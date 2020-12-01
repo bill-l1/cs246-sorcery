@@ -18,15 +18,20 @@ class Card  {
 	Player * owner;
 
 	public:
-		Card(const std::string &name); //TODO remove args
+		Card();
 		std::string getName() const;
 		std::string getType() const;
 		std::string getDescription() const;
 		int getCost() const;
 		Player * getOwner() const;
 		void setOwner(Player * player);	
+	
+	friend class CardFactory;
 };
 
-class CardFactory {};
+class CardFactory {
+	public:
+		static std::unique_ptr<Card> getCard(const std::string &name);
+};
 
 #endif

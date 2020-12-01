@@ -6,9 +6,8 @@
 
 using namespace std;
 
-Card::Card(const string &name)
-	: name{name}
-{}
+Card::Card() {}
+
 string Card::getName() const {
 	return name;
 }
@@ -28,3 +27,8 @@ void Card::setOwner(Player * player) {
 	owner = player;
 }
 
+unique_ptr<Card> CardFactory::getCard(const string &name){
+	unique_ptr<Card> card = make_unique<Card>();
+	card.get()->name = name;
+	return move(card); //TODO mapping
+}

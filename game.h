@@ -18,7 +18,8 @@ class Game {
 	int turns;
 	void startTurn();
 	std::stack<std::unique_ptr<Card>> loadDeck(const bool &doShuffle) const;
-
+	template <typename T> 
+	void shuffleVector(std::vector<T> & v) const;
 	public:
 		Game(const std::string &p1name, const std::string &p2name, const std::string &p1deckname, const std::string &p2deckname, const bool &testing); //starts the game, creating players and decks from player/file names
 		std::shared_ptr<Player> getP1() const;

@@ -4,6 +4,10 @@
 #include <vector>
 #include <stack>
 #include <memory>
+#include <algorithm>
+#include <random>
+#include <chrono>
+#include <stdexcept>
 
 using namespace std;
 
@@ -69,13 +73,28 @@ void Game::startTurn(){
 }
 
 stack<unique_ptr<Card>> Game::loadDeck(const bool &doShuffle) const {
-	
 	ifstream f("default.deck"); // TODO make exception safe
 	stack<unique_ptr<Card>> deck;
+	vector<string> cardNames;
 	string s;
+
 	while(getline(f, s)) {
-		auto p = make_unique<Card>(s);
-		deck.push(move(p));
+		cardNames.push_back(s);	
 	}
+	if(doShuffle){
+		shuffleVector<string>(cardNames);
+	}
+	for(auto cardName : cardNames){
+		deck.push(CardFactory::getCard(cardName));
+	} 
 	return move(deck);	
+}
+
+template <typename T>
+void Game::shuffleVector(vector<T> & v) const {
+	  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine rng{seed};
+    for ( int i = 0; i < 1000; i++ ) {
+        std::shuffle( v.begin(), v.end(), rng );
+    }
 }
