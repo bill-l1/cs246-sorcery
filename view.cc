@@ -52,3 +52,12 @@ void View::printStartTurn() const {
 	cout << "Active player:" << game->getActivePlayer()->getName() << endl;
 	seperator();
 }
+
+void View::printHand() const {
+	seperator();
+	
+	for(auto && card : game->getActivePlayer()->hand){
+		cout << "Card: " << card->getName() << endl;
+	}
+	seperator();
+}

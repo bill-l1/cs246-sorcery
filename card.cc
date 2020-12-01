@@ -1,28 +1,30 @@
-
 #include <string>
 #include <memory>
-#include <stack>
+#include <map>
 #include "player.h"
 #include "card.h"
 
+using namespace std;
 
-Card(const std::string &name) {
+Card::Card(const string &name)
+	: name{name}
+{}
+string Card::getName() const {
+	return name;
+}
+string Card::getType() const {
+	return type;
+}
+string Card::getDescription() const {
+	return description;
+}
+int Card::getCost() const {
+	return cost;
+}
+Player * Card::getOwner() const {
+	return owner;
+}
+void Card::setOwner(Player * player) {
+	owner = player;
+}
 
-
-}
-std::string getName() const {
-return name;
-
-}
-std::string getType() const {
-return type;
-}
-std::string getDescription() const {
-return description;
-}
-int getCost() const {
-return cost;
-}
-Player getOwner() const {
-return owner;
-}

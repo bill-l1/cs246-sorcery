@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
 	string p2deckname = "default.deck";
 	string p1name = "Player";
 	string p2name = "Player";
-//	bool testing = false;
+	bool testing = false;
 	for(int i = 1; i < argc; i++){
 		string arg{argv[i]};
 		if(arg == "-init"){
@@ -35,6 +35,8 @@ int main(int argc, char *argv[]){
 				delete temp;
 				cerr << "Problem opening file " << filename << endl;
 			}
+		}else if(arg == "-testing"){
+			testing = true;
 		}
 	}
 	
@@ -46,9 +48,7 @@ int main(int argc, char *argv[]){
 		cout << "Enter name of player 2: ";
 		cin >> p2name;
 		cin.ignore(1000, '\n');	
-		Game game{p1name, p2name, p1deckname, p2deckname};
-			
-		
+		Game game{p1name, p2name, p1deckname, p2deckname, testing};
 		while (true){
 			cout << "\033[1;32m > ";
 			getline(*infile, s);	
@@ -68,7 +68,14 @@ int main(int argc, char *argv[]){
 			}else if(cmd == "use"){
 			}else if(cmd == "inspect"){
 			}else if(cmd == "hand"){
+				game.displayHand();
 			}else if(cmd == "board"){
+			}else if(cmd == "draw" && testing){
+				game.draw();
+			}else if(cmd == "discard" && testing){
+				int pos;
+				iss >> pos;
+				game.discard(pos);
 			}else if(cmd == ""){
 			}else{
 				cerr << "Unrecognized command " << cmd << "!" << endl;

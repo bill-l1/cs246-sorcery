@@ -36,7 +36,7 @@ class View {
 		void printHelp() const;
 		void printStartTurn() const;
 //		void printBoard() const;
-//		void printHand() const;
+		void printHand() const;
 //		void printMinion() const; TODO
 };
 
