@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include <stack>
+#include <fstream>
 
 using namespace std;
 
@@ -21,4 +22,15 @@ int Player::getLife() const {
 
 int Player::getMagic() const {
 	return magic;
+}
+
+void Player::loadDeck() {
+ifstream f("default.deck");
+while(f.good()) {
+string s;
+s << f;
+auto p = make_unique<Card>(s);
+deck->push(p);
+}
+
 }
