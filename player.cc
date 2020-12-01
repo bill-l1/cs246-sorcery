@@ -6,11 +6,16 @@
 
 using namespace std;
 
-Player::Player(const string &name)
+Player::Player(const string &name, stack<unique_ptr<Card>> deck)
 	: name{name},
 	life{20},
-	magic{3}
-{}
+	magic{3},
+	deck{move(deck)}
+{
+	for(int i = 0; i < 4; i++){
+		draw();
+	}
+}
 
 string Player::getName() const {
 	return name;
@@ -24,13 +29,23 @@ int Player::getMagic() const {
 	return magic;
 }
 
-void Player::loadDeck() {
-ifstream f("default.deck");
-while(f.good()) {
-string s;
-s << f;
-auto p = make_unique<Card>(s);
-deck->push(p);
+int Player::getDeckSize() const {
+	return deck.size();
 }
 
+int Player::getHandSize() const {
+	return hand.size();
+}
+
+int Player::getBoardSize() const {
+	return board.size();
+}
+
+void Player::draw() {
+	if(!deck.empty() && hand.size() < 5){
+		hand.push_back(move(deck.top()));
+		deck.pop();
+	}else{
+		//TODO add exception
+	}
 }

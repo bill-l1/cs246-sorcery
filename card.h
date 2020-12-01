@@ -4,7 +4,6 @@
 #include <string>
 #include <memory>
 #include <map>
-#include <stack>
 #include "player.h"
 
 // may need helper funciton to move from deck to hand to board to etc.
@@ -19,16 +18,15 @@ class Card  {
 	Player * owner;
 
 	public:
-		Card(const std::string &name); 
+		Card(const std::string &name); //TODO remove args
 		std::string getName() const;
 		std::string getType() const;
 		std::string getDescription() const;
 		int getCost() const;
-		Player getOwner() const;	
+		Player * getOwner() const;
+		void setOwner(Player * player);	
 };
 
-class CardFactory {
-
-};
+class CardFactory {};
 
 #endif
