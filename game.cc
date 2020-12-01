@@ -66,6 +66,7 @@ void Game::displayHand() const{
 
 void Game::startTurn(){
 	view.get()->printStartTurn();
+	draw();
 }
 
 stack<unique_ptr<Card>> Game::loadDeck(const bool &doShuffle) const {
