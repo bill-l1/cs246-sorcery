@@ -8,31 +8,33 @@
 #define MAX_HAND_SIZE 5
 #define MAX_BOARD_SIZE 5
 
-using namespace std;
-
+using std::cout;
+using std::cin;
+using std::cerr;
+using std::endl;
 
 int main(int argc, char *argv[]){
 	
-	cin.exceptions(ios_base::eofbit);
-	istream * infile = &cin;
-	string p1deckname = "default.deck";
-	string p2deckname = "default.deck";
-	string p1name = "Player";
-	string p2name = "Player";
+	cin.exceptions(std::ios_base::eofbit);
+	std::istream * infile = &cin;
+	std::string p1deckname = "default.deck";
+	std::string p2deckname = "default.deck";
+	std::string p1name = "Player";
+	std::string p2name = "Player";
 	bool testing = false;
 	for(int i = 1; i < argc; i++){
-		string arg{argv[i]};
+		std::string arg{argv[i]};
 		if(arg == "-init"){
 			if(i == argc-1 || infile != &cin) throw;
 
-			string filename{argv[++i]};
-			ifstream * temp = new ifstream;
-			temp->exceptions(ifstream::failbit | ifstream::badbit);
+			std::string filename{argv[++i]};
+			std::ifstream * temp = new std::ifstream;
+			temp->exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
 			try{
 				temp->open(filename);
 				infile = temp;
-			} catch (ifstream::failure e){
+			} catch (std::ifstream::failure e){
 				delete temp;
 				cerr << "Problem opening file " << filename << endl;
 			}
@@ -48,7 +50,7 @@ int main(int argc, char *argv[]){
 	}
 	
 
-	string s;
+	std::string s;
 	try{
 		cout << "Enter name of player 1: ";
 		cin >> p1name;
@@ -58,11 +60,11 @@ int main(int argc, char *argv[]){
 		Game game{p1name, p2name, p1deckname, p2deckname, testing};
 		while (true){
 			cout << "\033[1;32m > ";
-			getline(*infile, s);	
+			std::getline(*infile, s);	
 			cout << "\033[0m";
-			istringstream iss{s};
+			std::istringstream iss{s};
 			
-			string cmd;
+			std::string cmd;
 			iss >> cmd;
 			if(cmd == "help"){
 				game.displayHelp();			
@@ -109,7 +111,7 @@ int main(int argc, char *argv[]){
 				game.discard(pos);
 			}else if(cmd == ""){
 			}else{
-				cerr << "Unrecognized command " << cmd << "!" << endl;
+				std::cerr << "Unrecognized command " << cmd << "!" << endl;
 			}
 		}
 	}catch (...){

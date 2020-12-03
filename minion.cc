@@ -1,5 +1,7 @@
+#include <string>
 #include "minion.h"
 #include "card.h"
+
 
 Minion::Minion(const std::string &name, const std::string &description, const int &cost, const std::string &type) : Card{name, description, cost, type}
 {}

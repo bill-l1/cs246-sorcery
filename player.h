@@ -1,13 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-
 #include <string>
 #include <memory>
 #include <vector>
 #include <stack>
-//#include "card.h"
-//#include "minion.h"
-//#include "base_minion.h"
 
 // may need helper funciton to move from deck to hand to board to etc.
 class Card;

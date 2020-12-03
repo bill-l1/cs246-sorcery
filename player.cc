@@ -1,19 +1,16 @@
 #include <string>
 #include <memory>
 #include <stack>
-#include <fstream>
-#include <iostream>
 #include "player.h"
 #include "base_minion.h"
-using namespace std;
 
-Player::Player(const string &name)
+Player::Player(const std::string &name)
 	: name{name},
 	life{20},
 	magic{3}
 {}
 
-string Player::getName() const {
+std::string Player::getName() const {
 	return name;
 }
 
@@ -37,8 +34,8 @@ int Player::getDeckSize() const {
 	return deck.size();
 }
 
-void Player::setDeck(stack<unique_ptr<Card>> d){
-	deck = move(d);
+void Player::setDeck(std::stack<std::unique_ptr<Card>> d){
+	deck = std::move(d);
 }
 
 int Player::getHandSize() const {
@@ -58,9 +55,9 @@ void Player::draw() {
 	}
 }
 
-void Player::playCard(unique_ptr<BaseMinion> card){
+void Player::playCard(std::unique_ptr<BaseMinion> card){
 	if(board.size() < 5){
-		board.push_back(move(card));
+		board.push_back(std::move(card));
 	}else{
 		//TODO exception
 	}

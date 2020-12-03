@@ -1,3 +1,4 @@
+#include <string>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -7,35 +8,45 @@
 #include "player.h"
 #include "minion.h"
 
-using namespace std;
+using std::cout;
+using std::cerr;
+using std::endl;
 
 View::View(Game * game) : game{game}
 {}
 
 void View::seperator() const {
-	cout << "\n" << setfill('=') << setw(80) << "=\n" << endl;
+	cout << "\n" << std::setfill('=') << std::setw(80) << "=\n" << endl;
 }
 
-void View::printFromFile(const string &filename) const {
-	ifstream infile;
-	infile.exceptions(ifstream::failbit | ifstream::badbit);
+void View::printFromFile(const std::string &filename) const {
+	std::ifstream infile;
+	infile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	
 	try{
 		infile.open(filename);
-	} catch (ifstream::failure e){
+	} catch (std::ifstream::failure e){
 		cerr << _RED << "Problem opening file " << filename << _RESET << endl;
 	}
 
 	try{	
-		string s;
-		while(getline(infile, s)){
+		std::string s;
+		while(std::getline(infile, s)){
 			cout << s << endl;
 		}
 	} catch (...){}
 }
 
-void View::printAlert(const string &s) const {
-	cerr << _RED_BG << " !  " << s << "  ! "<< _RESET << endl;
+void View::printAlert(const std::string &s, const int &type) const {
+	if(type == 0){
+		cerr << _RED_BG << "!  " << s << "  !"<< _RESET << endl;
+	}else if(type == 1){
+		cout << _YELLOW_BG << " " << s << " " << _RESET << endl;
+	}else if(type == 2){
+		cout << _GREEN_BG << " " << s << " " << _RESET << endl;
+	}else{
+		cout << s << endl;
+	}
 }
 
 void View::printInit() const {
