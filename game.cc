@@ -143,6 +143,7 @@ void Game::displayHand() const{
 void Game::startTurn(){
 	view.get()->printStartTurn();
 	draw();
+	activePlayer->setMagic(activePlayer->getMagic() + 1);
 }
 
 void Game::play(const int &pos){
