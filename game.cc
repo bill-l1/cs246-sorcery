@@ -41,6 +41,8 @@ Game::Game(const string &p1name, const string &p2name, const string &p1deckname,
 
 void Game::startTurn(){
 	view.get()->printStartTurn();
+	draw();
+	activePlayer->setMagic(activePlayer->getMagic() + 1);
 }
 
 stack<unique_ptr<Card>> Game::loadDeck(const string &dname, const bool &doShuffle, Player * owner) const {
@@ -133,17 +135,15 @@ void Game::discard(const int &pos){
 	}
 }
 void Game::displayHelp() const{
-	view.get()->printHelp();
+	view->printHelp();
 }
 
 void Game::displayHand() const{
-	view.get()->printHand();
+	view->printHand();
 }
 
-void Game::startTurn(){
-	view.get()->printStartTurn();
-	draw();
-	activePlayer->setMagic(activePlayer->getMagic() + 1);
+void Game::displayBoard() const {
+	view->printBoard();
 }
 
 void Game::play(const int &pos){

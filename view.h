@@ -31,13 +31,13 @@ class View {
 	void seperator() const;
 	public:
 		View(Game * game);
-		void printFromFile(const std::string &filename) const;
-		void printAlert(const std::string &s) const;
-		void printInit() const;
-		void printHelp() const;
-		void printStartTurn() const;
-		void printBoard() const;
-		void printHand() const;
+		void printFromFile(const std::string &filename) const; // print from txt file
+		void printAlert(const std::string &s) const; // print an alert for when stuff hits the fan
+		void printInit() const; // print at beginning of the game
+		void printHelp() const; // print help
+		void printStartTurn() const; // print at start of turn
+		void printBoard() const; // print the board
+		void printHand() const; // print the hand
 //		void printMinion() const; TODO
 };
 
