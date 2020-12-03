@@ -1,12 +1,18 @@
 #include <string>
 #include <memory>
 #include <map>
-#include "player.h"
 #include "card.h"
 
 using namespace std;
 
-Card::Card() {}
+Card::Card(const string &name, const string &description, const int &cost, const string &type)
+	: name{name},
+	description{description},
+	cost{cost},
+	type{type}
+{}
+
+Card::~Card() {}
 
 string Card::getName() const {
 	return name;
@@ -27,8 +33,3 @@ void Card::setOwner(Player * player) {
 	owner = player;
 }
 
-unique_ptr<Card> CardFactory::getCard(const string &name){
-	unique_ptr<Card> card = make_unique<Card>();
-	card.get()->name = name;
-	return move(card); //TODO mapping
-}

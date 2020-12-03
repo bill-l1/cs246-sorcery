@@ -5,9 +5,14 @@
 #include <memory>
 #include <vector>
 #include <stack>
-#include "card.h"
+//#include "card.h"
+//#include "minion.h"
+//#include "base_minion.h"
 
 // may need helper funciton to move from deck to hand to board to etc.
+class Card;
+class Minion;
+class BaseMinion;
 
 class Player  {
 	std::string name;
@@ -15,18 +20,23 @@ class Player  {
 	int magic;
 	std::stack<std::unique_ptr<Card> > deck;
 	std::vector<std::unique_ptr<Card> > hand;
-	std::vector<std::unique_ptr<Card>> board;
-	//std::stack<std::unique_ptr<Card>> graveyard;
+	std::vector<std::unique_ptr<Minion>> board;
+	std::stack<std::unique_ptr<Minion>> graveyard;
 	//std::unique_ptr<Card> ritual;
 	public:
-		Player(const std::string &name, std::stack<std::unique_ptr<Card> > deck);
+		Player(const std::string &name);
 		std::string getName() const;
 		int getLife() const;
+		void setLife(const int &n);
 		int getMagic() const;
+		void setMagic(const int &n);
 		int getDeckSize() const;
+		void setDeck(std::stack<std::unique_ptr<Card>> d);
 		int getHandSize() const;
 		int getBoardSize() const;
-		void draw(); //TODO
+		void draw();
+		void playCard(std::unique_ptr<BaseMinion> card);
+		//void playCard(std::unique_ptr<Card> card); this shouldn't ever be called !!
 		//void runOnPlay(); //iterate through all board/rituals for onPlay effects
 		//void runOnStartTurn(); 
 		//void runOnEndTurn();

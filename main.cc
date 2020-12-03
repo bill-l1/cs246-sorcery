@@ -5,6 +5,9 @@
 #include <vector>
 #include "game.h"
 
+#define MAX_HAND_SIZE 5
+#define MAX_BOARD_SIZE 5
+
 using namespace std;
 
 
@@ -20,9 +23,7 @@ int main(int argc, char *argv[]){
 	for(int i = 1; i < argc; i++){
 		string arg{argv[i]};
 		if(arg == "-init"){
-			if(i == argc-1 || infile != &cin){
-				throw;
-			}
+			if(i == argc-1 || infile != &cin) throw;
 
 			string filename{argv[++i]};
 			ifstream * temp = new ifstream;
@@ -37,6 +38,12 @@ int main(int argc, char *argv[]){
 			}
 		}else if(arg == "-testing"){
 			testing = true;
+		}else if(arg == "-deck1"){
+			if(i == argc-1) throw;
+			p1deckname = argv[++i];
+		}else if(arg == "-deck2"){
+			if(i == argc-1) throw;
+			p2deckname = argv[++i];
 		}
 	}
 	
@@ -64,12 +71,36 @@ int main(int argc, char *argv[]){
 			}else if(cmd == "quit"){
 				break;
 			}else if(cmd == "attack"){
+				int pos, t;
+				iss >> pos;
+				if(iss >> t){
+					game.attack(pos, t);
+				}else{
+					game.attack(pos);
+				}		
 			}else if(cmd == "play"){
+				int pos, pnum;
+				iss >> pos;
+				if(iss >> pnum){
+					char target;
+					iss >> target;
+					game.play(pos, pnum, target);
+				}else{
+					game.play(pos);
+				}
+				//}catch(...){
+					//TODO exception if play is invalid
+					// -invalid target
+					// -invalid placement
+					// -invalid card played
+					// -invalid way to play card (ex. no target on enchantment)
+			//	}
 			}else if(cmd == "use"){
 			}else if(cmd == "inspect"){
 			}else if(cmd == "hand"){
 				game.displayHand();
 			}else if(cmd == "board"){
+				game.displayBoard();
 			}else if(cmd == "draw" && testing){
 				game.draw();
 			}else if(cmd == "discard" && testing){

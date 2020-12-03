@@ -1,21 +1,17 @@
-#include "player.h"
 #include <string>
 #include <memory>
 #include <stack>
 #include <fstream>
-
+#include <iostream>
+#include "player.h"
+#include "base_minion.h"
 using namespace std;
 
-Player::Player(const string &name, stack<unique_ptr<Card>> deck)
+Player::Player(const string &name)
 	: name{name},
 	life{20},
-	magic{3},
-	deck{move(deck)}
-{
-	for(int i = 0; i < 4; i++){
-		draw();
-	}
-}
+	magic{3}
+{}
 
 string Player::getName() const {
 	return name;
@@ -25,12 +21,24 @@ int Player::getLife() const {
 	return life;
 }
 
+void Player::setLife(const int &n){
+	life = n;
+}
+
 int Player::getMagic() const {
 	return magic;
 }
 
+void Player::setMagic(const int &n){
+	magic = n;
+}
+
 int Player::getDeckSize() const {
 	return deck.size();
+}
+
+void Player::setDeck(stack<unique_ptr<Card>> d){
+	deck = move(d);
 }
 
 int Player::getHandSize() const {
@@ -49,3 +57,16 @@ void Player::draw() {
 		//TODO add exception
 	}
 }
+
+void Player::playCard(unique_ptr<BaseMinion> card){
+	if(board.size() < 5){
+		board.push_back(move(card));
+	}else{
+		//TODO exception
+	}
+}
+/*
+void Player::playCard(unique_ptr<Card> card){
+	cout << "wrong func" << endl;
+}
+*/

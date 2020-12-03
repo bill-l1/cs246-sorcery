@@ -1,8 +1,6 @@
 #ifndef VIEW_H
 #define VIEW_H
-
 #include <vector>
-#include "game.h"
 
 class Game;
 
@@ -19,12 +17,14 @@ const std::vector<std::vector<std::string> > _COMMANDS =
 	{"board", "Describe all cards on the board."}};
 
 const std::string _RED = "\033[31m";
+const std::string _RED_BG = "\033[1;41m";
 const std::string _GREEN = "\033[32m";
 const std::string _YELLOW = "\033[33m";
+const std::string _BLUE = "\033[34m";
 const std::string _RESET = "\033[0m";
 
-const std::string _YELLOWBG = "\033[43m";
-const std::string _WHITEBG = "\033[47m";
+// const std::string _YELLOWBG = "\033[43m";
+// const std::string _WHITEBG = "\033[47m";
 
 class View {
 	Game * game;
@@ -32,10 +32,11 @@ class View {
 	public:
 		View(Game * game);
 		void printFromFile(const std::string &filename) const;
+		void printAlert(const std::string &s) const;
 		void printInit() const;
 		void printHelp() const;
 		void printStartTurn() const;
-//		void printBoard() const;
+		void printBoard() const;
 		void printHand() const;
 //		void printMinion() const; TODO
 };

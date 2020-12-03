@@ -2,6 +2,10 @@
 #include <iomanip>
 #include <fstream>
 #include "view.h"
+#include "game.h"
+#include "card.h"
+#include "player.h"
+#include "minion.h"
 
 using namespace std;
 
@@ -28,6 +32,10 @@ void View::printFromFile(const string &filename) const {
 			cout << s << endl;
 		}
 	} catch (...){}
+}
+
+void View::printAlert(const string &s) const {
+	cerr << _RED_BG << " !  " << s << "  ! "<< _RESET << endl;
 }
 
 void View::printInit() const {
@@ -58,6 +66,21 @@ void View::printHand() const {
 	
 	for(auto && card : game->getActivePlayer()->hand){
 		cout << "Card: " << card->getName() << endl;
+	}
+	seperator();
+}
+
+void View::printBoard() const {
+	seperator();
+	cout << "Player 1: " << game->getP1()->getName() << endl;
+	cout << _RED <<  game->getP1()->getLife() << " HP " << _BLUE <<  game->getP1()->getMagic() << " MP" << _RESET << endl << endl;
+	for(auto && card : game->getP1()->board){
+		cout << (&card - &game->getP1()->board[0]) << " - Minion: " << card->getName() << "\t" << _GREEN << card->getAttack() << _RESET << "/" << _YELLOW << card->getDefense() << _RESET << "\t" << card->getDescription().substr(0, 40) << endl;
+	}
+	cout << "\nPlayer 2: " << game->getP2()->getName() << endl;
+	cout << _RED << game->getP2()->getLife() << " HP " << _BLUE <<  game->getP2()->getMagic() << " MP" << _RESET <<  endl << endl;
+	for(auto && card : game->getP2()->board){
+		cout << (&card - &game->getP2()->board[0]) << " - Minion: " << card->getName() << "\t" << _GREEN << card->getAttack() << _RESET << "/" << _YELLOW << card->getDefense() << _RESET << "\t" << card->getDescription().substr(0, 40) << endl;
 	}
 	seperator();
 }

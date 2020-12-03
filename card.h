@@ -1,37 +1,39 @@
 #ifndef CARD_H
 #define CARD_H
-
+#include <iostream>
 #include <string>
 #include <memory>
 #include <map>
-#include "player.h"
-
+//#include "base_minion.h"
+//#include "minion.h"
 // may need helper funciton to move from deck to hand to board to etc.
+//#include "player.h"
+//#include "minion.h"
+//#include "base_minion.h"
 
 class Player;
+//class Minion;
+//class BaseMinion;
+//class MinionList;
 
 class Card  {
 	std::string name;
-	std::string type;
 	std::string description;
 	int cost;
 	Player * owner;
+	std::string type;
 
 	public:
-		Card();
+		Card(const std::string &name, const std::string &description, const int &cost, const std::string &type);
+		virtual ~Card();
 		std::string getName() const;
-		std::string getType() const;
 		std::string getDescription() const;
 		int getCost() const;
 		Player * getOwner() const;
 		void setOwner(Player * player);	
-	
-	friend class CardFactory;
-};
+		std::string getType() const;
 
-class CardFactory {
-	public:
-		static std::unique_ptr<Card> getCard(const std::string &name);
+	friend class CardFactory;
 };
 
 #endif
