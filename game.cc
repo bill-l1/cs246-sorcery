@@ -140,8 +140,9 @@ void Game::displayHand() const{
 	view.get()->printHand();
 }
 
-void Game::displayBoard() const {
-	view.get()->printBoard();
+void Game::startTurn(){
+	view.get()->printStartTurn();
+	draw();
 }
 
 void Game::play(const int &pos){
