@@ -218,15 +218,14 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 			//TODO
 		}
 		activePlayer->setMagic(activePlayer->getMagic() - activePlayer->hand[pos]->getCost());
-		unique_ptr<Card> card = move(activePlayer->hand[pos]);
+		std::unique_ptr<Card> card = move(activePlayer->hand[pos]);
 		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
 		if(auto cast = dynamic_cast<Spell *>(card.get())){
-			unique_ptr<Spell> cast_card;
-			card.release(); // if this causes a leak im finna lose it
-			cast_card.reset(cast); //prob set up a helper function for this.
-			activePlayer->castSpell(move(cast_card),target);	
-		}
-		else{ //TODO add other card types
+			std::unique_ptr<Spell> cast_card;
+			card.release(); 
+			cast_card.reset(cast); 
+			activePlayer->playCard(std::move(cast_card), target);	
+		}else{ //TODO add other card types
 			view->printAlert("Invalid card type.");
 			//exception handling
 		}

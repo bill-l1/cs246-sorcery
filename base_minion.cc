@@ -37,6 +37,6 @@ void BaseMinion::setAttack(int atk) {
 }
 
 void BaseMinion::setDefense(int def) {
-defense = def;
+	defense = def;
 }
 
