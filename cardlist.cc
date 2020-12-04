@@ -1,5 +1,6 @@
 #include "cardlist.h"
 #include "base_minion.h"
+#include "spell.h"
 
 MinionList::AirElemental::AirElemental()
 	: BaseMinion{
@@ -55,4 +56,12 @@ MinionList::MasterSummoner::MasterSummoner()
 	"Master Summoner",
 	"Summon up to three 1/1 air elementals",
 	3, 2, 2, 2}
+{}
+
+
+SpellList::Banish::Banish(Player * owner, Card * target)
+	:Spell {
+	"Banish",
+	"Destroy Target Minion or Ritual",2,new SampleEffect(owner,target),target
+	}
 {}

@@ -23,3 +23,11 @@ int Minion::getActivateCost() const {
 void Minion::attackOther(Minion * target){
     return;
 }
+
+void Minion::setAttack(int atk) {
+return;
+}
+
+void Minion::setDefense(int def) {
+return;
+}

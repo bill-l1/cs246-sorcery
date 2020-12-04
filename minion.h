@@ -11,6 +11,9 @@ class Minion : public Card {
 		virtual int getActions() const;
 		virtual int getActivateCost() const;
 		virtual void attackOther(Minion * target);
+		virtual void setAttack (int attack);
+		virtual void setDefense(int defense);
+	
 };
 
 #endif
