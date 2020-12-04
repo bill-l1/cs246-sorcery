@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
 	cin.exceptions(ios_base::eofbit);
 	istream * infile = &cin;
 	string p1deckname = "default.deck";
-	string p2deckname = "default.deck";
+	string p2deckname = "default2.deck";
 	string p1name = "Player";
 	string p2name = "Player";
 	bool testing = false;

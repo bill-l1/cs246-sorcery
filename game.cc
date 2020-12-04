@@ -199,12 +199,12 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 			break;
 		}
 		if(pos < activePlayer->getHandSize()){
-		if(pnum == 1 && p1->board.size() < t2) {
-		target = dynamic_cast<Card *>(p1->board[t2]);
+		if(pnum == 1 && p1->board.size() > t2) {
+		target = dynamic_cast<Card *>(p1->board[t2].get());
 
 		}
-		else if (pnum == 2 && p2->board.size() < t2) {
-		target = dynamic_cast<Card *>(p2->board[t2]);
+		else if (pnum == 2 && p2->board.size() > t2) {
+		target = dynamic_cast<Card *>(p2->board[t2].get());
 		}
 		else {
 		view->printAlert("Invalid target");
