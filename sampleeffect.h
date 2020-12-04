@@ -8,8 +8,6 @@
 #include "minion.h"
 #include "base_minion.h"
 class SampleEffect : public Effect{
-	Player * owner;
-	Card * target;
 	public:
 	SampleEffect(Player * owner, Card * target);
 	void run() override;

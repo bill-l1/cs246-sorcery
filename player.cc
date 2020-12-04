@@ -5,6 +5,7 @@
 #include <iostream>
 #include "player.h"
 #include "base_minion.h"
+#include "spell.h"
 using namespace std;
 
 Player::Player(const string &name)
@@ -64,6 +65,12 @@ void Player::playCard(unique_ptr<BaseMinion> card){
 	}else{
 		//TODO exception
 	}
+}
+
+void Player::castSpell(unique_ptr<Spell> card, Card * target) {
+card->getEffect()->setTarget(target);	
+card->getEffect()->run();
+
 }
 /*
 void Player::playCard(unique_ptr<Card> card){

@@ -59,9 +59,9 @@ MinionList::MasterSummoner::MasterSummoner()
 {}
 
 
-SpellList::Banish::Banish(Player * owner, Card * target)
+SpellList::Banish::Banish()
 	:Spell {
 	"Banish",
-	"Destroy Target Minion or Ritual",2,new SampleEffect(owner,target),target
+	"Destroy Target Minion or Ritual",2,new SampleEffect(nullptr,nullptr),nullptr
 	}
 {}

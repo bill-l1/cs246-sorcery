@@ -16,4 +16,8 @@ target{tar}
 	Card * Spell::getTarget() const {
 	return target;
 	}
+	void Spell::setTarget(Card * tar) {
+	this->target = tar;
+
+	}
 

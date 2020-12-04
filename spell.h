@@ -9,9 +9,10 @@ class Spell : public Card {
 	Card * target;
 	public:
 		Spell(const std::string &name, const std::string &description, const int &cost, Effect  * effect, Card * target);
-		~Spell();
+	//	~Spell();
 		Effect * getEffect() const;
 		Card * getTarget() const;
+		void setTarget(Card * tar);
 
 };
 

@@ -26,7 +26,7 @@ class MinionList {
 
 class SpellList {
 	public:
-	class Banish : public Spell { public: Banish(Player * owner, Card * Target); };
+	class Banish : public Spell { public: Banish(); };
 	//class Unsummon : public Spell { public: Unsummon(Player * owner, Card * Target); };
 	//class Disenchant : public Spell { public: Disenchant(P); };
 

@@ -13,7 +13,7 @@
 class Card;
 class Minion;
 class BaseMinion;
-
+class Spell;
 class Player  {
 	std::string name;
 	int life;
@@ -36,6 +36,7 @@ class Player  {
 		int getBoardSize() const;
 		void draw();
 		void playCard(std::unique_ptr<BaseMinion> card);
+		void castSpell(std::unique_ptr<Spell> card, Card * target);
 		//void playCard(std::unique_ptr<Card> card); this shouldn't ever be called !!
 		//void runOnPlay(); //iterate through all board/rituals for onPlay effects
 		//void runOnStartTurn(); 
