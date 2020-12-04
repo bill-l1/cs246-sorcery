@@ -2,6 +2,8 @@
 #define CARDLIST_H
 
 #include "base_minion.h"
+#include "spell.h"
+#include "sampleeffect.h"
 
 //Steps to create a new card:
 // 1. add it to header
@@ -20,6 +22,15 @@ class MinionList {
 	class NovicePyromancer : public BaseMinion { public: NovicePyromancer(); };
 	class ApprenticeSummoner : public BaseMinion { public: ApprenticeSummoner(); };
 	class MasterSummoner : public BaseMinion { public: MasterSummoner(); };
+};
+
+class SpellList {
+	public:
+	class Banish : public Spell { public: Banish(Player * owner, Card * Target); };
+	//class Unsummon : public Spell { public: Unsummon(Player * owner, Card * Target); };
+	//class Disenchant : public Spell { public: Disenchant(P); };
+
+
 };
 
 #endif

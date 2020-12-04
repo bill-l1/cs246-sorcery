@@ -15,6 +15,8 @@ class BaseMinion : public Minion {
 		int getActions() const override;
 		int getActivateCost() const override;
 		void attackOther(Minion * target) override;
+		void setAttack(int atk) override;
+		void setDefense(int def) override;
 };
 
 #endif
