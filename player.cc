@@ -3,6 +3,7 @@
 #include <stack>
 #include "player.h"
 #include "base_minion.h"
+#include "spell.h"
 
 Player::Player(const std::string &name)
 	: name{name},
@@ -48,7 +49,7 @@ int Player::getBoardSize() const {
 
 void Player::draw() {
 	if(!deck.empty() && hand.size() < 5){
-		hand.push_back(move(deck.top()));
+		hand.push_back(std::move(deck.top()));
 		deck.pop();
 	}else{
 		//TODO add exception
@@ -61,6 +62,11 @@ void Player::playCard(std::unique_ptr<BaseMinion> card){
 	}else{
 		//TODO exception
 	}
+}
+
+void Player::castSpell(std::unique_ptr<Spell> card, Card * target) {
+	card->getEffect()->setTarget(target);	
+	card->getEffect()->run();
 }
 /*
 void Player::playCard(unique_ptr<Card> card){

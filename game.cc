@@ -165,7 +165,8 @@ void Game::play(const int &pos){
 			card.release(); // if this causes a leak im finna lose it
 			cast_card.reset(cast); //prob set up a helper function for this.
 			activePlayer->playCard(move(cast_card));	
-		}else{ //TODO add other card types
+		}
+		else{ //TODO add other card types
 			view->printAlert("Invalid card type.");
 			//exception handling
 		}
@@ -176,8 +177,65 @@ void Game::play(const int &pos){
 }
 
 void Game::play(const int &pos, const int &pnum, const char &t){
-	//TODO
+		int t2 = 9999;
+		Card * target = nullptr;
+		switch(t) {
+		case '0':
+			t2 = 0;
+			break;
+		case '1':
+			t2 = 1;
+			break;
+		case '2':
+			t2 = 2;
+			break;
+		case '3':
+			t2 = 3;
+			break;
+		case '4':
+			t2 = 4;
+			break;
+		}
+		if(pos < activePlayer->getHandSize()){
+		if(pnum == 1 && p1->board.size() > t2) {
+		target = dynamic_cast<Card *>(p1->board[t2].get());
+
+		}
+		else if (pnum == 2 && p2->board.size() > t2) {
+		target = dynamic_cast<Card *>(p2->board[t2].get());
+		}
+		else {
+		view->printAlert("Invalid target");
+		return;
+		}
+		if(activePlayer->getMagic() < activePlayer->hand[pos]->getCost()){
+			if(testing){
+				activePlayer->setMagic(activePlayer->hand[pos]->getCost());
+			}else{
+				view->printAlert("Not enough magic to play.");
+				return;
+			}
+			//TODO
+		}
+		activePlayer->setMagic(activePlayer->getMagic() - activePlayer->hand[pos]->getCost());
+		unique_ptr<Card> card = move(activePlayer->hand[pos]);
+		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
+		if(auto cast = dynamic_cast<Spell *>(card.get())){
+			unique_ptr<Spell> cast_card;
+			card.release(); // if this causes a leak im finna lose it
+			cast_card.reset(cast); //prob set up a helper function for this.
+			activePlayer->castSpell(move(cast_card),target);	
+		}
+		else{ //TODO add other card types
+			view->printAlert("Invalid card type.");
+			//exception handling
+		}
+	}else{
+		view->printAlert("Invalid selection.");
+		//TODO exception
+	}
 }
+
 
 void Game::attack(const int &pos){
 	if(pos < activePlayer->getHandSize()){
