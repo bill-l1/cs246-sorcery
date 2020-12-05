@@ -32,3 +32,11 @@ void BaseMinion::attackOther(Minion * target){
 	//TODO
 }
 
+void BaseMinion::setAttack(int atk) {
+	attack = atk;
+}
+
+void BaseMinion::setDefense(int def) {
+	defense = def;
+}
+
