@@ -12,12 +12,14 @@ class BaseMinion : public Minion {
 		BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost=-1);
 		virtual ~BaseMinion();
 		int getAttack() const override;
+		void setAttack(const int &att) override;
 		int getDefense() const override;
+		void setDefense(const int &def) override;
 		int getActions() const override;
 		int getActivateCost() const override;
 		void attackOther(Minion * target) override;
-		void setAttack(int atk) override;
-		void setDefense(int def) override;
+		void buff(const int &att, const int &def) override;
+		Minion * getBase() const override;
 };
 
 #endif

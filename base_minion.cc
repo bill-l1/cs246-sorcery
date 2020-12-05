@@ -16,8 +16,16 @@ int BaseMinion::getAttack() const {
 	return attack;
 }
 
+void BaseMinion::setAttack(const int &att) {
+	attack = att;
+}
+
 int BaseMinion::getDefense() const {
 	return defense;
+}
+
+void BaseMinion::setDefense(const int &def) {
+	defense = def;
 }
 
 int BaseMinion::getActions() const {
@@ -29,14 +37,15 @@ int BaseMinion::getActivateCost() const {
 }
 
 void BaseMinion::attackOther(Minion * target){
-	//TODO
+	this->buff(0, -target->getAttack());
+	target->buff(0, -getAttack());
 }
 
-void BaseMinion::setAttack(int atk) {
-	attack = atk;
+void BaseMinion::buff(const int &att, const int &def){
+	attack += att;
+	defense += def;
 }
 
-void BaseMinion::setDefense(int def) {
-	defense = def;
+BaseMinion * BaseMinion::getBase(){
+	return this;
 }
-
