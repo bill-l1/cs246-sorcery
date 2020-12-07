@@ -13,6 +13,10 @@ class Minion : public Card {
 		virtual void attackOther(Minion * target);
 		virtual void setAttack (int attack);
 		virtual void setDefense(int defense);
+		virtual void onEndTurn();
+		virtual void onDeath();
+		virtual void onAllyPlay();
+		virtual void onEnemyPlay();
 	
 };
 

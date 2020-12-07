@@ -67,9 +67,15 @@ void Player::playCard(unique_ptr<BaseMinion> card){
 	}
 }
 
-void Player::castSpell(unique_ptr<Spell> card, Card * target) {
+void Player::playCard(unique_ptr<Spell> card, Card * target) {
 card->getEffect()->setTarget(target);	
 card->getEffect()->run();
+
+}
+
+void Player::playCard(unique_ptr<Ritual> card) {
+
+return;
 
 }
 /*

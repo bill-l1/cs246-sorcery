@@ -29,3 +29,22 @@ return;
 void Minion::setDefense(int def) {
 return;
 }
+
+void Minion::onDeath() {
+return;
+}
+
+void Minion::onEndTurn() {
+
+return;
+}
+
+void Minion::onAllyPlay() {
+
+return;
+}
+
+void Minion::onEnemyPlay() {
+
+return;
+}

@@ -22,7 +22,7 @@ class Player  {
 	std::vector<std::unique_ptr<Card> > hand;
 	std::vector<std::unique_ptr<Minion>> board;
 	std::stack<std::unique_ptr<Minion>> graveyard;
-	//std::unique_ptr<Card> ritual;
+	std::unique_ptr<Card> ritual;
 	public:
 		Player(const std::string &name);
 		std::string getName() const;

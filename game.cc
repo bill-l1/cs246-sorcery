@@ -76,6 +76,7 @@ void Game::update() {
 	for(auto && minion : p1->board){
 		if(minion->getDefense() <= 0){
 			int index = &minion - &p1->board[0];
+			minion->onDeath();
 			p1->graveyard.push(move(minion)); //TODO account for enchantments later
 			p1->board.erase(p1->board.begin()+index);
 		}
@@ -84,6 +85,7 @@ void Game::update() {
 	for(auto && minion : p2->board){
 		if(minion->getDefense() <= 0){
 			int index = &minion - &p2->board[0];
+			minion->onDeath();
 			p2->graveyard.push(move(minion)); //TODO account for enchantments later
 			p2->board.erase(p2->board.begin()+index);
 		}
@@ -117,6 +119,9 @@ int Game::getTurns() const{
 }
 
 void Game::endTurn(){
+	for(auto && minion : activePlayer.get()->board){
+	minion->onEndTurn;
+	}
 	swap(activePlayer, nonActivePlayer);
 	turns++;
 	startTurn();
@@ -166,7 +171,16 @@ void Game::play(const int &pos){
 			unique_ptr<BaseMinion> cast_card;
 			card.release(); // if this causes a leak im finna lose it
 			cast_card.reset(cast); //prob set up a helper function for this.
-			activePlayer->playCard(move(cast_card));	
+			activePlayer->playCard(move(cast_card));
+		for(auto && minion : activePlayer.get()->board){
+		minion->onAllyPlay();
+	
+		}
+		for(auto && minion : nonActivePlayer.get()->board){
+		minion->onEnemyPlay();
+
+		}	
+
 		}
 		else{ //TODO add other card types
 			view->printAlert("Invalid card type.");
