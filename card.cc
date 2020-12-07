@@ -1,11 +1,7 @@
 #include <string>
-#include <memory>
-#include <map>
 #include "card.h"
 
-using namespace std;
-
-Card::Card(const string &name, const string &description, const int &cost, const string &type)
+Card::Card(const std::string &name, const std::string &description, const int &cost, const std::string &type)
 	: name{name},
 	description{description},
 	cost{cost},
@@ -14,13 +10,13 @@ Card::Card(const string &name, const string &description, const int &cost, const
 
 Card::~Card() {}
 
-string Card::getName() const {
+std::string Card::getName() const {
 	return name;
 }
-string Card::getType() const {
+std::string Card::getType() const {
 	return type;
 }
-string Card::getDescription() const {
+std::string Card::getDescription() const {
 	return description;
 }
 int Card::getCost() const {

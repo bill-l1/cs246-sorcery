@@ -62,6 +62,6 @@ MinionList::MasterSummoner::MasterSummoner()
 SpellList::Banish::Banish()
 	:Spell {
 	"Banish",
-	"Destroy Target Minion or Ritual",2,new SampleEffect(nullptr,nullptr),nullptr
-	}
+	"Destroy Target Minion or Ritual", 2, 
+	std::make_unique<SampleEffect>(nullptr,nullptr), nullptr}
 {}

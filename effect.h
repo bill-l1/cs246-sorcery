@@ -7,7 +7,7 @@ class Effect{
 	Card * target;
 	public:
 		Effect(Player * owner, Card * target);
-		~Effect();
+		virtual ~Effect();
 		Player * getOwner() const;
 		Card * getTarget() const;
 		void setTarget(Card * target);

@@ -1,8 +1,8 @@
 #ifndef CARDFACTORY_H
 #define CARDFACTORY_H
+#include <string>
 #include <memory>
 #include <map>
-#include <boost/any.hpp>
 #include "cardlist.h"
 
 class Card;

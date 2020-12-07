@@ -1,9 +1,8 @@
+#include <string>
 #include "base_minion.h"
 #include "minion.h"
 
-using namespace std;
-
-BaseMinion::BaseMinion(const string &name, const string &description, const int &cost, const int &att, const int &def, const int &activateCost)
+BaseMinion::BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost)
 	: Minion{name, description, cost, "Minion"},
 	attack{att},
 	defense{def},
@@ -38,6 +37,6 @@ void BaseMinion::setAttack(int atk) {
 }
 
 void BaseMinion::setDefense(int def) {
-defense = def;
+	defense = def;
 }
 

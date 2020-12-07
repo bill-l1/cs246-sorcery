@@ -1,14 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
+#include <string>
 #include <vector>
 #include <stack>
 #include <memory>
-//#include "card.h"
-//#include "player.h"
 #include "view.h"
 
 class Card;
-//class View;
+class Minion;
 class Player;
 
 class Game {
@@ -41,6 +40,8 @@ class Game {
 		void play(const int &pos, const int &pnum, const char &t); //plays card at hand[pos], targetting t belonging to Player pnum
 		void attack(const int &pos);
 		void attack(const int &pos, const int &t);
+		void buff(Player * player, const int &n);
+		void buff(Minion * minion, const int &att, const int &def);
 		//TODO implement rest of methods
 };
 

@@ -1,5 +1,6 @@
 #ifndef BASE_MINION_H
 #define BASE_MINION_H
+#include <string>
 #include "minion.h"
 
 class BaseMinion : public Minion {
