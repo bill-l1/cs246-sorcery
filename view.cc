@@ -86,12 +86,12 @@ void View::printBoard() const {
 	cout << "Player 1: " << game->getP1()->getName() << endl;
 	cout << _RED <<  game->getP1()->getLife() << " HP " << _BLUE <<  game->getP1()->getMagic() << " MP" << _RESET << endl << endl;
 	for(auto && card : game->getP1()->board){
-		cout << (&card - &game->getP1()->board[0]) << " - Minion: " << card->getName() << "\t" << _GREEN << card->getAttack() << _RESET << "/" << _YELLOW << card->getDefense() << _RESET << "\t" << card->getDescription().substr(0, 40) << endl;
+		cout << (&card - &game->getP1()->board[0]) << " - Minion: " << ((card->getActions()>0) ? _WHITE : "") << card->getMinionName() << "\t" << _GREEN << card->getAttack() << _RESET << "/" << _YELLOW << card->getDefense() << _RESET << "\t" << card->getMinionDescription().substr(0, 40) << endl;
 	}
 	cout << "\nPlayer 2: " << game->getP2()->getName() << endl;
 	cout << _RED << game->getP2()->getLife() << " HP " << _BLUE <<  game->getP2()->getMagic() << " MP" << _RESET <<  endl << endl;
 	for(auto && card : game->getP2()->board){
-		cout << (&card - &game->getP2()->board[0]) << " - Minion: " << card->getName() << "\t" << _GREEN << card->getAttack() << _RESET << "/" << _YELLOW << card->getDefense() << _RESET << "\t" << card->getDescription().substr(0, 40) << endl;
+		cout << (&card - &game->getP2()->board[0]) << " - Minion: " << ((card->getActions()>0) ? _WHITE : "") << card->getMinionName() << "\t" << _GREEN << card->getAttack() << _RESET << "/" << _YELLOW << card->getDefense() << _RESET << "\t" << card->getMinionDescription().substr(0, 40) << endl;
 	}
 	seperator();
 }

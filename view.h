@@ -24,6 +24,7 @@ const std::string _GREEN_BG = "\033[1;42m";
 const std::string _YELLOW = "\033[33m";
 const std::string _YELLOW_BG = "\033[1;30m\033[1;43m";
 const std::string _BLUE = "\033[34m";
+const std::string _WHITE = "\033[1;37m";
 const std::string _RESET = "\033[0m";
 
 // const std::string _YELLOWBG = "\033[43m";

@@ -8,6 +8,7 @@
 class Card;
 class Player;
 class BaseMinion;
+class Enchantment;
 
 typedef std::unique_ptr<Card>(*build_ptr)();
 

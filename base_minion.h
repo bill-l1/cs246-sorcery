@@ -16,10 +16,10 @@ class BaseMinion : public Minion {
 		int getDefense() const override;
 		void setDefense(const int &def) override;
 		int getActions() const override;
+		void setActions(const int &n) override;
 		int getActivateCost() const override;
-		void attackOther(Minion * target) override;
 		void buff(const int &att, const int &def) override;
-		Minion * getBase() const override;
+		Minion * getBase() override;
 };
 
 #endif

@@ -16,8 +16,8 @@ class Card  {
 	public:
 		Card(const std::string &name, const std::string &description, const int &cost, const std::string &type);
 		virtual ~Card();
-		std::string getName() const;
-		std::string getDescription() const;
+		virtual std::string getName() const;
+		virtual std::string getDescription() const;
 		int getCost() const;
 		Player * getOwner() const;
 		void setOwner(Player * player);	

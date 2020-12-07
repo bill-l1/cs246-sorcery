@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "base_minion.h"
 #include "minion.h"
 
@@ -6,7 +7,7 @@ BaseMinion::BaseMinion(const std::string &name, const std::string &description, 
 	: Minion{name, description, cost, "Minion"},
 	attack{att},
 	defense{def},
-	actions{1},
+	actions{0},
 	activateCost{activateCost}
 {}
 
@@ -32,20 +33,24 @@ int BaseMinion::getActions() const {
 	return actions;
 }
 
+void BaseMinion::setActions(const int &n) {
+	actions = n;
+}
+
 int BaseMinion::getActivateCost() const {
 	return activateCost;
 }
 
-void BaseMinion::attackOther(Minion * target){
-	this->buff(0, -target->getAttack());
-	target->buff(0, -getAttack());
-}
+// void BaseMinion::attackOther(Minion * target){
+// 	this->buff(0, -target->getAttack());
+// 	target->buff(0, -getAttack());
+// }
 
 void BaseMinion::buff(const int &att, const int &def){
 	attack += att;
 	defense += def;
 }
 
-BaseMinion * BaseMinion::getBase(){
+Minion * BaseMinion::getBase() {
 	return this;
 }

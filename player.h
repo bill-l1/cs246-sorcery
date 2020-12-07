@@ -9,6 +9,7 @@
 class Card;
 class Minion;
 class BaseMinion;
+class Enchantment;
 
 class Player  {
 	std::string name;
@@ -32,6 +33,7 @@ class Player  {
 		int getBoardSize() const;
 		void draw();
 		void playCard(std::unique_ptr<BaseMinion> card);
+		void playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion>& target);
 		//void playCard(std::unique_ptr<Card> card); this shouldn't ever be called !!
 		//void runOnPlay(); //iterate through all board/rituals for onPlay effects
 		//void runOnStartTurn(); 

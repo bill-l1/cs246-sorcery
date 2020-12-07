@@ -56,3 +56,17 @@ MinionList::MasterSummoner::MasterSummoner()
 	"Summon up to three 1/1 air elementals",
 	3, 2, 2, 2}
 {}
+
+EnchantmentList::GiantStrength::GiantStrength()
+	: Enchantment{
+	"Giant Strength",
+	"",
+	1, "+2", "+2"}
+{}
+
+EnchantmentList::Enrage::Enrage()
+	: Enchantment{
+	"Enrage",
+	"",
+	1, "*2", "-2"}
+{}

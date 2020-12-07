@@ -88,7 +88,7 @@ void Game::update() {
 			//end game
 		}
 	}
-	}
+}
 
 std::shared_ptr<Player> Game::getP1() const {
 	return p1;
@@ -153,7 +153,6 @@ void Game::play(const int &pos){
 		}
 
 		activePlayer->setMagic(activePlayer->getMagic() - activePlayer->hand[pos]->getCost());
-		
 		std::unique_ptr<Card> card = move(activePlayer->hand[pos]);
 		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
 		if(auto cast = dynamic_cast<BaseMinion *>(card.get())){
@@ -161,11 +160,11 @@ void Game::play(const int &pos){
 			card.release(); // if this causes a leak im finna lose it
 			cast_card.reset(cast); //prob set up a helper function for this.
 			activePlayer->playCard(move(cast_card));	
-		}
-		else{ //TODO add other card types
+		}else{ //TODO add other card types
 			view->printAlert("Invalid card type.");
 			//exception handling
 		}
+		update(); //TODO move to play effects loop
 	}else{
 		view->printAlert("Invalid selection.");
 		//TODO exception
@@ -174,7 +173,8 @@ void Game::play(const int &pos){
 
 void Game::play(const int &pos, const int &pnum, const char &t){
 		int t2 = 9999;
-		Card * target = nullptr;
+	//Card * target = nullptr;
+	
 		switch(t) {
 		case '0':
 			t2 = 0;
@@ -192,18 +192,16 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 			t2 = 4;
 			break;
 		}
-		if(pos < activePlayer->getHandSize()){
-		if(pnum == 1 && p1->board.size() > t2) {
-		target = dynamic_cast<Card *>(p1->board[t2].get());
 
-		}
-		else if (pnum == 2 && p2->board.size() > t2) {
-		target = dynamic_cast<Card *>(p2->board[t2].get());
-		}
-		else {
+		if(pos < activePlayer->getHandSize()){
+		std::vector<Player *> players{p1.get(), p2.get()};
+		if((pnum == 1 && p1->board.size() <= t2) || (pnum == 2 && p2->board.size() <= t2) || pnum > 2) {
 		view->printAlert("Invalid target");
 		return;
 		}
+		std::unique_ptr<Minion>& target = players[pnum-1]->board[t2]; 
+		//create target for ritual TODO
+
 		if(activePlayer->getMagic() < activePlayer->hand[pos]->getCost()){
 			if(testing){
 				activePlayer->setMagic(activePlayer->hand[pos]->getCost());
@@ -213,11 +211,20 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 			}
 			//TODO
 		}
+		
 		activePlayer->setMagic(activePlayer->getMagic() - activePlayer->hand[pos]->getCost());
 		std::unique_ptr<Card> card = move(activePlayer->hand[pos]);
 		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
-		if(auto cast = dynamic_cast<Spell *>(card.get())){
-			std::unique_ptr<Spell> cast_card;
+		// if(auto cast = dynamic_cast<Spell *>(card.get())){
+		// 	std::unique_ptr<Spell> cast_card;
+		// 	card.release(); 
+		// 	cast_card.reset(cast); 
+		// 	activePlayer->playCard(std::move(cast_card), target);	
+		// }
+		
+		if(auto cast = dynamic_cast<Enchantment *>(card.get())){
+			std::unique_ptr<Enchantment> cast_card;
+			// std::unique_ptr<Minion> t_ref = (std::unique_ptr<Minion>&) target;
 			card.release(); 
 			cast_card.reset(cast); 
 			activePlayer->playCard(std::move(cast_card), target);	
@@ -225,6 +232,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 			view->printAlert("Invalid card type.");
 			//exception handling
 		}
+		update(); //TODO move to play effects loop
 	}else{
 		view->printAlert("Invalid selection.");
 		//TODO exception
@@ -247,7 +255,7 @@ void Game::attack(const int &pos, const int &t){
 	if(pos < activePlayer->getBoardSize() && t < nonActivePlayer->getBoardSize()){
 		Minion * minion = activePlayer->board[pos].get();
 		Minion * other = nonActivePlayer->board[t].get();
-		view->printAlert(minion->getName() + " attacks " + other->getName()+"!", 1);
+		view->printAlert(minion->getMinionName() + " attacks " + other->getMinionName()+"!", 1);
 		minion->attackOther(other);
 		update();
 	}else{
@@ -258,6 +266,7 @@ void Game::attack(const int &pos, const int &t){
 void Game::buff(Player * player, const int &n){
 	std::string name = player->getName();
 	player->setLife(player->getLife()+n);
+	// TODO move to view.
 	if(n > 0){
 		view->printAlert(name+" healed "+ std::to_string(abs(n)) +" damage!", 2);
 	}else if (n < 0){
@@ -269,7 +278,8 @@ void Game::buff(Player * player, const int &n){
 
 void Game::buff(Minion * minion, const int &att, const int &def){
 	std::string owner = minion->getOwner()->getName();
-	std::string name = minion->getName();
+	std::string name = minion->getMinionName();
+	minion->buff(att, def);
 	if(att > 0){
 		view->printAlert(owner+"'s "+name+" gained "+ std::to_string(abs(att)) +" attack!", 2);
 	}else if (att < 0){

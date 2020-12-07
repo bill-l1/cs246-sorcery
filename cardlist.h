@@ -2,6 +2,7 @@
 #define CARDLIST_H
 
 #include "base_minion.h"
+#include "enchantment.h"
 
 //Steps to create a new card:
 // 1. add it to header
@@ -20,6 +21,13 @@ class MinionList {
 	class NovicePyromancer : public BaseMinion { public: NovicePyromancer(); };
 	class ApprenticeSummoner : public BaseMinion { public: ApprenticeSummoner(); };
 	class MasterSummoner : public BaseMinion { public: MasterSummoner(); };
+};
+
+class EnchantmentList {
+	public:
+	class GiantStrength : public Enchantment { public: GiantStrength(); };
+	class Enrage : public Enchantment { public: Enrage(); };
+	class MagicFatigue : public Enchantment { public: MagicFatigue(); };
 };
 
 #endif

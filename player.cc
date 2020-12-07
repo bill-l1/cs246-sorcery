@@ -1,8 +1,11 @@
 #include <string>
 #include <memory>
 #include <stack>
+#include <iostream>
 #include "player.h"
+#include "minion.h"
 #include "base_minion.h"
+#include "enchantment.h"
 
 Player::Player(const std::string &name)
 	: name{name},
@@ -62,6 +65,14 @@ void Player::playCard(std::unique_ptr<BaseMinion> card){
 		//TODO exception
 	}
 }
+
+void Player::playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion> &target){
+	Enchantment * enchant = card.release();
+	enchant->setComponent(target.get()); // attach minion to enchant
+	target.release();
+	target.reset(enchant);
+}
+
 /*
 void Player::playCard(unique_ptr<Card> card){
 	cout << "wrong func" << endl;
