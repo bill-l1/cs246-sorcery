@@ -14,7 +14,7 @@ Enchantment::~Enchantment(){}
 
 int Enchantment::statConvert(const int &in, const std::string &s) const{
     try{
-        if (s.length() < 2) throw;
+        if (s.length() < 2) throw std::exception();
         int val = stoi(s.substr(1));
         if(s[0] == '+'){
             return in + val;
@@ -24,10 +24,10 @@ int Enchantment::statConvert(const int &in, const std::string &s) const{
             return in * val;
         }
         return val;
-    }catch(...){
+    } catch(...) {
         //TODO
+        return in;
     }
-    return in;
 }
 
 std::string Enchantment::getMinionName() const {

@@ -52,13 +52,18 @@ std::stack<std::unique_ptr<Card>> Game::loadDeck(const std::string &dname, const
 	while(std::getline(f, s)) {
 		cardNames.push_back(s);	
 	}
+	
 	if(doShuffle){
 		shuffleVector<std::string>(cardNames);
+	}else{
+		std::reverse(cardNames.begin(), cardNames.end());
 	}
+
 	for(auto cardName : cardNames){
-		deck.push(move(CardFactory::getCard(cardName, owner)));
+		deck.push(std::move(CardFactory::getCard(cardName, owner)));
 	} 
-	return move(deck);	
+
+	return std::move(deck);	
 }
 
 template <typename T>
@@ -165,14 +170,14 @@ void Game::play(const int &pos){
 		}
 
 		activePlayer->setMagic(activePlayer->getMagic() - activePlayer->hand[pos]->getCost());
-		std::unique_ptr<Card> card = move(activePlayer->hand[pos]);
+		std::unique_ptr<Card> card = std::move(activePlayer->hand[pos]);
 		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
 		if(auto cast = dynamic_cast<BaseMinion *>(card.get())){
 			view->printAlert(activePlayer->getName()+" summons "+card->getName()+"!", 2);
 			std::unique_ptr<BaseMinion> cast_card;
 			card.release(); // if this causes a leak im finna lose it
 			cast_card.reset(cast); //prob set up a helper function for this.
-			activePlayer->playCard(move(cast_card));
+			activePlayer->playCard(std::move(cast_card));
 		}else{ //TODO add other card types
 			view->printAlert("Invalid card type.");
 			//exception handling
@@ -216,7 +221,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		}
 		
 		activePlayer->setMagic(activePlayer->getMagic() - activePlayer->hand[pos]->getCost());
-		std::unique_ptr<Card> card = move(activePlayer->hand[pos]);
+		std::unique_ptr<Card> card = std::move(activePlayer->hand[pos]);
 		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
 		// if(auto cast = dynamic_cast<Spell *>(card.get())){
 		// view->printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
