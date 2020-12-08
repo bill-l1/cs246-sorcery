@@ -21,7 +21,6 @@ Game::Game(const std::string &p1name, const std::string &p2name, const std::stri
 	p1->setDeck(std::move(loadDeck(p1deckname, !testing, p1.get())));
 	p2 = std::make_shared<Player>(p2name);
 	p2->setDeck(std::move(loadDeck(p2deckname, !testing, p2.get())));
-
 	for(int i = 0; i < 4; i++){
 		p1->draw();
 		p2->draw();
@@ -74,6 +73,7 @@ void Game::update() {
 	for(auto && minion : p1->board){
 		if(minion->getDefense() <= 0){
 			int index = &minion - &p1->board[0];
+			//std::cout << "yeah this died";
 			minion->onDeath();
 			p1->graveyard.push(move(minion)); //TODO account for enchantments
 			p1->board.erase(p1->board.begin()+index);
@@ -118,7 +118,7 @@ int Game::getTurns() const{
 
 void Game::endTurn(){
 	for(auto && minion : activePlayer.get()->board){
-	minion->onEndTurn;
+	minion->onEndTurn();
 	}
 	swap(activePlayer, nonActivePlayer);
 	turns++;
@@ -167,6 +167,7 @@ void Game::play(const int &pos){
 		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
 		if(auto cast = dynamic_cast<BaseMinion *>(card.get())){
 			std::unique_ptr<BaseMinion> cast_card;
+			card.get()->setGame(this);
 			card.release(); // if this causes a leak im finna lose it
 			cast_card.reset(cast); //prob set up a helper function for this.
 			activePlayer->playCard(move(cast_card));
@@ -177,7 +178,22 @@ void Game::play(const int &pos){
 		for(auto && minion : nonActivePlayer.get()->board){
 		minion->onEnemyPlay();
 
+		}
+		if(activePlayer.get()->ritual != nullptr) {
+		activePlayer.get()->ritual->onAllyPlay();
+		}
+		if(nonActivePlayer.get()->ritual != nullptr) {
+		nonActivePlayer.get()->ritual->onEnemyPlay();
 		}	
+
+		}
+		else if(auto cast = dynamic_cast<Ritual*>(card.get())) {
+			std::unique_ptr<Ritual> cast_card;
+			card.get()->setGame(this);
+			card.release(); // if this causes a leak im finna lose it
+			cast_card.reset(cast); //prob set up a helper function for this.
+			activePlayer->playCard(move(cast_card));
+
 
 		}
 		else{ //TODO add other card types
@@ -238,7 +254,8 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 			std::unique_ptr<Spell> cast_card;
 			card.release(); 
 			cast_card.reset(cast); 
-			activePlayer->playCard(std::move(cast_card), target);	
+			activePlayer->playCard(std::move(cast_card), target);
+			update();	
 		}else{ //TODO add other card types
 			view->printAlert("Invalid card type.");
 			//exception handling

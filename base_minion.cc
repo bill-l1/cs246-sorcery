@@ -2,12 +2,13 @@
 #include "base_minion.h"
 #include "minion.h"
 
-BaseMinion::BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost)
+BaseMinion::BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost, std::unique_ptr<Effect> eff)
 	: Minion{name, description, cost, "Minion"},
 	attack{att},
 	defense{def},
 	actions{1},
-	activateCost{activateCost}
+	activateCost{activateCost},
+	ability{std::move(eff)}
 {}
 
 BaseMinion::~BaseMinion(){}
@@ -38,5 +39,9 @@ void BaseMinion::setAttack(int atk) {
 
 void BaseMinion::setDefense(int def) {
 	defense = def;
+}
+
+Effect * BaseMinion::getAbility() const {
+return ability.get();
 }
 

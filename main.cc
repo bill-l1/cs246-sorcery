@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
 	
 	cin.exceptions(std::ios_base::eofbit);
 	std::istream * infile = &cin;
-	std::string p1deckname = "default.deck";
+	std::string p1deckname = "testrituals.deck";
 	std::string p2deckname = "default.deck";
 	std::string p1name = "Player";
 	std::string p2name = "Player";
@@ -79,7 +79,8 @@ int main(int argc, char *argv[]){
 					game.attack(pos, t);
 				}else{
 					game.attack(pos);
-				}		
+				}
+			
 			}else if(cmd == "play"){
 				int pos, pnum;
 				iss >> pos;
@@ -90,6 +91,7 @@ int main(int argc, char *argv[]){
 				}else{
 					game.play(pos);
 				}
+			
 				//}catch(...){
 					//TODO exception if play is invalid
 					// -invalid target

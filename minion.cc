@@ -20,6 +20,11 @@ int Minion::getActions() const {
 int Minion::getActivateCost() const {
     return -999;
 }
+
+Effect * Minion::getAbility() const {
+return nullptr;
+}
+
 void Minion::attackOther(Minion * target){
     return;
 }

@@ -39,7 +39,7 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	// Spells
 	{"Banish", &CardFactory::buildCard<SpellList::Banish>},
 	// Enchantments
-
+	{"Aura of Power", &CardFactory::buildCard<RitualList::auraOfPower>},
 	// Rituals
 
 };

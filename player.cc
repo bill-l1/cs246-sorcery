@@ -4,7 +4,7 @@
 #include "player.h"
 #include "base_minion.h"
 #include "spell.h"
-
+#include "ritual.h"
 Player::Player(const std::string &name)
 	: name{name},
 	life{20},
@@ -64,14 +64,18 @@ void Player::playCard(std::unique_ptr<BaseMinion> card){
 	}
 }
 
-void Player::playCard(unique_ptr<Spell> card, Card * target) {
+void Player::playCard(std::unique_ptr<Spell> card, Card * target) {
 card->getEffect()->setTarget(target);	
 card->getEffect()->run();
 }
 
-void Player::playCard(unique_ptr<Ritual> card) {
+void Player::playCard(std::unique_ptr<Ritual> card) {
+this->ritual=std::move(card);
+this->ritual.get()->setOwner(this);
+}
 
-return;
+Minion * Player::getBoardNum(int num) const {
+return board[num].get();
 
 }
 /*

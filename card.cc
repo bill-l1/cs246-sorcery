@@ -29,3 +29,9 @@ void Card::setOwner(Player * player) {
 	owner = player;
 }
 
+Game * Card::getGame() const {
+return game;
+}
+void Card::setGame(Game * newgame)  {
+this->game = newgame;
+}

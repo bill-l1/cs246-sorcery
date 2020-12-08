@@ -1,6 +1,7 @@
 #ifndef MINION_H
 #define MINION_H
 #include "card.h"
+#include "effect.h"
 
 class Minion : public Card {
 	public:
@@ -10,6 +11,7 @@ class Minion : public Card {
 		virtual int getDefense() const;
 		virtual int getActions() const;
 		virtual int getActivateCost() const;
+		virtual Effect * getAbility() const;
 		virtual void attackOther(Minion * target);
 		virtual void setAttack (int attack);
 		virtual void setDefense(int defense);
