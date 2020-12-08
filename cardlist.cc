@@ -85,7 +85,7 @@ EnchantmentList::MagicFatigue::MagicFatigue()
 	0}
 {}
 
-EnchantmentList::MagicFatigue::Silence()
+EnchantmentList::Silence::Silence()
 	: Enchantment{
 	"Silence",
 	"Enchanted minion cannot use abilities",
