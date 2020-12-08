@@ -63,7 +63,6 @@ int main(int argc, char *argv[]){
 			std::getline(*infile, s);	
 			cout << "\033[0m";
 			std::istringstream iss{s};
-			
 			std::string cmd;
 			iss >> cmd;
 			if(cmd == "help"){
@@ -99,6 +98,9 @@ int main(int argc, char *argv[]){
 			//	}
 			}else if(cmd == "use"){
 			}else if(cmd == "inspect"){
+				int pos;
+				iss >> pos;
+				game.displayMinion(pos);
 			}else if(cmd == "hand"){
 				game.displayHand();
 			}else if(cmd == "board"){

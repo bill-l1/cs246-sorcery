@@ -47,6 +47,14 @@ std::string Enchantment::getMinionDescription() const {
     }
 }
 
+int Enchantment::getMinionCost() const {
+    if(component == nullptr){
+        return getCost();
+    }else{
+        return component->getMinionCost();
+    }
+}
+
 Minion * Enchantment::getComponent() const {
     return component.get(); //TODO exception for nullptr, same goes for the rest of the methods
 }
@@ -56,12 +64,20 @@ void Enchantment::setComponent(Minion * minion){
     component.reset(minion); 
 }
 
+std::string Enchantment::getAttackStr() const {
+    return att_str;
+}
+
 int Enchantment::getAttack() const {
     return statConvert(component->getAttack(), att_str);
 }
 
 void Enchantment::setAttack(const int &att) {
     component->setAttack(att); 
+}
+
+std::string Enchantment::getDefenseStr() const {
+    return def_str;
 }
 
 int Enchantment::getDefense() const {

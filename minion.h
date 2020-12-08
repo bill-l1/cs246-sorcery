@@ -9,6 +9,7 @@ class Minion : public Card {
 		virtual Minion * getComponent() const;
 		virtual std::string getMinionName() const;
 		virtual std::string getMinionDescription() const;
+		virtual int getMinionCost() const;
 		virtual int getAttack() const;
 		virtual void setAttack(const int &att);
 		virtual int getDefense() const;

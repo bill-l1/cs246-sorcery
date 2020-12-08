@@ -21,6 +21,10 @@ std::string Minion::getMinionDescription() const {
     return getDescription();
 }
 
+int Minion::getMinionCost() const {
+    return getCost();
+}
+
 int Minion::getAttack() const {
     std::cerr << "Illegal function call from minion" << std::endl;
     return -999;

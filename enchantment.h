@@ -16,10 +16,13 @@ class Enchantment : public Minion {
         virtual ~Enchantment();
         std::string getMinionName() const override;
         std::string getMinionDescription() const override;
+        int getMinionCost() const override;
         Minion * getComponent() const override;
         void setComponent(Minion * minion);
+        std::string getAttackStr() const;
         virtual int getAttack() const override;
 		void setAttack(const int &att) override;
+        std::string getDefenseStr() const;
 		virtual int getDefense() const override;
 		void setDefense(const int &def) override;
 		virtual int getActions() const override;

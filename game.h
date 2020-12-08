@@ -34,6 +34,7 @@ class Game {
 		void draw();
 		void discard(const int &pos);
 		void displayHelp() const;
+		void displayMinion(const int &pos) const;
 		void displayHand() const;
 		void displayBoard() const;
 		void play(const int &pos); //plays card at hand[pos], no target

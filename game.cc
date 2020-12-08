@@ -30,7 +30,7 @@ Game::Game(const std::string &p1name, const std::string &p2name, const std::stri
 	view = std::make_unique<View>(this);
 	activePlayer = p1;
 	nonActivePlayer = p2;
-	turns = 0;
+	turns = 1;
 	this->testing = testing;
 
 	view->printInit();
@@ -75,13 +75,16 @@ void Game::update() {
 	for(auto &p : players){
 		for(auto it = p->board.begin(); it != p->board.end();){
 			if((*it)->getDefense() <= 0){
-				view->printAlert((*it)->getName() + " was destroyed.", 1);
-				p->graveyard.push(std::move(*it)); //TODO account for enchantments later
+				view->printAlert((*it)->getMinionName() + " was destroyed.", 1);
+				Minion * bm = (*it)->getBase();
+				it->release();
+				it->reset(bm);
+				p->graveyard.push(std::move(*it));
 				p->board.erase(it);
 			}else{
 				++it;
+			}
 		}
-	}
 
 		if(p->getLife() <= 0){
 			view->printAlert("Game over!", 2);
@@ -132,6 +135,15 @@ void Game::displayHelp() const{
 	view->printHelp();
 }
 
+void Game::displayMinion(const int &pos) const {
+	if(pos < activePlayer->getBoardSize()){
+		view->printMinion(activePlayer->board[pos].get());
+	}else{
+		view->printAlert("Invalid selection.");
+		//TODO exception
+	}
+}
+
 void Game::displayHand() const{
 	view->printHand();
 }
@@ -156,10 +168,11 @@ void Game::play(const int &pos){
 		std::unique_ptr<Card> card = move(activePlayer->hand[pos]);
 		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
 		if(auto cast = dynamic_cast<BaseMinion *>(card.get())){
+			view->printAlert(activePlayer->getName()+" summons "+card->getName()+"!", 2);
 			std::unique_ptr<BaseMinion> cast_card;
 			card.release(); // if this causes a leak im finna lose it
 			cast_card.reset(cast); //prob set up a helper function for this.
-			activePlayer->playCard(move(cast_card));	
+			activePlayer->playCard(move(cast_card));
 		}else{ //TODO add other card types
 			view->printAlert("Invalid card type.");
 			//exception handling
@@ -172,33 +185,23 @@ void Game::play(const int &pos){
 }
 
 void Game::play(const int &pos, const int &pnum, const char &t){
-		int t2 = 9999;
-	//Card * target = nullptr;
-	
-		switch(t) {
-		case '0':
-			t2 = 0;
-			break;
-		case '1':
-			t2 = 1;
-			break;
-		case '2':
-			t2 = 2;
-			break;
-		case '3':
-			t2 = 3;
-			break;
-		case '4':
-			t2 = 4;
-			break;
-		}
-
-		if(pos < activePlayer->getHandSize()){
-		std::vector<Player *> players{p1.get(), p2.get()};
-		if((pnum == 1 && p1->board.size() <= t2) || (pnum == 2 && p2->board.size() <= t2) || pnum > 2) {
+	int t2 = 9999;
+	if(t >= '0' && t <= '4'){
+		t2 = t - 48;
+	}else if (t == 'r'){
+		//TODO
+	}else{
 		view->printAlert("Invalid target");
 		return;
+	}
+
+	if(pos < activePlayer->getHandSize()){
+		std::vector<Player *> players{p1.get(), p2.get()};
+		if((pnum == 1 && p1->board.size() <= t2) || (pnum == 2 && p2->board.size() <= t2) || pnum > 2) {
+			view->printAlert("Invalid target");
+			return;
 		}
+
 		std::unique_ptr<Minion>& target = players[pnum-1]->board[t2]; 
 		//create target for ritual TODO
 
@@ -216,6 +219,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		std::unique_ptr<Card> card = move(activePlayer->hand[pos]);
 		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
 		// if(auto cast = dynamic_cast<Spell *>(card.get())){
+		// view->printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
 		// 	std::unique_ptr<Spell> cast_card;
 		// 	card.release(); 
 		// 	cast_card.reset(cast); 
@@ -223,6 +227,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		// }
 		
 		if(auto cast = dynamic_cast<Enchantment *>(card.get())){
+			view->printAlert(activePlayer->getName()+" enchants "+target->getMinionName()+" with "+card->getName()+"!", 2);
 			std::unique_ptr<Enchantment> cast_card;
 			// std::unique_ptr<Minion> t_ref = (std::unique_ptr<Minion>&) target;
 			card.release(); 
@@ -238,7 +243,6 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		//TODO exception
 	}
 }
-
 
 void Game::attack(const int &pos){
 	if(pos < activePlayer->getBoardSize()){
@@ -256,6 +260,8 @@ void Game::attack(const int &pos, const int &t){
 		Minion * minion = activePlayer->board[pos].get();
 		Minion * other = nonActivePlayer->board[t].get();
 		view->printAlert(minion->getMinionName() + " attacks " + other->getMinionName()+"!", 1);
+		view->printBuff(minion, 0, -other->getAttack());
+		view->printBuff(other, 0, -minion->getAttack());
 		minion->attackOther(other);
 		update();
 	}else{
@@ -264,38 +270,11 @@ void Game::attack(const int &pos, const int &t){
 }
 
 void Game::buff(Player * player, const int &n){
-	std::string name = player->getName();
 	player->setLife(player->getLife()+n);
-	// TODO move to view.
-	if(n > 0){
-		view->printAlert(name+" healed "+ std::to_string(abs(n)) +" damage!", 2);
-	}else if (n < 0){
-		view->printAlert(name+" took "+ std::to_string(abs(n)) +" damage!", 1);
-	}else{
-		view->printAlert(name+" took no damage.", 1);
-	}
+	view->printBuff(player, n);
 }
 
 void Game::buff(Minion * minion, const int &att, const int &def){
-	std::string owner = minion->getOwner()->getName();
-	std::string name = minion->getMinionName();
 	minion->buff(att, def);
-	if(att > 0){
-		view->printAlert(owner+"'s "+name+" gained "+ std::to_string(abs(att)) +" attack!", 2);
-	}else if (att < 0){
-		view->printAlert(owner+"'s "+name+" lost "+ std::to_string(abs(att)) +" attack!", 1);
-	}else{
-		//view->printAlert(owner+"'s "+name+" took no damage.");
-	}
-	if(def > 0){
-		view->printAlert(owner+"'s "+name+" gained "+ std::to_string(abs(def)) +" defense!", 2);
-	}else if (att == 0 && def < 0){
-		view->printAlert(owner+"'s "+name+" took "+ std::to_string(abs(def)) +" damage!", 1);
-	}else if (def < 0){
-		view->printAlert(owner+"'s "+name+" lost "+ std::to_string(abs(def)) +" defense!", 1);
-	}else if (att == 0) {
-		view->printAlert(owner+"'s "+name+" took no damage.", 1);
-	}else{
-		//
-	}
+	view->printBuff(minion, att, def);
 }

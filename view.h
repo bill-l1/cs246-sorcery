@@ -2,6 +2,9 @@
 #define VIEW_H
 #include <string>
 #include <vector>
+#include "ascii_graphics.h"
+
+#define COOL_DRAWINGS 1
 
 class Game;
 
@@ -24,11 +27,12 @@ const std::string _GREEN_BG = "\033[1;42m";
 const std::string _YELLOW = "\033[33m";
 const std::string _YELLOW_BG = "\033[1;30m\033[1;43m";
 const std::string _BLUE = "\033[34m";
+const std::string _BLUE_BG = "\033[1;44m";
 const std::string _WHITE = "\033[1;37m";
 const std::string _RESET = "\033[0m";
 
-// const std::string _YELLOWBG = "\033[43m";
-// const std::string _WHITEBG = "\033[47m";
+class Player;
+class Minion;
 
 class View {
 	Game * game;
@@ -40,9 +44,17 @@ class View {
 		void printInit() const; // print at beginning of the game
 		void printHelp() const; // print help
 		void printStartTurn() const; // print at start of turn
-		void printBoard() const; // print the board
+		void printMinion(Minion * minion) const; // print minion
 		void printHand() const; // print the hand
-//		void printMinion() const; TODO
+		void printBoard() const; // print the board
+		void printBuff(Player * player, const int &n) const;
+		void printBuff(Minion * minion, const int &att, const int &def) const;
+
+	friend std::ostream& operator<<(std::ostream& os, const std::vector<std::string>& v);
+	friend std::ostream& operator<<(std::ostream& os, const std::vector<card_template_t>& temps);
 };
+
+std::ostream& operator<<(std::ostream& os, const std::vector<std::string>& v);
+std::ostream& operator<<(std::ostream& os, const std::vector<card_template_t>& temps);
 
 #endif
