@@ -41,7 +41,9 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	// Enchantments
 	{"Giant Strength", &CardFactory::buildCard<EnchantmentList::GiantStrength>},
 	{"Enrage", &CardFactory::buildCard<EnchantmentList::Enrage>},
-	
+	{"Delay", &CardFactory::buildCard<EnchantmentList::Delay>},
+	{"Magic Fatigue", &CardFactory::buildCard<EnchantmentList::MagicFatigue>},
+	{"Silence", &CardFactory::buildCard<EnchantmentList::Silence>},
 	// Rituals
 
 };

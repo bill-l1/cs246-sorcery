@@ -70,3 +70,24 @@ EnchantmentList::Enrage::Enrage()
 	"",
 	1, "*2", "-2"}
 {}
+
+EnchantmentList::Delay::Delay()
+	: Enchantment{
+	"Delay",
+	"Enchanted minion does not gain an action on their next turn. This enchantment is automatically destroyed after 1 turn",
+	2}
+{}
+
+EnchantmentList::MagicFatigue::MagicFatigue()
+	: Enchantment{
+	"Magic Fatigue",
+	"Enchanted minion's activated ability costs 2 more",
+	0}
+{}
+
+EnchantmentList::MagicFatigue::Silence()
+	: Enchantment{
+	"Silence",
+	"Enchanted minion cannot use abilities",
+	1}
+{}

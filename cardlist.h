@@ -27,7 +27,9 @@ class EnchantmentList {
 	public:
 	class GiantStrength : public Enchantment { public: GiantStrength(); };
 	class Enrage : public Enchantment { public: Enrage(); };
+	class Delay : public Enchantment { public: Delay(); };
 	class MagicFatigue : public Enchantment { public: MagicFatigue(); };
+	class Silence : public Enchantment { public: Silence(); };
 };
 
 #endif
