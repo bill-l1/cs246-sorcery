@@ -25,10 +25,10 @@ class Game {
 	void update(); //helper function for checking card/player states after actions
 	public:
 		Game(const std::string &p1name, const std::string &p2name, const std::string &p1deckname, const std::string &p2deckname, const bool &testing); //starts the game, creating players and decks from player/file names
-		std::shared_ptr<Player> getP1() const;
-		std::shared_ptr<Player> getP2() const;
-		std::shared_ptr<Player> getActivePlayer() const;
-		std::shared_ptr<Player> getNonActivePlayer() const;
+		Player * getP1() const;
+		Player * getP2() const;
+		Player * getActivePlayer() const;
+		Player * getNonActivePlayer() const;
 		int getTurns() const;
 		void endTurn(); //ends turn, runs end turn triggers and swaps active players
 		void draw();

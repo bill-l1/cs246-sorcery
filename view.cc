@@ -11,6 +11,8 @@
 #include "minion.h"
 #include "base_minion.h"
 #include "enchantment.h"
+#include "spell.h"
+#include "ritual.h"
 #include "ascii_graphics.h"
 
 using std::cout;
@@ -140,7 +142,16 @@ void View::printBoard() const {
 		}
 
 		card_template_t p1_card = display_player_card(1, game->getP1()->getName(), game->getP1()->getLife(), game->getP1()->getMagic());
-		card_template_t p1_ritual = CARD_TEMPLATE_BORDER; //TODO
+		Ritual * p1_rptr = game->getP1()->getRitual();
+		card_template_t p1_ritual = (p1_rptr != nullptr) ? 
+			display_ritual(
+				p1_rptr->getName(),
+				p1_rptr->getCost(),
+				0, //TODO
+				p1_rptr->getDescription(),
+				p1_rptr->getCharges()
+			)
+			: CARD_TEMPLATE_BORDER;
 		card_template_t p1_graveyard = (game->getP1()->graveyard.size()) 
 			? display_any_minion(game->getP1()->graveyard.top().get()) : CARD_TEMPLATE_BORDER;
 		std::vector<card_template_t> r1 {BD, p1_ritual, CARD_TEMPLATE_EMPTY, p1_card, CARD_TEMPLATE_EMPTY, p1_graveyard, BD};
@@ -155,10 +166,20 @@ void View::printBoard() const {
 		p1_board.push_back(BD);
 
 		card_template_t p2_card = display_player_card(2, game->getP2()->getName(), game->getP2()->getLife(), game->getP2()->getMagic());
-		card_template_t p2_ritual = CARD_TEMPLATE_BORDER; //TODO
+		Ritual * p2_rptr = game->getP2()->getRitual();
+		card_template_t p2_ritual = (p2_rptr != nullptr) ? 
+			display_ritual(
+				p2_rptr->getName(),
+				p2_rptr->getCost(),
+				0, //TODO
+				p2_rptr->getDescription(),
+				p2_rptr->getCharges()
+			) 
+			: CARD_TEMPLATE_BORDER;
 		card_template_t p2_graveyard = (game->getP2()->graveyard.size()) 
 			? display_any_minion(game->getP2()->graveyard.top().get()) : CARD_TEMPLATE_BORDER;
 		std::vector<card_template_t> r2 {BD, p2_ritual, CARD_TEMPLATE_EMPTY, p2_card, CARD_TEMPLATE_EMPTY, p2_graveyard, BD};
+		
 		std::vector<card_template_t> p2_board{BD};
 		for(unsigned i = 0; i < 5; i++){
 			if(i < game->getP2()->board.size()){
@@ -256,6 +277,11 @@ static card_template_t display_any_card(Card * card) {
 		return display_any_minion(cast);
 	}else if(Enchantment * cast = dynamic_cast<Enchantment *>(card)){
 		return display_any_enchantment(cast);
+	}else if(Spell * cast = dynamic_cast<Spell *>(card)){
+		return display_spell(cast->getName(), cast->getCost(), cast->getDescription());
+	}else if(Ritual * cast = dynamic_cast<Ritual *>(card)){
+		//TODO FIX 0
+		return display_ritual(cast->getName(), cast->getCost(), 0, cast->getDescription(), cast->getCharges());
 	}else {
 		return CARD_TEMPLATE_BORDER;
 	}

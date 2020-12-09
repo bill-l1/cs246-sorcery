@@ -17,7 +17,6 @@ class Ritual : public Card {
 		virtual void onAllyPlay();
 		virtual void onEnemyPlay();
 		void setCharges(int chg);
-
 };
 
 #endif
