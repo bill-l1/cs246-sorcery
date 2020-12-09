@@ -6,6 +6,8 @@
 #include "minion.h"
 #include "base_minion.h"
 #include "enchantment.h"
+#include "spell.h"
+#include "ritual.h"
 
 Player::Player(const std::string &name)
 	: name{name},
@@ -49,9 +51,13 @@ int Player::getBoardSize() const {
 	return board.size();
 }
 
+Ritual * Player::getRitual() const {
+	return ritual.get();
+}
+
 void Player::draw() {
 	if(!deck.empty() && hand.size() < 5){
-		hand.push_back(move(deck.top()));
+		hand.push_back(std::move(deck.top()));
 		deck.pop();
 	}else{
 		//TODO add exception
@@ -73,6 +79,20 @@ void Player::playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion>
 	target.reset(enchant);
 }
 
+void Player::playCard(std::unique_ptr<Spell> card, Card * target) {
+	card->getEffect()->setTarget(target);	
+	card->getEffect()->run();
+}
+
+void Player::playCard(std::unique_ptr<Ritual> card) {
+	this->ritual=std::move(card);
+	this->ritual.get()->setOwner(this);
+}
+
+Minion * Player::getBoardNum(int num) const {
+return board[num].get();
+
+}
 /*
 void Player::playCard(unique_ptr<Card> card){
 	cout << "wrong func" << endl;

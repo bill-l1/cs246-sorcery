@@ -11,6 +11,8 @@ class Minion;
 class BaseMinion;
 class Enchantment;
 
+class Spell;
+class Ritual;
 class Player  {
 	std::string name;
 	int life;
@@ -19,7 +21,7 @@ class Player  {
 	std::vector<std::unique_ptr<Card> > hand;
 	std::vector<std::unique_ptr<Minion>> board;
 	std::stack<std::unique_ptr<Minion>> graveyard;
-	//std::unique_ptr<Card> ritual;
+	std::unique_ptr<Ritual> ritual;
 	public:
 		Player(const std::string &name);
 		std::string getName() const;
@@ -31,9 +33,13 @@ class Player  {
 		void setDeck(std::stack<std::unique_ptr<Card>> d);
 		int getHandSize() const;
 		int getBoardSize() const;
+		Ritual * getRitual() const;
 		void draw();
 		void playCard(std::unique_ptr<BaseMinion> card);
 		void playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion>& target);
+		void playCard(std::unique_ptr<Spell> card, Card * target);
+		void playCard(std::unique_ptr<Ritual> card);
+		Minion * getBoardNum(int num) const;
 		//void playCard(std::unique_ptr<Card> card); this shouldn't ever be called !!
 		//void runOnPlay(); //iterate through all board/rituals for onPlay effects
 		//void runOnStartTurn(); 

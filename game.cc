@@ -21,7 +21,6 @@ Game::Game(const std::string &p1name, const std::string &p2name, const std::stri
 	p1->setDeck(std::move(loadDeck(p1deckname, !testing, p1.get())));
 	p2 = std::make_shared<Player>(p2name);
 	p2->setDeck(std::move(loadDeck(p2deckname, !testing, p2.get())));
-
 	for(int i = 0; i < 4; i++){
 		p1->draw();
 		p2->draw();
@@ -81,6 +80,7 @@ void Game::update() {
 		for(auto it = p->board.begin(); it != p->board.end();){
 			if((*it)->getDefense() <= 0){
 				view->printAlert((*it)->getMinionName() + " was destroyed.", 1);
+				(*it)->onDeath();
 				Minion * bm = (*it)->getBase();
 				it->release();
 				it->reset(bm);
@@ -98,20 +98,20 @@ void Game::update() {
 	}
 }
 
-std::shared_ptr<Player> Game::getP1() const {
-	return p1;
+Player * Game::getP1() const {
+	return p1.get();
 }
 
-std::shared_ptr<Player> Game::getP2() const {
-	return p2;
+Player * Game::getP2() const {
+	return p2.get();
 }
 
-std::shared_ptr<Player> Game::getActivePlayer() const {
-	return activePlayer;
+Player * Game::getActivePlayer() const {
+	return activePlayer.get();
 }
 
-std::shared_ptr<Player> Game::getNonActivePlayer() const {
-	return nonActivePlayer;
+Player * Game::getNonActivePlayer() const {
+	return nonActivePlayer.get();
 }
 
 int Game::getTurns() const{
@@ -119,7 +119,10 @@ int Game::getTurns() const{
 }
 
 void Game::endTurn(){
-	std::swap(activePlayer, nonActivePlayer);
+	for(auto && minion : activePlayer.get()->board){
+	minion->onEndTurn();
+	}
+	swap(activePlayer, nonActivePlayer);
 	turns++;
 	startTurn();
 }
@@ -175,9 +178,31 @@ void Game::play(const int &pos){
 		if(auto cast = dynamic_cast<BaseMinion *>(card.get())){
 			view->printAlert(activePlayer->getName()+" summons "+card->getName()+"!", 2);
 			std::unique_ptr<BaseMinion> cast_card;
+			card.get()->setGame(this);
 			card.release(); // if this causes a leak im finna lose it
 			cast_card.reset(cast); //prob set up a helper function for this.
 			activePlayer->playCard(std::move(cast_card));
+			for(auto && minion : activePlayer.get()->board){
+				minion->onAllyPlay();
+			}
+			for(auto && minion : nonActivePlayer.get()->board){
+				minion->onEnemyPlay();
+			}
+			if(activePlayer.get()->ritual != nullptr) {
+				activePlayer.get()->ritual->onAllyPlay();
+			}
+			if(nonActivePlayer.get()->ritual != nullptr) {
+				nonActivePlayer.get()->ritual->onEnemyPlay();
+			}	
+
+		}else if(auto cast = dynamic_cast<Ritual*>(card.get())) {
+			std::unique_ptr<Ritual> cast_card;
+			card.get()->setGame(this);
+			card.release(); // if this causes a leak im finna lose it
+			cast_card.reset(cast); //prob set up a helper function for this.
+			activePlayer->playCard(move(cast_card));
+
+
 		}else{ //TODO add other card types
 			view->printAlert("Invalid card type.");
 			//exception handling
@@ -191,23 +216,26 @@ void Game::play(const int &pos){
 
 void Game::play(const int &pos, const int &pnum, const char &t){
 	int t2 = 9999;
+	Card * target = nullptr;
+	std::vector<Player *> players{p1.get(), p2.get()};
+
 	if(t >= '0' && t <= '4'){
 		t2 = t - 48;
+		target = players[pnum-1]->board[t2].get();
 	}else if (t == 'r'){
-		//TODO
+		target = players[pnum-1]->ritual.get();
 	}else{
 		view->printAlert("Invalid target");
 		return;
 	}
 
 	if(pos < activePlayer->getHandSize()){
-		std::vector<Player *> players{p1.get(), p2.get()};
 		if((pnum == 1 && p1->board.size() <= t2) || (pnum == 2 && p2->board.size() <= t2) || pnum > 2) {
 			view->printAlert("Invalid target");
 			return;
 		}
 
-		std::unique_ptr<Minion>& target = players[pnum-1]->board[t2]; 
+		std::unique_ptr<Ritual>& r_target = players[pnum-1]->ritual;
 		//create target for ritual TODO
 
 		if(activePlayer->getMagic() < activePlayer->hand[pos]->getCost()){
@@ -223,31 +251,34 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		activePlayer->setMagic(activePlayer->getMagic() - activePlayer->hand[pos]->getCost());
 		std::unique_ptr<Card> card = std::move(activePlayer->hand[pos]);
 		activePlayer->hand.erase(activePlayer->hand.begin()+pos);
-		// if(auto cast = dynamic_cast<Spell *>(card.get())){
-		// view->printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
-		// 	std::unique_ptr<Spell> cast_card;
-		// 	card.release(); 
-		// 	cast_card.reset(cast); 
-		// 	activePlayer->playCard(std::move(cast_card), target);	
-		// }
 		
-		if(auto cast = dynamic_cast<Enchantment *>(card.get())){
-			view->printAlert(activePlayer->getName()+" enchants "+target->getMinionName()+" with "+card->getName()+"!", 2);
+		if(auto cast = dynamic_cast<Spell *>(card.get())){
+			view->printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
+			std::unique_ptr<Spell> cast_card;
+			card.release(); 
+			cast_card.reset(cast); 
+			activePlayer->playCard(std::move(cast_card), target);	
+		}else if(auto cast = dynamic_cast<Enchantment *>(card.get())){
+			//TODO verify minion target
+			std::unique_ptr<Minion>& m_target = players[pnum-1]->board[t2];
+			view->printAlert(activePlayer->getName()+" enchants "+m_target->getMinionName()+" with "+card->getName()+"!", 2);
 			std::unique_ptr<Enchantment> cast_card;
 			// std::unique_ptr<Minion> t_ref = (std::unique_ptr<Minion>&) target;
 			card.release(); 
 			cast_card.reset(cast); 
-			activePlayer->playCard(std::move(cast_card), target);	
-		}else{ //TODO add other card types
+			activePlayer->playCard(std::move(cast_card), m_target);	
+		}else{ 
 			view->printAlert("Invalid card type.");
 			//exception handling
 		}
+		
 		update(); //TODO move to play effects loop
 	}else{
 		view->printAlert("Invalid selection.");
 		//TODO exception
 	}
 }
+
 
 void Game::attack(const int &pos){
 	if(pos < activePlayer->getBoardSize()){

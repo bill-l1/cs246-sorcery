@@ -4,6 +4,11 @@
 #include "base_minion.h"
 #include "enchantment.h"
 
+#include "spell.h"
+#include "sampleeffect.h"
+#include "game.h"
+#include "ritual.h"
+#include "banisheffect.h"
 //Steps to create a new card:
 // 1. add it to header
 // 	class NAME : public TYPE_CLASS { public : NAME(); };
@@ -17,7 +22,7 @@ class MinionList {
 	class EarthElemental : public BaseMinion { public: EarthElemental(); };
 	class Bomb : public BaseMinion { public: Bomb(); };
 	class FireElemental : public BaseMinion { public: FireElemental(); };
-	class PotionSeller : public BaseMinion { public: PotionSeller(); };
+	class PotionSeller : public BaseMinion { public: PotionSeller(); void onEndTurn() override; };
 	class NovicePyromancer : public BaseMinion { public: NovicePyromancer(); };
 	class ApprenticeSummoner : public BaseMinion { public: ApprenticeSummoner(); };
 	class MasterSummoner : public BaseMinion { public: MasterSummoner(); };
@@ -30,6 +35,21 @@ class EnchantmentList {
 	class Delay : public Enchantment { public: Delay(); };
 	class MagicFatigue : public Enchantment { public: MagicFatigue(); };
 	class Silence : public Enchantment { public: Silence(); };
+};
+
+class SpellList {
+	public:
+	class Banish : public Spell { public: Banish(); };
+	//class Unsummon : public Spell { public: Unsummon(Player * owner, Card * Target); };
+	//class Disenchant : public Spell { public: Disenchant(P); };
+
+
+};
+
+class RitualList {
+	public:
+	class auraOfPower : public Ritual { public: auraOfPower(); void onAllyPlay() override; };
+
 };
 
 #endif

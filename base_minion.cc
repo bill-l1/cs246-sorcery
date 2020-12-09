@@ -3,12 +3,13 @@
 #include "base_minion.h"
 #include "minion.h"
 
-BaseMinion::BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost)
+BaseMinion::BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost, std::unique_ptr<Effect> eff)
 	: Minion{name, description, cost, "Minion"},
 	attack{att},
 	defense{def},
 	actions{0},
-	activateCost{activateCost}
+	activateCost{activateCost},
+	ability{std::move(eff)}
 {}
 
 BaseMinion::~BaseMinion(){}
@@ -41,11 +42,6 @@ int BaseMinion::getActivateCost() const {
 	return activateCost;
 }
 
-// void BaseMinion::attackOther(Minion * target){
-// 	this->buff(0, -target->getAttack());
-// 	target->buff(0, -getAttack());
-// }
-
 void BaseMinion::buff(const int &att, const int &def){
 	attack += att;
 	defense += def;
@@ -54,3 +50,8 @@ void BaseMinion::buff(const int &att, const int &def){
 Minion * BaseMinion::getBase() {
 	return this;
 }
+
+Effect * BaseMinion::getAbility() const {
+return ability.get();
+}
+

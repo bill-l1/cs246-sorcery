@@ -37,7 +37,8 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	{"Master Summoner", &CardFactory::buildCard<MinionList::MasterSummoner>},
 
 	// Spells
-
+	{"Banish", &CardFactory::buildCard<SpellList::Banish>},
+	
 	// Enchantments
 	{"Giant Strength", &CardFactory::buildCard<EnchantmentList::GiantStrength>},
 	{"Enrage", &CardFactory::buildCard<EnchantmentList::Enrage>},
@@ -46,5 +47,6 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	{"Silence", &CardFactory::buildCard<EnchantmentList::Silence>},
 	
 	// Rituals
+	{"Aura of Power", &CardFactory::buildCard<RitualList::auraOfPower>},
 
 };

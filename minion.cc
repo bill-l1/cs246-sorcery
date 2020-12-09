@@ -60,6 +60,10 @@ int Minion::getActivateCost() const {
     return -999;
 }
 
+Effect * Minion::getAbility() const {
+return nullptr;
+}
+
 void Minion::attackOther(Minion * target){
     this->buff(0, -target->getAttack());
 	target->buff(0, -this->getAttack());
@@ -73,4 +77,23 @@ void Minion::buff(const int &att, const int &def){
 Minion * Minion::getBase() {
     std::cerr << "Illegal function call from minion" << std::endl;
     return nullptr;
+}
+
+void Minion::onDeath() {
+return;
+}
+
+void Minion::onEndTurn() {
+
+return;
+}
+
+void Minion::onAllyPlay() {
+
+return;
+}
+
+void Minion::onEnemyPlay() {
+
+return;
 }

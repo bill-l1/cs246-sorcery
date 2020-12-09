@@ -1,7 +1,7 @@
 #ifndef CARD_H
 #define CARD_H
 #include <string>
-
+#include "game.h"
 // may need helper funciton to move from deck to hand to board to etc.
 
 class Player;
@@ -12,6 +12,7 @@ class Card  {
 	int cost;
 	Player * owner;
 	std::string type;
+	Game * game;
 
 	public:
 		Card(const std::string &name, const std::string &description, const int &cost, const std::string &type);
@@ -22,6 +23,8 @@ class Card  {
 		Player * getOwner() const;
 		void setOwner(Player * player);	
 		std::string getType() const;
+		Game * getGame() const;
+		void setGame(Game * game);
 
 	friend class CardFactory;
 };

@@ -1,6 +1,7 @@
 #ifndef MINION_H
 #define MINION_H
 #include "card.h"
+#include "effect.h"
 
 class Minion : public Card {
 	public:
@@ -17,9 +18,15 @@ class Minion : public Card {
 		virtual int getActions() const;
 		virtual void setActions(const int &n);
 		virtual int getActivateCost() const;
+		virtual Effect * getAbility() const;
 		virtual void attackOther(Minion * target);
 		virtual void buff(const int &att, const int &def);
 		virtual Minion * getBase();
+		virtual void onEndTurn();
+		virtual void onDeath();
+		virtual void onAllyPlay();
+		virtual void onEnemyPlay();
+	
 };
 
 #endif

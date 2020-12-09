@@ -1,5 +1,7 @@
 #include "cardlist.h"
 #include "base_minion.h"
+#include "spell.h"
+
 
 MinionList::AirElemental::AirElemental()
 	: BaseMinion{
@@ -33,8 +35,15 @@ MinionList::PotionSeller::PotionSeller()
 	: BaseMinion{
 	"Potion Seller",
 	"At the end of your turn, all your minions gain +0/+1",
-	2, 1, 3}
+	2, 1, 3,0,std::make_unique<SampleEffect>(nullptr,nullptr,0,1)}
 {}
+
+void MinionList::PotionSeller::onEndTurn() {
+	for(int i = 0; i < this->getOwner()->getBoardSize(); i++) {
+		this->getAbility()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(i));
+		this->getAbility()->run();
+	}
+}
 
 MinionList::NovicePyromancer::NovicePyromancer()
 	: BaseMinion{
@@ -91,3 +100,27 @@ EnchantmentList::Silence::Silence()
 	"Enchanted minion cannot use abilities",
 	1}
 {}
+
+SpellList::Banish::Banish()
+	:Spell {
+	"Banish",
+	"Destroy Target Minion or Ritual", 2, 
+	std::make_unique<BanishEffect>(nullptr,nullptr), nullptr}
+{}
+
+RitualList::auraOfPower::auraOfPower()
+	:Ritual {
+	"Aura of Power",
+	"Whenever a minion enters play under your control, it gains +1/+1", 1,
+	std::make_unique<SampleEffect>(nullptr,nullptr,1,1),4}
+
+{}
+
+void RitualList::auraOfPower::onAllyPlay() {
+this->setCharges(this->getCharges()-1);
+this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(this->getOwner()->getBoardSize()-1));
+this->getEffect()->run();
+return;
+
+}
+
