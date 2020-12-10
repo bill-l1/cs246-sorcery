@@ -19,6 +19,7 @@
 extern const unsigned MAX_HAND_SIZE = 5;
 extern const unsigned MAX_BOARD_SIZE = 5;
 extern const unsigned INTIAL_HAND_SIZE = 4;
+extern const unsigned MAX_ACTIONS = 1;
 
 Game::Game(const std::string &p1name, const std::string &p2name, const std::string &p1deckname, const std::string &p2deckname, const bool &testing)
 {
@@ -57,6 +58,12 @@ void Game::startTurn(){
 		printAlert("Can't draw card: hand is too full!");
 	}
 	activePlayer->setMagic(activePlayer->getMagic() + 1);
+
+	for(auto && minion : activePlayer->board){
+		minion->setActions(MAX_ACTIONS);
+	}
+
+	update();
 }
 
 std::stack<std::unique_ptr<Card>> Game::loadDeck(const std::string &dname, const bool &doShuffle, Player * owner) const {
@@ -160,9 +167,11 @@ int Game::getTurns() const{
 }
 
 void Game::endTurn(){
-	for(auto && minion : activePlayer.get()->board){
-	minion->onEndTurn();
+	for(auto && minion : activePlayer->board){
+		minion->onEndTurn();
+		minion->setActions(0);
 	}
+	update();
 	swap(activePlayer, nonActivePlayer);
 	turns++;
 	startTurn();
@@ -285,6 +294,8 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 void Game::attack(const int &pos){
 	verifyBoardPosition(activePlayer.get(), pos);
 	Minion * minion = activePlayer->board[pos].get();
+	int cost = verifyActionCost(minion, 1);
+	minion->setActions(cost);
 	printAlert(minion->getName()+" attacks "+nonActivePlayer->getName()+"!", 1);
 	buff(nonActivePlayer.get(), -minion->getAttack());
 	update();
@@ -295,6 +306,8 @@ void Game::attack(const int &pos, const int &t){
 	verifyBoardPosition(nonActivePlayer.get(), t);
 	Minion * minion = activePlayer->board[pos].get();
 	Minion * other = nonActivePlayer->board[t].get();
+	int cost = verifyActionCost(minion, 1);
+	minion->setActions(cost);
 	printAlert(minion->getMinionName() + " attacks " + other->getMinionName()+"!", 1);
 	view->printBuff(minion, 0, -other->getAttack());
 	view->printBuff(other, 0, -minion->getAttack());
@@ -355,6 +368,18 @@ int Game::verifyMagicCost(Player * player, const int &n) const {
 		}
 	}else{
 		return player->getMagic() - n;
+	}
+}
+
+int Game::verifyActionCost(Minion * minion, const int &n) const {
+	if(minion->getActions() < n){
+		if(testing){
+			return 0;
+		}else{
+			throw InsufficientActions{};
+		}
+	}else{
+		return minion->getActions() - n;
 	}
 }
 

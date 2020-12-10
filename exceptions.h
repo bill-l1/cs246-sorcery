@@ -46,6 +46,10 @@ class InsufficientMagic : public GameException {
     public: InsufficientMagic();
 };
 
+class InsufficientActions : public GameException {
+    public: InsufficientActions();
+};
+
 class HandIsFull : public GameException {
     public: HandIsFull();
 };

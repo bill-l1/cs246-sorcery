@@ -50,6 +50,10 @@ InsufficientMagic::InsufficientMagic()
     : GameException{"Not enough magic."}
 {}
 
+InsufficientActions::InsufficientActions()
+    : GameException{"Minion cannot act yet."}
+{}
+
 HandIsFull::HandIsFull()
     : GameException{"Hand is too full!"}
 {}

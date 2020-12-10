@@ -127,17 +127,17 @@ static card_template_t display_minion_general(card_template_t out,std::string na
 
 const card_template_t CARD_TEMPLATE_MINION_NO_ABILITY =
 #if SIMPLE_GRAPHICS == 0
-      {"┏━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━┓",
-       "┃ ~NNNNNNNNNNNNNNNNNNNNN~ │ ~C~ ┃",
-       "┠─────────────────────────┴─────┨",
-       "┃ ~TTTTTTTTTTTTTTTTTTTTTTTTTTT~ ┃",
-       "┠───────────────────────────────┨",
-       "┃ ~EEEEEEEEEEEEEEEEEEEEEEEEEEEE ┃",
-       "┃ EEEEEEEEEEEEEEEEEEEEEEEEEEEEE ┃",
-       "┃ EEEEEEEEEEEEEEEEEEEEEEEEEEEE~ ┃",
-       "┠─────┐                   ┌─────┨",
-       "┃ ~AA~│                   │~DD~ ┃",
-       "┗━━━━━┷━━━━━━━━━━━━━━━━━━━┷━━━━━┛"};
+      {"┏━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━┓\033[0m",
+       "┃ ~NNNNNNNNNNNNNNNNNNNNN~ │ ~C~ ┃\033[0m",
+       "┠─────────────────────────┴─────┨\033[0m",
+       "┃ ~TTTTTTTTTTTTTTTTTTTTTTTTTTT~ ┃\033[0m",
+       "┠───────────────────────────────┨\033[0m",
+       "┃ ~EEEEEEEEEEEEEEEEEEEEEEEEEEEE ┃\033[0m",
+       "┃ EEEEEEEEEEEEEEEEEEEEEEEEEEEEE ┃\033[0m",
+       "┃ EEEEEEEEEEEEEEEEEEEEEEEEEEEE~ ┃\033[0m",
+       "┠─────┐                   ┌─────┨\033[0m",
+       "┃ ~AA~│                   │~DD~ ┃\033[0m",
+       "┗━━━━━┷━━━━━━━━━━━━━━━━━━━┷━━━━━┛\033[0m"};
 #else
       {"|-------------------------------|",
        "| ~NNNNNNNNNNNNNNNNNNNNN~ | ~C~ |",
@@ -155,17 +155,17 @@ const card_template_t CARD_TEMPLATE_MINION_NO_ABILITY =
 
 const card_template_t CARD_TEMPLATE_MINION_WITH_ABILITY =
 #if SIMPLE_GRAPHICS == 0
-      {"┏━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━┓",
-       "┃ ~NNNNNNNNNNNNNNNNNNNNN~ │ ~C~ ┃",
-       "┠─────────────────────────┴─────┨",
-       "┃ ~TTTTTTTTTTTTTTTTTTTTTTTTTTT~ ┃",
-       "┠─────┬─────────────────────────┨",
-       "┃ ~K~ │ ~EEEEEEEEEEEEEEEEEEEEEE ┃",
-       "┠─────┘ EEEEEEEEEEEEEEEEEEEEEEE ┃",
-       "┃       EEEEEEEEEEEEEEEEEEEEEE~ ┃",
-       "┠─────┐                   ┌─────┨",
-       "┃ ~AA~│                   │~DD~ ┃",
-       "┗━━━━━┷━━━━━━━━━━━━━━━━━━━┷━━━━━┛"};
+      {"┏━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━┓\033[0m",
+       "┃ ~NNNNNNNNNNNNNNNNNNNNN~ │ ~C~ ┃\033[0m",
+       "┠─────────────────────────┴─────┨\033[0m",
+       "┃ ~TTTTTTTTTTTTTTTTTTTTTTTTTTT~ ┃\033[0m",
+       "┠─────┬─────────────────────────┨\033[0m",
+       "┃ ~K~ │ ~EEEEEEEEEEEEEEEEEEEEEE ┃\033[0m",
+       "┠─────┘ EEEEEEEEEEEEEEEEEEEEEEE ┃\033[0m",
+       "┃       EEEEEEEEEEEEEEEEEEEEEE~ ┃\033[0m",
+       "┠─────┐                   ┌─────┨\033[0m",
+       "┃ ~AA~│                   │~DD~ ┃\033[0m",
+       "┗━━━━━┷━━━━━━━━━━━━━━━━━━━┷━━━━━┛\033[0m"};
 #else
       {"|-------------------------------|",
        "| ~NNNNNNNNNNNNNNNNNNNNN~ | ~C~ |",

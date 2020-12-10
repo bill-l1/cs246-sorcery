@@ -158,7 +158,14 @@ void View::printBoard() const {
 		std::vector<card_template_t> p1_board {BD};
 		for(unsigned i = 0; i < 5; i++){
 			if(i < game->getP1()->board.size()){
-				p1_board.push_back(display_any_minion(game->getP1()->board[i].get()));
+				Minion * m = game->getP1()->board[i].get();
+				card_template_t m_temp = display_any_minion(m);
+				if(m->getActions() > 0){
+					for(auto & row : m_temp){
+						row = _GREEN + row;
+					}
+				}
+				p1_board.push_back(m_temp);
 			}else{
 				p1_board.push_back(CARD_TEMPLATE_BORDER);
 			}
@@ -183,7 +190,14 @@ void View::printBoard() const {
 		std::vector<card_template_t> p2_board{BD};
 		for(unsigned i = 0; i < 5; i++){
 			if(i < game->getP2()->board.size()){
-				p2_board.push_back(display_any_minion(game->getP2()->board[i].get()));
+				Minion * m = game->getP2()->board[i].get();
+				card_template_t m_temp = display_any_minion(m);
+				if(m->getActions() > 0){
+					for(auto & row : m_temp){
+						row = _GREEN + row;
+					}
+				}
+				p2_board.push_back(m_temp);
 			}else{
 				p2_board.push_back(CARD_TEMPLATE_BORDER);
 			}
