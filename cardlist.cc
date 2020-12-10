@@ -35,14 +35,15 @@ MinionList::PotionSeller::PotionSeller()
 	: BaseMinion{
 	"Potion Seller",
 	"At the end of your turn, all your minions gain +0/+1",
-	2, 1, 3,0,std::make_unique<SampleEffect>(nullptr,nullptr,0,1)}
+	2, 1, 3,-1,std::make_unique<TeamBuff>(nullptr,nullptr,0,1)}
 {}
 
-void MinionList::PotionSeller::onEndTurn() {
-	for(int i = 0; i < this->getOwner()->getBoardSize(); i++) {
-		this->getAbility()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(i));
-		this->getAbility()->run();
+Effect * MinionList::PotionSeller::onEndTurn() {
+	if(this->getOwner() != this->getGame()->getActivePlayer()) {
+	return nullptr;
 	}
+	this->getAbility()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(0));
+	return this->getAbility();
 }
 
 MinionList::NovicePyromancer::NovicePyromancer()
@@ -116,11 +117,13 @@ RitualList::auraOfPower::auraOfPower()
 
 {}
 
-void RitualList::auraOfPower::onAllyPlay() {
+Effect * RitualList::auraOfPower::onPlay() {
+if(this->getOwner() != this->getGame()->getActivePlayer()) {
+return nullptr;
+}
 this->setCharges(this->getCharges()-1);
 this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(this->getOwner()->getBoardSize()-1));
-this->getEffect()->run();
-return;
+return this->getEffect();
 
 }
 

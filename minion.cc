@@ -79,21 +79,18 @@ Minion * Minion::getBase() {
     return nullptr;
 }
 
-void Minion::onDeath() {
-return;
+Effect * Minion::onDeath() {
+
+	return nullptr;
 }
 
-void Minion::onEndTurn() {
+Effect * Minion::onEndTurn() {
+ 
 
-return;
+return nullptr;
 }
 
-void Minion::onAllyPlay() {
-
-return;
+Effect * Minion::onPlay() {
+return nullptr;
 }
 
-void Minion::onEnemyPlay() {
-
-return;
-}

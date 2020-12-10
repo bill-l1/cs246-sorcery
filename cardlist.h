@@ -9,6 +9,7 @@
 #include "game.h"
 #include "ritual.h"
 #include "banisheffect.h"
+#include "teambuff.h"
 //Steps to create a new card:
 // 1. add it to header
 // 	class NAME : public TYPE_CLASS { public : NAME(); };
@@ -22,7 +23,7 @@ class MinionList {
 	class EarthElemental : public BaseMinion { public: EarthElemental(); };
 	class Bomb : public BaseMinion { public: Bomb(); };
 	class FireElemental : public BaseMinion { public: FireElemental(); };
-	class PotionSeller : public BaseMinion { public: PotionSeller(); void onEndTurn() override; };
+	class PotionSeller : public BaseMinion { public: PotionSeller(); Effect * onEndTurn() override; };
 	class NovicePyromancer : public BaseMinion { public: NovicePyromancer(); };
 	class ApprenticeSummoner : public BaseMinion { public: ApprenticeSummoner(); };
 	class MasterSummoner : public BaseMinion { public: MasterSummoner(); };
@@ -48,7 +49,7 @@ class SpellList {
 
 class RitualList {
 	public:
-	class auraOfPower : public Ritual { public: auraOfPower(); void onAllyPlay() override; };
+	class auraOfPower : public Ritual { public: auraOfPower(); Effect * onPlay() override; };
 
 };
 

@@ -13,9 +13,8 @@ class Ritual : public Card {
 		virtual ~Ritual();
 		Effect * getEffect() const;
 		int getCharges() const;
-		virtual void onTurnStart();
-		virtual void onAllyPlay();
-		virtual void onEnemyPlay();
+		virtual Effect * onTurnStart();
+		virtual Effect * onPlay();
 		void setCharges(int chg);
 };
 

@@ -25,13 +25,10 @@ void Ritual::setCharges(int chg) {
 	this->charges = chg;
 }
 
-void Ritual::onTurnStart() {
-return;
+Effect * Ritual::onTurnStart() {
+return nullptr;
 }
-void Ritual::onAllyPlay() {
-return;
-}
-void Ritual::onEnemyPlay() {
-return;
+Effect * Ritual::onPlay() {
+return nullptr;
 }
 

@@ -168,7 +168,9 @@ int Game::getTurns() const{
 
 void Game::endTurn(){
 	for(auto && minion : activePlayer->board){
-		minion->onEndTurn();
+		if(minion->onEndTurn() != nullptr) {
+		minion->onEndTurn()->run();
+		}
 		minion->setActions(0);
 	}
 	update();
@@ -218,16 +220,20 @@ void Game::play(const int &pos){
 		cast_card.reset(cast); //prob set up a helper function for this.
 		activePlayer->playCard(std::move(cast_card));
 		for(auto && minion : activePlayer.get()->board){
-			minion->onAllyPlay();
+			minion->onPlay();
 		}
 		for(auto && minion : nonActivePlayer.get()->board){
-			minion->onEnemyPlay();
+			minion->onPlay();
 		}
 		if(activePlayer.get()->ritual != nullptr) {
-			activePlayer.get()->ritual->onAllyPlay();
+			if (activePlayer.get()->ritual->onPlay() != nullptr) {
+			activePlayer.get()->ritual->onPlay()->run();
+			}
 		}
 		if(nonActivePlayer.get()->ritual != nullptr) {
-			nonActivePlayer.get()->ritual->onEnemyPlay();
+			if (nonActivePlayer.get()->ritual->onPlay() != nullptr) {
+			nonActivePlayer.get()->ritual->onPlay()->run();
+			}
 		}	
 	}else if(auto cast = dynamic_cast<Ritual*>(c_ref.get())) {
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
@@ -315,6 +321,31 @@ void Game::attack(const int &pos, const int &t){
 	update();
 
 }
+/*
+void Game::use(const int &pos) {
+	if(pos < activePlayer->getBoardSize()) {
+	Minion * minion = activePlayer->board[pos].get();
+	if(minion->getActivateCost() >= 0) {
+		if(activePlayer->getMagic() < minion->getActivateCost()) {
+		minion->activate();
+
+		}
+		else {
+		view->printAlert("Not enough mana");
+		}
+	}
+	else {
+	view->printAlert("Invalid selection");
+	}
+
+	}
+	else {
+	view->printAlert("Invalid selection.");
+	}
+
+}
+*/
+
 
 void Game::buff(Player * player, const int &n){
 	player->setLife(player->getLife()+n);

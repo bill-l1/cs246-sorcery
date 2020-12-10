@@ -45,6 +45,7 @@ class Game {
 		void displayBoard() const;
 		void play(const int &pos); //plays card at hand[pos], no target
 		void play(const int &pos, const int &pnum, const char &t); //plays card at hand[pos], targetting t belonging to Player pnum
+		//void use (const int &pos);
 		void attack(const int &pos);
 		void attack(const int &pos, const int &t);
 		void buff(Player * player, const int &n);

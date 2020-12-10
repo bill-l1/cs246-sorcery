@@ -22,10 +22,9 @@ class Minion : public Card {
 		virtual void attackOther(Minion * target);
 		virtual void buff(const int &att, const int &def);
 		virtual Minion * getBase();
-		virtual void onEndTurn();
-		virtual void onDeath();
-		virtual void onAllyPlay();
-		virtual void onEnemyPlay();
+		virtual Effect * onEndTurn();
+		virtual Effect * onDeath();
+		virtual Effect * onPlay();
 	
 };
 
