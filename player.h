@@ -5,7 +5,6 @@
 #include <vector>
 #include <stack>
 
-// may need helper funciton to move from deck to hand to board to etc.
 class Card;
 class Minion;
 class BaseMinion;
@@ -40,7 +39,6 @@ class Player  {
 		void playCard(std::unique_ptr<Spell> card, Card * target);
 		void playCard(std::unique_ptr<Ritual> card);
 		Minion * getBoardNum(int num) const;
-		//void playCard(std::unique_ptr<Card> card); this shouldn't ever be called !!
 		//void runOnPlay(); //iterate through all board/rituals for onPlay effects
 		//void runOnStartTurn(); 
 		//void runOnEndTurn();

@@ -8,6 +8,7 @@
 #include "enchantment.h"
 #include "spell.h"
 #include "ritual.h"
+#include "exceptions.h"
 
 Player::Player(const std::string &name)
 	: name{name},
@@ -56,19 +57,19 @@ Ritual * Player::getRitual() const {
 }
 
 void Player::draw() {
-	if(!deck.empty() && hand.size() < 5){
+	if(!deck.empty() && hand.size() < MAX_HAND_SIZE){
 		hand.push_back(std::move(deck.top()));
 		deck.pop();
 	}else{
-		//TODO add exception
+		throw HandIsFull{};
 	}
 }
 
 void Player::playCard(std::unique_ptr<BaseMinion> card){
-	if(board.size() < 5){
+	if(board.size() < MAX_BOARD_SIZE){
 		board.push_back(std::move(card));
 	}else{
-		//TODO exception
+		throw BoardIsFull{};
 	}
 }
 
@@ -93,8 +94,3 @@ Minion * Player::getBoardNum(int num) const {
 return board[num].get();
 
 }
-/*
-void Player::playCard(unique_ptr<Card> card){
-	cout << "wrong func" << endl;
-}
-*/

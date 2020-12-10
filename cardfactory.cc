@@ -2,6 +2,7 @@
 #include <iostream>
 #include "cardfactory.h"
 #include "base_minion.h"
+#include "exceptions.h"
 
 //build card based off input class
 template<class T>
@@ -11,20 +12,20 @@ std::unique_ptr<Card> CardFactory::buildCard(){
 
 // return a std::unique_ptr of a card from a card name and owner
 // uses FUNC_MAP to map strings to cards
+// throws InvalidCard if card is not found in FUNC_MAP
 std::unique_ptr<Card> CardFactory::getCard(const std::string &name, Player * owner){	
 	std::unique_ptr<Card> card;
 	if(FUNC_MAP.count(name)){
 		card = FUNC_MAP[name]();
 	}else{
-		std::cerr << "Card " << name << " not found." << std::endl;
 		card = std::make_unique<BaseMinion>("???", "Invalid card", 4, 7, 7);
-		// TODO possibly throw exception later
+		//throw InvalidCard{name}; TODO uncomment when all cards have been implemented
 	}
 	card->setOwner(owner);
-	return move(card); //TODO mapping
+	return std::move(card);
 }
 
-//map strings from deck file to template method
+//map strings from a deck file to template method buildCard and return its associated class
 std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	// Minions
 	{"Air Elemental", &CardFactory::buildCard<MinionList::AirElemental>},
