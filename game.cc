@@ -346,6 +346,7 @@ void Game::use(const int &pos) {
 			int cost = verifyActionCost(minion, 1);
 			minion->setActions(cost);
 			minion->getAbility()->run();
+			update();
 		}
 		else {
 		view->printAlert("Not enough mana");
@@ -363,6 +364,41 @@ void Game::use(const int &pos) {
 }
 
 
+void Game::use(const int &pos, const int &pnum, const char &t){
+	int bt = t-48;
+	Card * target = nullptr;
+	std::vector<Player *> players{p1.get(), p2.get()};
+
+	if(pnum != 1 && pnum != 2) throw InvalidPlayer{}; //validate pnum
+	Player *pt = players[pnum-1]; 
+	verifyBoardPosition(activePlayer.get(), pos);
+
+	if(t >= '0' && t <= '4'){
+		verifyBoardPosition(pt, bt);
+		target = pt->board[bt].get();
+	}else if (t == 'r'){
+		target = pt->ritual.get();
+	}else{
+		throw InvalidTarget{};
+	}
+	Minion * minion = activePlayer->board[pos].get();
+	if(minion->getActivateCost() >= 0) {
+		if(activePlayer->getMagic() >= minion->getActivateCost()) {
+			int cost = verifyActionCost(minion, 1);
+			minion->setActions(cost);
+			minion->getAbility()->setTarget(target);
+			minion->getAbility()->run();
+			update();
+		}
+		else {
+		view->printAlert("Not enough mana");
+		}
+	}
+	else {
+	view->printAlert("Invalid selection");
+	}
+
+}
 
 void Game::buff(Player * player, const int &n){
 	player->setLife(player->getLife()+n);

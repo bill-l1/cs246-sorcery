@@ -118,7 +118,7 @@ int main(int argc, char *argv[]){
 					if(iss >> pos){
 						if(iss >> pnum){
 							if(iss >> target){
-							//	game.use(pos, pnum, target);
+							game.use(pos, pnum, target);
 							}else{
 								throw InvalidCommand{};
 							}

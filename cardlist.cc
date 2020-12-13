@@ -50,7 +50,7 @@ MinionList::NovicePyromancer::NovicePyromancer()
 	: BaseMinion{
 	"Novice Pyromancer",
 	"Deal 1 damage to target minion",
-	1, 0, 1, 1}
+	1, 0, 1, 1,std::make_unique<SampleEffect>(nullptr,nullptr,0,-1)}
 {}
 
 MinionList::ApprenticeSummoner::ApprenticeSummoner()
