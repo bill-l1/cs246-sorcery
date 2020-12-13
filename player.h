@@ -38,6 +38,8 @@ class Player  {
 		void playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion>& target);
 		void playCard(std::unique_ptr<Spell> card, Card * target);
 		void playCard(std::unique_ptr<Ritual> card);
+		void playCard(std::unique_ptr<Spell> card);
+
 		Minion * getBoardNum(int num) const;
 		//void runOnPlay(); //iterate through all board/rituals for onPlay effects
 		//void runOnStartTurn(); 

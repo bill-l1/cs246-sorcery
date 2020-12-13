@@ -106,7 +106,15 @@ SpellList::Banish::Banish()
 	:Spell {
 	"Banish",
 	"Destroy Target Minion or Ritual", 2, 
-	std::make_unique<BanishEffect>(nullptr,nullptr), nullptr}
+	std::make_unique<BanishEffect>(nullptr,nullptr),nullptr}
+{}
+
+
+SpellList::Blizzard::Blizzard()
+	:Spell {
+	"Blizzard",
+	"Deal 2 damage to all minions", 3, 
+	std::make_unique<AllBoard>(nullptr,nullptr,0,-2),nullptr}
 {}
 
 RitualList::auraOfPower::auraOfPower()

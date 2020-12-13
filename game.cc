@@ -216,6 +216,7 @@ void Game::play(const int &pos){
 		printAlert(activePlayer->getName()+" summons "+card->getName()+"!", 2);
 		std::unique_ptr<BaseMinion> cast_card;
 		card->setGame(this);
+		cast->getAbility()->setGame(this);
 		card.release(); // if this causes a leak im finna lose it
 		cast_card.reset(cast); //prob set up a helper function for this.
 		activePlayer->playCard(std::move(cast_card));
@@ -241,10 +242,24 @@ void Game::play(const int &pos){
 		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
 		std::unique_ptr<Ritual> cast_card;
 		card.get()->setGame(this);
+		cast->getEffect()->setGame(this);
 		card.release(); // if this causes a leak im finna lose it
 		cast_card.reset(cast); //prob set up a helper function for this.
 		activePlayer->playCard(std::move(cast_card));
-	}else{ //TODO add non-targeted spells
+	}
+	else if(auto cast = dynamic_cast<Spell*>(c_ref.get())) {
+		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
+		activePlayer->setMagic(newMagic);
+		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
+		std::unique_ptr<Spell> cast_card;
+		card.get()->setGame(this);
+		cast->getEffect()->setGame(this);
+		card.release(); // if this causes a leak im finna lose it
+		cast_card.reset(cast); //prob set up a helper function for this.
+		activePlayer->playCard(std::move(cast_card));
+	}	
+	
+	else{ //TODO add non-targeted spells
 		throw InvalidPlay{};
 	}
 
