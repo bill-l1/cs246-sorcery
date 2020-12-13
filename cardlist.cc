@@ -57,7 +57,7 @@ MinionList::ApprenticeSummoner::ApprenticeSummoner()
 	: BaseMinion{
 	"Apprentice Summoner",
 	"Summon a 1/1 air elemental",
-	1, 1, 1, 1}
+	1, 1, 1, 1,std::make_unique<SummonEffect>(nullptr,nullptr,1)}
 {}
 
 MinionList::MasterSummoner::MasterSummoner()

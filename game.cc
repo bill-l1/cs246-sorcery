@@ -290,6 +290,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 	if(auto cast = dynamic_cast<Spell *>(c_ref.get())){
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
 		activePlayer->setMagic(newMagic);
+		cast->getEffect()->setGame(this);
 		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
 		std::unique_ptr<Spell> cast_card;
 		card.release(); 
@@ -336,14 +337,15 @@ void Game::attack(const int &pos, const int &t){
 	update();
 
 }
-/*
+
 void Game::use(const int &pos) {
 	if(pos < activePlayer->getBoardSize()) {
 	Minion * minion = activePlayer->board[pos].get();
 	if(minion->getActivateCost() >= 0) {
-		if(activePlayer->getMagic() < minion->getActivateCost()) {
-		minion->activate();
-
+		if(activePlayer->getMagic() >= minion->getActivateCost()) {
+			int cost = verifyActionCost(minion, 1);
+			minion->setActions(cost);
+			minion->getAbility()->run();
 		}
 		else {
 		view->printAlert("Not enough mana");
@@ -359,7 +361,7 @@ void Game::use(const int &pos) {
 	}
 
 }
-*/
+
 
 
 void Game::buff(Player * player, const int &n){

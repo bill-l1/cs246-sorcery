@@ -11,6 +11,7 @@
 #include "banisheffect.h"
 #include "teambuff.h"
 #include "allboard.h"
+#include "summoneffect.h"
 //Steps to create a new card:
 // 1. add it to header
 // 	class NAME : public TYPE_CLASS { public : NAME(); };
