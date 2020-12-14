@@ -2,6 +2,7 @@
 #define MINION_H
 #include "card.h"
 #include "effect.h"
+#include <memory>
 
 class Minion : public Card {
 	public:
@@ -18,13 +19,13 @@ class Minion : public Card {
 		virtual int getActions() const;
 		virtual void setActions(const int &n);
 		virtual int getActivateCost() const;
-		virtual Effect * getAbility() const;
 		virtual void attackOther(Minion * target);
 		virtual void buff(const int &att, const int &def);
 		virtual Minion * getBase();
-		virtual Effect * onEndTurn();
-		virtual Effect * onDeath();
-		virtual Effect * onPlay();
+		virtual std::unique_ptr<Effect> onEndTurn();
+		virtual std::unique_ptr<Effect> onDeath();
+		virtual std::unique_ptr<Effect> onPlay();
+		virtual std::unique_ptr<Effect> onActivate(Card * target = nullptr);
 	
 };
 
