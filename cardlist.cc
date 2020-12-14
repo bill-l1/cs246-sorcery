@@ -35,30 +35,47 @@ MinionList::PotionSeller::PotionSeller()
 	: BaseMinion{
 	"Potion Seller",
 	"At the end of your turn, all your minions gain +0/+1",
-	2, 1, 3,-1,std::make_unique<TeamBuff>(nullptr,nullptr,0,1)}
+	2, 1, 3,-1}
 {}
 
-Effect * MinionList::PotionSeller::onEndTurn() {
-	if(this->getOwner() != this->getGame()->getActivePlayer()) {
+std::unique_ptr<Effect> MinionList::PotionSeller::onEndTurn() {
+	std::unique_ptr<Effect> eff = std::make_unique<TeamBuff>(nullptr,this->getGame()->getActivePlayer()->getBoardNum(0),0,1);
+	if (this->getOwner() != this->getGame()->getActivePlayer()) {
 	return nullptr;
 	}
-	this->getAbility()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(0));
-	return this->getAbility();
+	eff.get()->setGame(this->getGame());
+	return eff;
 }
 
 MinionList::NovicePyromancer::NovicePyromancer()
 	: BaseMinion{
 	"Novice Pyromancer",
 	"Deal 1 damage to target minion",
-	1, 0, 1, 1,std::make_unique<SampleEffect>(nullptr,nullptr,0,-1)}
+	1, 0, 1, 1}
 {}
+
+
+std::unique_ptr<Effect> MinionList::NovicePyromancer::onActivate(Card * target) {
+	std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(nullptr,target,0,-1);
+	eff.get()->setGame(this->getGame());
+	return std::move(eff);
+
+}
 
 MinionList::ApprenticeSummoner::ApprenticeSummoner()
 	: BaseMinion{
 	"Apprentice Summoner",
 	"Summon a 1/1 air elemental",
-	1, 1, 1, 1,std::make_unique<SummonEffect>(nullptr,nullptr,1)}
+	1, 1, 1, 1}
 {}
+
+
+std::unique_ptr<Effect> MinionList::ApprenticeSummoner::onActivate(Card * target) {
+	std::unique_ptr<Effect> eff = std::make_unique<SummonEffect>(nullptr,nullptr,1);
+	eff.get()->setGame(this->getGame());
+	return std::move(eff);
+
+}
 
 MinionList::MasterSummoner::MasterSummoner()
 	: BaseMinion{

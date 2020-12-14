@@ -168,8 +168,8 @@ int Game::getTurns() const{
 
 void Game::endTurn(){
 	for(auto && minion : activePlayer->board){
-		if(minion->onEndTurn() != nullptr) {
-		minion->onEndTurn()->run();
+		if(minion->onEndTurn().get() != nullptr) {
+		minion->onEndTurn().get()->run();
 		}
 		minion->setActions(0);
 	}
@@ -216,15 +216,18 @@ void Game::play(const int &pos){
 		printAlert(activePlayer->getName()+" summons "+card->getName()+"!", 2);
 		std::unique_ptr<BaseMinion> cast_card;
 		card->setGame(this);
-		cast->getAbility()->setGame(this);
 		card.release(); // if this causes a leak im finna lose it
 		cast_card.reset(cast); //prob set up a helper function for this.
 		activePlayer->playCard(std::move(cast_card));
 		for(auto && minion : activePlayer.get()->board){
-			minion->onPlay();
+			if(minion->onPlay() != nullptr) {
+			minion->onPlay().get()->run();
+			}
 		}
 		for(auto && minion : nonActivePlayer.get()->board){
-			minion->onPlay();
+			if(minion->onPlay() != nullptr) {
+			minion->onPlay().get()->run();
+			}
 		}
 		if(activePlayer.get()->ritual != nullptr) {
 			if (activePlayer.get()->ritual->onPlay() != nullptr) {
@@ -253,7 +256,6 @@ void Game::play(const int &pos){
 		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
 		std::unique_ptr<Spell> cast_card;
 		card.get()->setGame(this);
-		cast->getEffect()->setGame(this);
 		card.release(); // if this causes a leak im finna lose it
 		cast_card.reset(cast); //prob set up a helper function for this.
 		activePlayer->playCard(std::move(cast_card));
@@ -344,7 +346,7 @@ void Game::use(const int &pos) {
 		if(activePlayer->getMagic() >= minion->getActivateCost()) {
 			int cost = verifyActionCost(minion, 1);
 			minion->setActions(cost);
-			minion->getAbility()->run();
+			minion->onActivate().get()->run();
 			update();
 		}
 		else {
@@ -385,8 +387,7 @@ void Game::use(const int &pos, const int &pnum, const char &t){
 		if(activePlayer->getMagic() >= minion->getActivateCost()) {
 			int cost = verifyActionCost(minion, 1);
 			minion->setActions(cost);
-			minion->getAbility()->setTarget(target);
-			minion->getAbility()->run();
+			minion->onActivate(target).get()->run();
 			update();
 		}
 		else {

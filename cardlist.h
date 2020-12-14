@@ -26,12 +26,9 @@ class MinionList {
 	class EarthElemental : public BaseMinion { public: EarthElemental(); };
 	class Bomb : public BaseMinion { public: Bomb(); };
 	class FireElemental : public BaseMinion { public: FireElemental(); };
-	class PotionSeller : public BaseMinion { 
-		public: PotionSeller(); 
-		Effect * onEndTurn() override; 
-	};
-	class NovicePyromancer : public BaseMinion { public: NovicePyromancer(); };
-	class ApprenticeSummoner : public BaseMinion { public: ApprenticeSummoner(); };
+	class PotionSeller : public BaseMinion { public: PotionSeller(); std::unique_ptr<Effect> onEndTurn() override; };
+	class NovicePyromancer : public BaseMinion { public: NovicePyromancer(); std::unique_ptr<Effect> onActivate(Card * target) override; };
+	class ApprenticeSummoner : public BaseMinion { public: ApprenticeSummoner(); std::unique_ptr<Effect> onActivate(Card * target) override;};
 	class MasterSummoner : public BaseMinion { public: MasterSummoner(); };
 };
 

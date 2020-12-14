@@ -19,7 +19,7 @@ class BaseMinion : public Minion {
 	std::unique_ptr<Effect> ability;
 	std::unique_ptr<RefObj> b_ref;
 	public:
-		BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost=-1, std::unique_ptr<Effect> ability=nullptr);
+		BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost=-1);
 		virtual ~BaseMinion();
 		int getAttack() const override;
 		void setAttack(const int &att) override;
@@ -30,7 +30,6 @@ class BaseMinion : public Minion {
 		int getActivateCost() const override;
 		void buff(const int &att, const int &def) override;
 		Minion * getBase() override;
-		Effect * getAbility() const override;
 		std::unique_ptr<Minion>& getBoardRef() const override;
 		void setBoardRef(std::unique_ptr<Minion>& ref) override;
 };

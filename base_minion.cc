@@ -5,13 +5,12 @@
 
 RefObj::RefObj(std::unique_ptr<Minion>& b_ref) : b_ref{b_ref} {}
 
-BaseMinion::BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost, std::unique_ptr<Effect> eff)
+BaseMinion::BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost)
 	: Minion{name, description, cost, "Minion"},
 	attack{att},
 	defense{def},
 	actions{0},
-	activateCost{activateCost},
-	ability{std::move(eff)}
+	activateCost{activateCost}
 {}
 
 BaseMinion::~BaseMinion(){}
@@ -51,10 +50,6 @@ void BaseMinion::buff(const int &att, const int &def){
 
 Minion * BaseMinion::getBase() {
 	return this;
-}
-
-Effect * BaseMinion::getAbility() const {
-	return ability.get();
 }
 
 std::unique_ptr<Minion>& BaseMinion::getBoardRef() const {
