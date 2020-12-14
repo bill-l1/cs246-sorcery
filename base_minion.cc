@@ -52,6 +52,6 @@ Minion * BaseMinion::getBase() {
 }
 
 Effect * BaseMinion::getAbility() const {
-return ability.get();
+	return ability.get();
 }
 

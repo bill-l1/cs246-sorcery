@@ -95,12 +95,24 @@ EnchantmentList::MagicFatigue::MagicFatigue()
 	0}
 {}
 
+int EnchantmentList::MagicFatigue::getActivateCost() const {
+	return component->getActivateCost() + 2;
+}
+
 EnchantmentList::Silence::Silence()
 	: Enchantment{
 	"Silence",
 	"Enchanted minion cannot use abilities",
 	1}
 {}
+
+Effect * EnchantmentList::Silence::getAbility() const {
+	return nullptr;
+}
+
+int EnchantmentList::Silence::getActivateCost() const {
+	return -1;
+}
 
 SpellList::Banish::Banish()
 	:Spell {

@@ -18,10 +18,9 @@ class Minion : public Card {
 		virtual int getActions() const;
 		virtual void setActions(const int &n);
 		virtual int getActivateCost() const;
-		virtual Effect * getAbility() const;
-		virtual void attackOther(Minion * target);
 		virtual void buff(const int &att, const int &def);
 		virtual Minion * getBase();
+		virtual Effect * getAbility() const;
 		virtual Effect * onEndTurn();
 		virtual Effect * onDeath();
 		virtual Effect * onPlay();

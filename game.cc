@@ -315,9 +315,8 @@ void Game::attack(const int &pos, const int &t){
 	int cost = verifyActionCost(minion, 1);
 	minion->setActions(cost);
 	printAlert(minion->getMinionName() + " attacks " + other->getMinionName()+"!", 1);
-	view->printBuff(minion, 0, -other->getAttack());
-	view->printBuff(other, 0, -minion->getAttack());
-	minion->attackOther(other);
+	minion->buff(0, other->getAttack());
+	other->buff(0, minion->getAttack());
 	update();
 
 }

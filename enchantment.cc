@@ -36,7 +36,6 @@ std::string Enchantment::getMinionName() const {
     }else{
         return component->getMinionName();
     }
-    
 }
 
 std::string Enchantment::getMinionDescription() const {
@@ -106,4 +105,20 @@ void Enchantment::buff(const int &att, const int &def) {
 
 Minion * Enchantment::getBase(){
     return component->getBase();
+}
+
+Effect * Enchantment::getAbility() const {
+	return component->getAbility();
+}
+
+Effect * Enchantment::onDeath() {
+	return component->onDeath();
+}
+
+Effect * Enchantment::onEndTurn() {
+    return component->onEndTurn();
+}
+
+Effect * Enchantment::onPlay() {
+    return component->onPlay();
 }

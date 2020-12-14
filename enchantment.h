@@ -30,6 +30,10 @@ class Enchantment : public Minion {
 		virtual int getActivateCost() const override;
 		void buff(const int &att, const int &def) override;
 		Minion * getBase() override;
+        Effect * getAbility() const override;
+        Effect * onEndTurn() override;
+		Effect * onDeath() override;
+		Effect * onPlay() override;
 };
 
 #endif

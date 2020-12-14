@@ -23,7 +23,10 @@ class MinionList {
 	class EarthElemental : public BaseMinion { public: EarthElemental(); };
 	class Bomb : public BaseMinion { public: Bomb(); };
 	class FireElemental : public BaseMinion { public: FireElemental(); };
-	class PotionSeller : public BaseMinion { public: PotionSeller(); Effect * onEndTurn() override; };
+	class PotionSeller : public BaseMinion { 
+		public: PotionSeller(); 
+		Effect * onEndTurn() override; 
+	};
 	class NovicePyromancer : public BaseMinion { public: NovicePyromancer(); };
 	class ApprenticeSummoner : public BaseMinion { public: ApprenticeSummoner(); };
 	class MasterSummoner : public BaseMinion { public: MasterSummoner(); };
@@ -33,9 +36,16 @@ class EnchantmentList {
 	public:
 	class GiantStrength : public Enchantment { public: GiantStrength(); };
 	class Enrage : public Enchantment { public: Enrage(); };
-	class Delay : public Enchantment { public: Delay(); };
-	class MagicFatigue : public Enchantment { public: MagicFatigue(); };
-	class Silence : public Enchantment { public: Silence(); };
+	class Delay : public Enchantment { public: Delay(); }; //fully implement this later
+	class MagicFatigue : public Enchantment { 
+		public: MagicFatigue(); 
+		int getActivateCost() const override;
+	};
+	class Silence : public Enchantment { 
+		public: Silence(); 
+		Effect * getAbility() const override;
+		int getActivateCost() const override;
+	};
 };
 
 class SpellList {
