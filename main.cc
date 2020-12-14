@@ -113,7 +113,21 @@ int main(int argc, char *argv[]){
 						throw InvalidCommand{};
 					}
 				}else if(cmd == "use"){
-					// TODO
+					int pos, pnum;
+					char target;
+					if(iss >> pos){
+						if(iss >> pnum){
+							if(iss >> target){
+							game.use(pos, pnum, target);
+							}else{
+								throw InvalidCommand{};
+							}
+						}else{
+							game.use(pos);
+						}
+					}else{
+						throw InvalidCommand{};
+					}
 				}else if(cmd == "inspect"){
 					int pos;
 					if(iss >> pos){

@@ -39,6 +39,7 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 
 	// Spells
 	{"Banish", &CardFactory::buildCard<SpellList::Banish>},
+	{"Blizzard", &CardFactory::buildCard<SpellList::Blizzard>},
 	
 	// Enchantments
 	{"Giant Strength", &CardFactory::buildCard<EnchantmentList::GiantStrength>},

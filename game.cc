@@ -216,6 +216,7 @@ void Game::play(const int &pos){
 		printAlert(activePlayer->getName()+" summons "+card->getName()+"!", 2);
 		std::unique_ptr<BaseMinion> cast_card;
 		card->setGame(this);
+		cast->getAbility()->setGame(this);
 		card.release(); // if this causes a leak im finna lose it
 		cast_card.reset(cast); //prob set up a helper function for this.
 		activePlayer->playCard(std::move(cast_card));
@@ -241,10 +242,24 @@ void Game::play(const int &pos){
 		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
 		std::unique_ptr<Ritual> cast_card;
 		card.get()->setGame(this);
+		cast->getEffect()->setGame(this);
 		card.release(); // if this causes a leak im finna lose it
 		cast_card.reset(cast); //prob set up a helper function for this.
 		activePlayer->playCard(std::move(cast_card));
-	}else{ //TODO add non-targeted spells
+	}
+	else if(auto cast = dynamic_cast<Spell*>(c_ref.get())) {
+		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
+		activePlayer->setMagic(newMagic);
+		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
+		std::unique_ptr<Spell> cast_card;
+		card.get()->setGame(this);
+		cast->getEffect()->setGame(this);
+		card.release(); // if this causes a leak im finna lose it
+		cast_card.reset(cast); //prob set up a helper function for this.
+		activePlayer->playCard(std::move(cast_card));
+	}	
+	
+	else{ //TODO add non-targeted spells
 		throw InvalidPlay{};
 	}
 
@@ -275,6 +290,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 	if(auto cast = dynamic_cast<Spell *>(c_ref.get())){
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
 		activePlayer->setMagic(newMagic);
+		cast->getEffect()->setGame(this);
 		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
 		std::unique_ptr<Spell> cast_card;
 		card.release(); 
@@ -320,14 +336,16 @@ void Game::attack(const int &pos, const int &t){
 	update();
 
 }
-/*
+
 void Game::use(const int &pos) {
 	if(pos < activePlayer->getBoardSize()) {
 	Minion * minion = activePlayer->board[pos].get();
 	if(minion->getActivateCost() >= 0) {
-		if(activePlayer->getMagic() < minion->getActivateCost()) {
-		minion->activate();
-
+		if(activePlayer->getMagic() >= minion->getActivateCost()) {
+			int cost = verifyActionCost(minion, 1);
+			minion->setActions(cost);
+			minion->getAbility()->run();
+			update();
 		}
 		else {
 		view->printAlert("Not enough mana");
@@ -343,8 +361,43 @@ void Game::use(const int &pos) {
 	}
 
 }
-*/
 
+
+void Game::use(const int &pos, const int &pnum, const char &t){
+	int bt = t-48;
+	Card * target = nullptr;
+	std::vector<Player *> players{p1.get(), p2.get()};
+
+	if(pnum != 1 && pnum != 2) throw InvalidPlayer{}; //validate pnum
+	Player *pt = players[pnum-1]; 
+	verifyBoardPosition(activePlayer.get(), pos);
+
+	if(t >= '0' && t <= '4'){
+		verifyBoardPosition(pt, bt);
+		target = pt->board[bt].get();
+	}else if (t == 'r'){
+		target = pt->ritual.get();
+	}else{
+		throw InvalidTarget{};
+	}
+	Minion * minion = activePlayer->board[pos].get();
+	if(minion->getActivateCost() >= 0) {
+		if(activePlayer->getMagic() >= minion->getActivateCost()) {
+			int cost = verifyActionCost(minion, 1);
+			minion->setActions(cost);
+			minion->getAbility()->setTarget(target);
+			minion->getAbility()->run();
+			update();
+		}
+		else {
+		view->printAlert("Not enough mana");
+		}
+	}
+	else {
+	view->printAlert("Invalid selection");
+	}
+
+}
 
 void Game::buff(Player * player, const int &n){
 	player->setLife(player->getLife()+n);

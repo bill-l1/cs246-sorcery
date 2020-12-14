@@ -20,3 +20,11 @@ void Effect::setTarget(Card * newtarget) {
 }
 void Effect::run() {
 }
+
+Game * Effect::getGame() const {
+return game;
+}
+
+void Effect::setGame(Game * newgame) {
+	game = newgame;
+}

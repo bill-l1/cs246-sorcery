@@ -50,14 +50,14 @@ MinionList::NovicePyromancer::NovicePyromancer()
 	: BaseMinion{
 	"Novice Pyromancer",
 	"Deal 1 damage to target minion",
-	1, 0, 1, 1}
+	1, 0, 1, 1,std::make_unique<SampleEffect>(nullptr,nullptr,0,-1)}
 {}
 
 MinionList::ApprenticeSummoner::ApprenticeSummoner()
 	: BaseMinion{
 	"Apprentice Summoner",
 	"Summon a 1/1 air elemental",
-	1, 1, 1, 1}
+	1, 1, 1, 1,std::make_unique<SummonEffect>(nullptr,nullptr,1)}
 {}
 
 MinionList::MasterSummoner::MasterSummoner()
@@ -118,7 +118,15 @@ SpellList::Banish::Banish()
 	:Spell {
 	"Banish",
 	"Destroy Target Minion or Ritual", 2, 
-	std::make_unique<BanishEffect>(nullptr,nullptr), nullptr}
+	std::make_unique<BanishEffect>(nullptr,nullptr),nullptr}
+{}
+
+
+SpellList::Blizzard::Blizzard()
+	:Spell {
+	"Blizzard",
+	"Deal 2 damage to all minions", 3, 
+	std::make_unique<AllBoard>(nullptr,nullptr,0,-2),nullptr}
 {}
 
 RitualList::auraOfPower::auraOfPower()

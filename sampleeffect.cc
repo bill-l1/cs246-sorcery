@@ -3,7 +3,7 @@
 #include "effect.h"
 #include "sampleeffect.h"
 
-SampleEffect::SampleEffect(Player * own, Card * tar, int atk, int def) :
+SampleEffect::SampleEffect(Player * own, Card * tar,int atk, int def) :
 	Effect{own, tar},
 	attack{atk},
 	defense{def}

@@ -85,6 +85,10 @@ void Player::playCard(std::unique_ptr<Spell> card, Card * target) {
 	card->getEffect()->run();
 }
 
+void Player::playCard(std::unique_ptr<Spell> card) {	
+	card->getEffect()->run();
+}
+
 void Player::playCard(std::unique_ptr<Ritual> card) {
 	this->ritual=std::move(card);
 	this->ritual.get()->setOwner(this);

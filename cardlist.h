@@ -10,6 +10,8 @@
 #include "ritual.h"
 #include "banisheffect.h"
 #include "teambuff.h"
+#include "allboard.h"
+#include "summoneffect.h"
 //Steps to create a new card:
 // 1. add it to header
 // 	class NAME : public TYPE_CLASS { public : NAME(); };
@@ -51,6 +53,7 @@ class EnchantmentList {
 class SpellList {
 	public:
 	class Banish : public Spell { public: Banish(); };
+	class Blizzard : public Spell { public: Blizzard(); };
 	//class Unsummon : public Spell { public: Unsummon(Player * owner, Card * Target); };
 	//class Disenchant : public Spell { public: Disenchant(P); };
 
