@@ -469,3 +469,20 @@ int Game::verifyActionCost(Minion * minion, const int &n) const {
 void Game::printAlert(const std::string &s, const int &type) const {
 	view->printAlert(s, type);
 }
+
+// void Game::disenchant(Player * player, Minion * target, Enchantment * e_target) {
+// 	for(auto & minion : player->board){
+// 		if(minion.get() == target){
+// 			if(target == e_target){
+// 				minion.release();
+// 				minion.reset(target->getComponent());
+// 			}else{
+// 				//TODO
+// 				// Minion * curr_minion = target;
+// 				// while(curr_minion->getComponent() != nullptr){
+
+// 				// }
+// 			}
+// 		}
+// 	}
+// }

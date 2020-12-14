@@ -85,8 +85,27 @@ EnchantmentList::Delay::Delay()
 	: Enchantment{
 	"Delay",
 	"Enchanted minion does not gain an action on their next turn. This enchantment is automatically destroyed after 1 turn",
-	2}
+	2},
+	toDestroy{false},
+	effect{std::make_unique<DisenchantEffect>(nullptr, nullptr, this)}
 {}
+
+Effect * EnchantmentList::Delay::onEndTurn(){
+	if(toDestroy){
+		return effect.get();
+	}else{
+		toDestroy = true;
+		return component->onEndTurn();
+	}
+}
+
+int EnchantmentList::Delay::getActions() const{
+	if(toDestroy){
+		return component->getActions();
+	}else{
+		return 0;
+	}
+}
 
 EnchantmentList::MagicFatigue::MagicFatigue()
 	: Enchantment{

@@ -122,3 +122,11 @@ Effect * Enchantment::onEndTurn() {
 Effect * Enchantment::onPlay() {
     return component->onPlay();
 }
+
+std::unique_ptr<Minion>& Enchantment::getBoardRef() const {
+    return component->getBoardRef();
+}
+
+void Enchantment::setBoardRef(std::unique_ptr<Minion>& ref) {
+    component->setBoardRef(ref);
+}

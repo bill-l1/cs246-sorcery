@@ -13,6 +13,7 @@ extern const unsigned INTIAL_HAND_SIZE;
 class Card;
 class Minion;
 class Player;
+class Enchantment;
 
 class Game {
 	std::shared_ptr<Player> p1; //Player 1
@@ -59,6 +60,7 @@ class Game {
 		int verifyMagicCost(Player * player, const int &n) const; //throws if n is greater than player's magic (unless testing is true); additionally returns the new magic amount.
 		int verifyActionCost(Minion * minion, const int &n) const; //throws if n is greater than minion's actions (unless testing is true); additionally returns the new actions amount.
 		void printAlert(const std::string &s, const int &type = 0) const;
+		void disenchant(Player * player, Minion * target, Enchantment * e_target);
 };
 
 #endif

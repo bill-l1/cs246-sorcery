@@ -3,12 +3,21 @@
 #include <string>
 #include "minion.h"
 #include <memory>
+
+class RefObj {
+	std::unique_ptr<Minion>& b_ref;
+	public:
+	RefObj(std::unique_ptr<Minion>& b_ref);
+	friend class BaseMinion;
+};
+
 class BaseMinion : public Minion {
 	int attack;
 	int defense;
 	int actions;
 	int activateCost;
 	std::unique_ptr<Effect> ability;
+	std::unique_ptr<RefObj> b_ref;
 	public:
 		BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost=-1, std::unique_ptr<Effect> ability=nullptr);
 		virtual ~BaseMinion();
@@ -22,6 +31,8 @@ class BaseMinion : public Minion {
 		void buff(const int &att, const int &def) override;
 		Minion * getBase() override;
 		Effect * getAbility() const override;
+		std::unique_ptr<Minion>& getBoardRef() const override;
+		void setBoardRef(std::unique_ptr<Minion>& ref) override;
 };
 
 #endif

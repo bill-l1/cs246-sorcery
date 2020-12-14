@@ -12,6 +12,7 @@
 #include "teambuff.h"
 #include "allboard.h"
 #include "summoneffect.h"
+#include "disenchanteffect.h"
 //Steps to create a new card:
 // 1. add it to header
 // 	class NAME : public TYPE_CLASS { public : NAME(); };
@@ -38,7 +39,21 @@ class EnchantmentList {
 	public:
 	class GiantStrength : public Enchantment { public: GiantStrength(); };
 	class Enrage : public Enchantment { public: Enrage(); };
-	class Delay : public Enchantment { public: Delay(); }; //fully implement this later
+	// i can't even begin to express my frustration with this card
+	// not only is it a terrible card, why the hell is it an enchantment?
+	// THIS IS LITERALLY FREEZE
+	// and why did I have to write so many damn loopholes to make it work?
+	// I'm honestly clueless
+	// just like the person who designed this; fuck you
+	// TODO delete this
+	class Delay : public Enchantment {
+		bool toDestroy;
+		std::unique_ptr<Effect> effect; 
+		public: 
+		Delay();
+		Effect * onEndTurn() override;
+		int getActions() const override;
+	};
 	class MagicFatigue : public Enchantment { 
 		public: MagicFatigue(); 
 		int getActivateCost() const override;

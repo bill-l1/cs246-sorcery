@@ -24,7 +24,8 @@ class Minion : public Card {
 		virtual Effect * onEndTurn();
 		virtual Effect * onDeath();
 		virtual Effect * onPlay();
-	
+		virtual std::unique_ptr<Minion>& getBoardRef() const;
+		virtual void setBoardRef(std::unique_ptr<Minion>& ref);
 };
 
 #endif

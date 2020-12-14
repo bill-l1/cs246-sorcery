@@ -68,6 +68,7 @@ void Player::draw() {
 void Player::playCard(std::unique_ptr<BaseMinion> card){
 	if(board.size() < MAX_BOARD_SIZE){
 		board.push_back(std::move(card));
+		board.back()->setBoardRef(board.back());
 	}else{
 		throw BoardIsFull{};
 	}

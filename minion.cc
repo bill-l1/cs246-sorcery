@@ -86,3 +86,11 @@ Effect * Minion::onPlay() {
     return nullptr;
 }
 
+// std::unique_ptr<Minion>& Minion::getBoardRef() const {
+//     return std::make_unique<Minion>();
+// }
+
+// void Minion::setBoardRef(std::unique_ptr<Minion>& ref){
+//     b_ref.release();
+//     b_ref.reset(new RefObj(ref));
+// }

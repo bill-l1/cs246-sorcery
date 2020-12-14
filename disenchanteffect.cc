@@ -4,29 +4,23 @@
 #include "minion.h"
 #include "enchantment.h"
 
-DisenchantEffect::DisenchantEffect(Player * owner, std::unique_ptr<Minion> &t_ref, Minion * e_target) 
-    : Effect{owner, t_ref.get()},
-    t_ref{t_ref},
+DisenchantEffect::DisenchantEffect(Player * owner, std::unique_ptr<Minion> &b_ref, Enchantment * e_target) 
+    : Effect{owner, b_ref.get()},
+    b_ref{b_ref},
     e_target{e_target}
 {}
 
 void DisenchantEffect::run(){
-    // if (auto minion = dynamic_cast<Minion *>(getTarget())){
-    //     if(auto enchant = dynamic_cast<Enchantment *>(e_target)){
-    //         Minion * curr_enchant = minion;
+    Minion * curr_minion = b_ref.get();
+    if(curr_minion == e_target){
+        Minion * child = curr_minion->getComponent();
+        b_ref.release();
+        b_ref.reset(child);
+    }else{
+        //TODO
+        // Minion * curr_minion = target;
+        // while(curr_minion->getComponent() != nullptr){
 
-    //         while(curr_enchant != nullptr && curr_enchant->getComponent() != e_target){
-    //             curr_enchant = curr_enchant->getComponent();
-    //         }
-
-    //         if(curr_enchant != nullptr){
-
-    //         }
-    //     }
-    // }
-    if(t_ref->getComponent() != nullptr){
-        Minion * component = t_ref->getComponent();
-        t_ref.release();
-        t_ref.reset(component);
+        // }
     }
 }

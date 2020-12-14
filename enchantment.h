@@ -34,6 +34,8 @@ class Enchantment : public Minion {
         Effect * onEndTurn() override;
 		Effect * onDeath() override;
 		Effect * onPlay() override;
+        std::unique_ptr<Minion>& getBoardRef() const override;
+		void setBoardRef(std::unique_ptr<Minion>& ref) override;
 };
 
 #endif

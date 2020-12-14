@@ -6,10 +6,10 @@
 #include "effect.h"
 
 class DisenchantEffect : public Effect {
-    std::unique_ptr<Minion>& t_ref;
-    Minion * e_target;
+    std::unique_ptr<Minion> &b_ref;
+    Enchantment * e_target;
     public:
-        DisenchantEffect(Player * owner, std::unique_ptr<Minion> &t_ref, Minion * e_target);
+        DisenchantEffect(Player * owner, std::unique_ptr<Minion> &b_ref, Enchantment * e_target);
         void run() override;
 };
 
