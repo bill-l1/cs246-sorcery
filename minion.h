@@ -8,7 +8,7 @@ class Minion : public Card {
 	public:
 		Minion(const std::string &name, const std::string &description, const int &cost, const std::string &type);
 		virtual ~Minion();
-		virtual Minion * getComponent() const;
+		virtual Minion * getComponent(const bool &steal = false);
 		virtual std::string getMinionName() const;
 		virtual std::string getMinionDescription() const;
 		virtual int getMinionCost() const;
@@ -27,7 +27,7 @@ class Minion : public Card {
 		virtual std::unique_ptr<Effect> onActivate(Card * target = nullptr);
 		virtual std::unique_ptr<Minion>& getBoardRef() const;
 		virtual void setBoardRef(std::unique_ptr<Minion>& ref);
-	
+		virtual void resetBoardRef();
 };
 
 #endif

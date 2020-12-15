@@ -9,7 +9,7 @@ Minion::Minion(const std::string &name, const std::string &description, const in
 
 Minion::~Minion(){}
 
-Minion * Minion::getComponent() const {
+Minion * Minion::getComponent(const bool &steal) {
     return nullptr;
 }
 
@@ -85,3 +85,12 @@ return std::move(nullptr);
 std::unique_ptr<Effect> Minion::onActivate(Card * target) {
 return std::move(nullptr);
 }
+
+std::unique_ptr<Minion>& Minion::getBoardRef() const {
+    std::unique_ptr<Minion> m = std::make_unique<Minion>("invalid", "", 1, "invalid");
+    return m;
+}
+
+void Minion::setBoardRef(std::unique_ptr<Minion>& ref) {}
+
+void Minion::resetBoardRef() {}

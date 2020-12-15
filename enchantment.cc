@@ -54,12 +54,15 @@ int Enchantment::getMinionCost() const {
     }
 }
 
-Minion * Enchantment::getComponent() const {
-    return component.get(); //TODO exception for nullptr, same goes for the rest of the methods
+Minion * Enchantment::getComponent(const bool &steal)  {
+    if(steal){
+        return component.release();
+    }else{
+        return component.get(); //TODO exception for nullptr, same goes for the rest of the methods
+    }
 }
 
 void Enchantment::setComponent(Minion * minion){
-    component.release();
     component.reset(minion); 
 }
 
@@ -107,20 +110,20 @@ Minion * Enchantment::getBase(){
     return component->getBase();
 }
 
-Effect * Enchantment::getAbility() const {
-	return component->getAbility();
+std::unique_ptr<Effect> Enchantment::onDeath() {
+	return std::move(component->onDeath());
 }
 
-Effect * Enchantment::onDeath() {
-	return component->onDeath();
+std::unique_ptr<Effect> Enchantment::onEndTurn() {
+    return std::move(component->onEndTurn());
 }
 
-Effect * Enchantment::onEndTurn() {
-    return component->onEndTurn();
+std::unique_ptr<Effect> Enchantment::onPlay() {
+    return std::move(component->onPlay());
 }
 
-Effect * Enchantment::onPlay() {
-    return component->onPlay();
+std::unique_ptr<Effect> Enchantment::onActivate(Card * target) {
+    return std::move(component->onActivate(target));
 }
 
 std::unique_ptr<Minion>& Enchantment::getBoardRef() const {
@@ -129,4 +132,8 @@ std::unique_ptr<Minion>& Enchantment::getBoardRef() const {
 
 void Enchantment::setBoardRef(std::unique_ptr<Minion>& ref) {
     component->setBoardRef(ref);
+}
+
+void Enchantment::resetBoardRef(){
+    component->resetBoardRef();
 }

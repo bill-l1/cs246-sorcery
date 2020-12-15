@@ -2,7 +2,6 @@
 #include "base_minion.h"
 #include "spell.h"
 
-
 MinionList::AirElemental::AirElemental()
 	: BaseMinion{
 	"Air Elemental",
@@ -103,21 +102,20 @@ EnchantmentList::Delay::Delay()
 	"Delay",
 	"Enchanted minion does not gain an action on their next turn. This enchantment is automatically destroyed after 1 turn",
 	2},
-	toDestroy{false},
-	effect{std::make_unique<DisenchantEffect>(nullptr, nullptr, this)}
+	toDestroy{false}
 {}
 
-Effect * EnchantmentList::Delay::onEndTurn(){
+std::unique_ptr<Effect> EnchantmentList::Delay::onEndTurn(){
 	if(toDestroy){
-		return effect.get();
+		return std::make_unique<DisenchantEffect>(getOwner(), getBoardRef(), this);
 	}else{
 		toDestroy = true;
-		return component->onEndTurn();
+		return std::move(component->onEndTurn());
 	}
 }
 
 int EnchantmentList::Delay::getActions() const{
-	if(toDestroy){
+	if(!toDestroy){
 		return component->getActions();
 	}else{
 		return 0;
@@ -142,12 +140,13 @@ EnchantmentList::Silence::Silence()
 	1}
 {}
 
-Effect * EnchantmentList::Silence::getAbility() const {
-	return nullptr;
-}
 
 int EnchantmentList::Silence::getActivateCost() const {
 	return -1;
+}
+
+std::unique_ptr<Effect> EnchantmentList::Silence::onActivate(Card * target)  {
+	return nullptr;
 }
 
 SpellList::Banish::Banish()

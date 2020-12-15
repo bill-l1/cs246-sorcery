@@ -36,19 +36,11 @@ class EnchantmentList {
 	public:
 	class GiantStrength : public Enchantment { public: GiantStrength(); };
 	class Enrage : public Enchantment { public: Enrage(); };
-	// i can't even begin to express my frustration with this card
-	// not only is it a terrible card, why the hell is it an enchantment?
-	// THIS IS LITERALLY FREEZE
-	// and why did I have to write so many damn loopholes to make it work?
-	// I'm honestly clueless
-	// just like the person who designed this; fuck you
-	// TODO delete this
 	class Delay : public Enchantment {
 		bool toDestroy;
-		std::unique_ptr<Effect> effect; 
 		public: 
 		Delay();
-		Effect * onEndTurn() override;
+		std::unique_ptr<Effect> onEndTurn() override;
 		int getActions() const override;
 	};
 	class MagicFatigue : public Enchantment { 
@@ -57,8 +49,8 @@ class EnchantmentList {
 	};
 	class Silence : public Enchantment { 
 		public: Silence(); 
-		Effect * getAbility() const override;
 		int getActivateCost() const override;
+		std::unique_ptr<Effect> onActivate(Card * target = nullptr) override;
 	};
 };
 
@@ -67,8 +59,7 @@ class SpellList {
 	class Banish : public Spell { public: Banish(); };
 	class Blizzard : public Spell { public: Blizzard(); };
 	//class Unsummon : public Spell { public: Unsummon(Player * owner, Card * Target); };
-	//class Disenchant : public Spell { public: Disenchant(P); };
-
+	class Disenchant : public Spell { public: Disenchant(); };
 
 };
 

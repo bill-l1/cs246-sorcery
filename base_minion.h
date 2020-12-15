@@ -32,6 +32,7 @@ class BaseMinion : public Minion {
 		Minion * getBase() override;
 		std::unique_ptr<Minion>& getBoardRef() const override;
 		void setBoardRef(std::unique_ptr<Minion>& ref) override;
+		void resetBoardRef() override;
 };
 
 #endif

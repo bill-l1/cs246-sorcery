@@ -17,7 +17,7 @@ class Enchantment : public Minion {
         std::string getMinionName() const override;
         std::string getMinionDescription() const override;
         int getMinionCost() const override;
-        Minion * getComponent() const override;
+        Minion * getComponent(const bool &steal = false) override;
         void setComponent(Minion * minion);
         std::string getAttackStr() const;
         virtual int getAttack() const override;
@@ -30,12 +30,13 @@ class Enchantment : public Minion {
 		virtual int getActivateCost() const override;
 		void buff(const int &att, const int &def) override;
 		Minion * getBase() override;
-        Effect * getAbility() const override;
-        Effect * onEndTurn() override;
-		Effect * onDeath() override;
-		Effect * onPlay() override;
+		std::unique_ptr<Effect> onEndTurn() override;
+		std::unique_ptr<Effect> onDeath() override;
+		std::unique_ptr<Effect> onPlay() override;
+		std::unique_ptr<Effect> onActivate(Card * target = nullptr) override;
         std::unique_ptr<Minion>& getBoardRef() const override;
 		void setBoardRef(std::unique_ptr<Minion>& ref) override;
+        void resetBoardRef() override;
 };
 
 #endif

@@ -53,10 +53,16 @@ Minion * BaseMinion::getBase() {
 }
 
 std::unique_ptr<Minion>& BaseMinion::getBoardRef() const {
-    return b_ref->b_ref;
+	return b_ref->b_ref; // TODO handle if b_ref isn't defined
 }
 
 void BaseMinion::setBoardRef(std::unique_ptr<Minion>& ref){
     b_ref.release();
-    b_ref.reset(new RefObj(ref));
+	if(ref.get() != nullptr){
+		b_ref.reset(new RefObj(ref));
+	}
+}
+
+void BaseMinion::resetBoardRef() {
+	b_ref.release();
 }

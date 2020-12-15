@@ -10,6 +10,7 @@ class DisenchantEffect : public Effect {
     Enchantment * e_target;
     public:
         DisenchantEffect(Player * owner, std::unique_ptr<Minion> &b_ref, Enchantment * e_target);
+        virtual ~DisenchantEffect();
         void run() override;
 };
 

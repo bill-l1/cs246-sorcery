@@ -126,6 +126,7 @@ void Game::update() {
 				Minion * bm = (*it)->getBase();
 				it->release();
 				it->reset(bm);
+				bm->resetBoardRef();
 				p->graveyard.push(std::move(*it));
 				p->board.erase(it);
 			}else{
@@ -169,7 +170,7 @@ int Game::getTurns() const{
 void Game::endTurn(){
 	for(auto && minion : activePlayer->board){
 		if(minion->onEndTurn().get() != nullptr) {
-		minion->onEndTurn().get()->run();
+			minion->onEndTurn().get()->run();
 		}
 		minion->setActions(0);
 	}
@@ -320,7 +321,7 @@ void Game::attack(const int &pos){
 	Minion * minion = activePlayer->board[pos].get();
 	int cost = verifyActionCost(minion, 1);
 	minion->setActions(cost);
-	printAlert(minion->getName()+" attacks "+nonActivePlayer->getName()+"!", 1);
+	printAlert(minion->getMinionName()+" attacks "+nonActivePlayer->getName()+"!", 1);
 	buff(nonActivePlayer.get(), -minion->getAttack());
 	update();
 }
