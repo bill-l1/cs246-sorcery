@@ -183,25 +183,36 @@ std::unique_ptr<Effect> EnchantmentList::Silence::onActivate(Card * target)  {
 SpellList::Banish::Banish()
 	:Spell {
 	"Banish",
-	"Destroy Target Minion or Ritual", 2, 
-	std::make_unique<BanishEffect>(nullptr,nullptr),nullptr}
+	"Destroy Target Minion or Ritual", 2, nullptr}
 {}
 
+std::unique_ptr<Effect> SpellList::Banish::onPlay(Card * target) {
+	std::unique_ptr<Effect> eff = std::make_unique<BanishEffect>(nullptr,target);
+	return eff;
+}
 
 SpellList::Blizzard::Blizzard()
 	:Spell {
 	"Blizzard",
-	"Deal 2 damage to all minions", 3, 
-	std::make_unique<AllBoard>(nullptr,nullptr,0,-2),nullptr}
+	"Deal 2 damage to all minions", 3, nullptr}
 {}
+
+
+std::unique_ptr<Effect> SpellList::Blizzard::onPlay(Card* target) {
+	std::unique_ptr<Effect> eff = std::make_unique<AllBoard>(nullptr,nullptr,0,-2);
+	eff.get()->setGame(this->getGame());
+	return eff;
+}
 
 RitualList::auraOfPower::auraOfPower()
 	:Ritual {
 	"Aura of Power",
 	"Whenever a minion enters play under your control, it gains +1/+1", 1,
 	std::make_unique<SampleEffect>(nullptr,nullptr,1,1),4}
-
 {}
+
+
+
 
 Effect * RitualList::auraOfPower::onPlay() {
 if(this->getOwner() != this->getGame()->getActivePlayer()) {
@@ -212,4 +223,43 @@ this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(thi
 return this->getEffect();
 
 }
+
+
+
+RitualList::Standstill::Standstill()
+	:Ritual {
+	"Standstill",
+	"Whenever a minion enters play, destroy it",3,
+	std::make_unique<BanishEffect>(nullptr,nullptr),4}
+
+{}
+
+Effect * RitualList::Standstill::onPlay() {
+this->setCharges(this->getCharges()-1);
+this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(this->getGame()->getActivePlayer()->getBoardSize()-1));
+return this->getEffect();
+
+}
+
+
+RitualList::DarkRitual::DarkRitual()
+	:Ritual {
+	"Dark ritual",
+	"At the start of your turn gain 1 mana", 0,
+	std::make_unique<ManaEffect>(nullptr,nullptr),5}
+
+{}
+
+Effect * RitualList::DarkRitual::onTurnStart() {
+if(this->getOwner() != this->getGame()->getActivePlayer()) {
+return nullptr;
+}
+this->setCharges(this->getCharges()-1);
+return this->getEffect();
+
+}
+
+
+
+
 

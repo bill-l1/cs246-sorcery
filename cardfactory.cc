@@ -50,5 +50,7 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	
 	// Rituals
 	{"Aura of Power", &CardFactory::buildCard<RitualList::auraOfPower>},
+	{"Standstill", &CardFactory::buildCard<RitualList::Standstill>},
+	{"Dark Ritual", &CardFactory::buildCard<RitualList::DarkRitual>}
 
 };

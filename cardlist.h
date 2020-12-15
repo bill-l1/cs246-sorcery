@@ -13,6 +13,7 @@
 #include "allboard.h"
 #include "summoneffect.h"
 #include "disenchanteffect.h"
+#include "manaeffect.h"
 //Steps to create a new card:
 // 1. add it to header
 // 	class NAME : public TYPE_CLASS { public : NAME(); };
@@ -56,8 +57,8 @@ class EnchantmentList {
 
 class SpellList {
 	public:
-	class Banish : public Spell { public: Banish(); };
-	class Blizzard : public Spell { public: Blizzard(); };
+	class Banish : public Spell { public: Banish();  std::unique_ptr<Effect> onPlay(Card * target) override; };
+	class Blizzard : public Spell { public: Blizzard();  std::unique_ptr<Effect> onPlay(Card * target) override;};
 	//class Unsummon : public Spell { public: Unsummon(Player * owner, Card * Target); };
 	class Disenchant : public Spell { public: Disenchant(); };
 
@@ -66,6 +67,8 @@ class SpellList {
 class RitualList {
 	public:
 	class auraOfPower : public Ritual { public: auraOfPower(); Effect * onPlay() override; };
+	class Standstill : public Ritual { public: Standstill(); Effect * onPlay() override; };
+	class DarkRitual : public Ritual { public: DarkRitual(); Effect * onTurnStart() override; };
 
 };
 

@@ -248,6 +248,7 @@ void Game::play(const int &pos){
 		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
 		std::unique_ptr<Ritual> cast_card;
 		card.get()->setGame(this);
+		card.get()->setOwner(this->getActivePlayer());
 		cast->getEffect()->setGame(this);
 		card.release(); // if this causes a leak im finna lose it
 		cast_card.reset(cast); //prob set up a helper function for this.
@@ -295,7 +296,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 	if(auto cast = dynamic_cast<Spell *>(c_ref.get())){
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
 		activePlayer->setMagic(newMagic);
-		cast->getEffect()->setGame(this);
+		card.get()->setGame(this);
 		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
 		std::unique_ptr<Spell> cast_card;
 		card.release(); 
