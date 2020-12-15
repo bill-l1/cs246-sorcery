@@ -13,6 +13,7 @@ void SummonEffect::run() {
 	this->getGame()->verifyBoardNotFull(this->getGame()->getActivePlayer());
 
 	for(int i = 0; i < quantity; i++) {
+	std::unique_ptr<BaseMinion> card = std::make_unique<BaseMinion>("Air Elemental", "",0,1,1);
 	this->getGame()->getActivePlayer()->playCard(std::move(card));
 
 	}

@@ -122,7 +122,9 @@ void Game::update() {
 		for(auto it = p->board.begin(); it != p->board.end();){
 			if((*it)->getDefense() <= 0){
 				printAlert((*it)->getMinionName() + " was destroyed.", 1);
-				(*it)->onDeath();
+				if((*it)->onDeath() != nullptr) {
+				(*it)->onDeath().get()->run();
+				}
 				Minion * bm = (*it)->getBase();
 				it->release();
 				it->reset(bm);

@@ -96,6 +96,9 @@ void Player::playCard(std::unique_ptr<Ritual> card) {
 }
 
 Minion * Player::getBoardNum(int num) const {
+if(num >= this->getBoardSize()) {
+return nullptr;
+}	
 return board[num].get();
 
 }
