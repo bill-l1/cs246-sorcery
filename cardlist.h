@@ -23,12 +23,12 @@ class MinionList {
 	public:
 	class AirElemental : public BaseMinion { public: AirElemental(); };
 	class EarthElemental : public BaseMinion { public: EarthElemental(); };
-	class Bomb : public BaseMinion { public: Bomb(); };
-	class FireElemental : public BaseMinion { public: FireElemental(); };
+	class Bomb : public BaseMinion { public: Bomb();  std::unique_ptr<Effect> onDeath() override;  };
+	class FireElemental : public BaseMinion { public: FireElemental(); std::unique_ptr<Effect> onPlay() override; };
 	class PotionSeller : public BaseMinion { public: PotionSeller(); std::unique_ptr<Effect> onEndTurn() override; };
 	class NovicePyromancer : public BaseMinion { public: NovicePyromancer(); std::unique_ptr<Effect> onActivate(Card * target) override; };
 	class ApprenticeSummoner : public BaseMinion { public: ApprenticeSummoner(); std::unique_ptr<Effect> onActivate(Card * target) override;};
-	class MasterSummoner : public BaseMinion { public: MasterSummoner(); };
+	class MasterSummoner : public BaseMinion { public: MasterSummoner(); std::unique_ptr<Effect> onActivate(Card * target) override; };
 };
 
 class EnchantmentList {

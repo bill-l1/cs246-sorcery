@@ -13,7 +13,7 @@ void TeamBuff::run() {
 	BaseMinion * m = dynamic_cast<BaseMinion *>(getTarget());
 	if(m != nullptr) {
 	for(int i = 0; i < m->getOwner()->getBoardSize(); i++) {
-		m->getGame()->buff(m->getGame()->getActivePlayer()->getBoardNum(i),attack,defense);
+		m->getGame()->buff(m->getOwner()->getBoardNum(i),attack,defense);
 		
 	}
 	

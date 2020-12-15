@@ -1,7 +1,7 @@
 #include "cardlist.h"
 #include "base_minion.h"
 #include "spell.h"
-
+#include <iostream>
 
 MinionList::AirElemental::AirElemental()
 	: BaseMinion{
@@ -24,12 +24,34 @@ MinionList::Bomb::Bomb()
 	2, 1, 2}
 {}
 
+std::unique_ptr<Effect> MinionList::Bomb::onDeath() {
+if(this->getOwner() == this->getGame()->getNonActivePlayer()) {
+std::unique_ptr<Effect> eff = std::make_unique<TeamBuff>(nullptr,this->getGame()->getActivePlayer()->getBoardNum(0),0,-this->getAttack());
+return std::move(eff);
+}
+
+std::unique_ptr<Effect> eff2 = std::make_unique<TeamBuff>(nullptr,this->getGame()->getNonActivePlayer()->getBoardNum(0),0,-this->getAttack());
+return std::move(eff2);
+
+
+}
+
 MinionList::FireElemental::FireElemental()
 	: BaseMinion{
 	"Fire Elemental",
 	"Whenever an opponent's minion enters play, deal 1 damage to it",
 	2, 2, 2}
 {}
+
+
+std::unique_ptr<Effect> MinionList::FireElemental::onPlay() {
+if(this->getOwner() == this->getGame()->getNonActivePlayer()) {
+std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(nullptr,this->getGame()->getActivePlayer()->getBoardNum(this->getGame()->getActivePlayer()->getBoardSize()-1),0,-1);
+return std::move(eff);
+}
+return nullptr;
+
+}
 
 MinionList::PotionSeller::PotionSeller()
 	: BaseMinion{
@@ -44,7 +66,7 @@ std::unique_ptr<Effect> MinionList::PotionSeller::onEndTurn() {
 	return nullptr;
 	}
 	eff.get()->setGame(this->getGame());
-	return eff;
+	return std::move(eff);
 }
 
 MinionList::NovicePyromancer::NovicePyromancer()
@@ -83,6 +105,15 @@ MinionList::MasterSummoner::MasterSummoner()
 	"Summon up to three 1/1 air elementals",
 	3, 2, 2, 2}
 {}
+
+std::unique_ptr<Effect> MinionList::MasterSummoner::onActivate(Card * target) {
+	std::unique_ptr<Effect> eff = std::make_unique<SummonEffect>(nullptr,nullptr,3);
+	eff.get()->setGame(this->getGame());
+	return std::move(eff);
+
+}
+
+
 
 EnchantmentList::GiantStrength::GiantStrength()
 	: Enchantment{
