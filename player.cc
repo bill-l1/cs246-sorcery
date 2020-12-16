@@ -108,7 +108,13 @@ return board[num].get();
 
 void Player::addToHand(Minion * target) {
 std::unique_ptr<Card> c = CardFactory::getCard(target->getMinionName(),target->getOwner());
+
+if( hand.size() < MAX_HAND_SIZE) {
 hand.push_back(std::move(c));
+}
+else {
+throw HandIsFull{};
+}
 }
 
 std::unique_ptr<BaseMinion>& Player::graveyardTop() {
