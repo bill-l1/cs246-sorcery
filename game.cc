@@ -123,7 +123,11 @@ void Game::update() {
 			if((*it)->getDefense() <= 0){
 				printAlert((*it)->getMinionName() + " was destroyed.", 1);
 				if((*it)->onDeath() != nullptr) {
-				(*it)->onDeath().get()->run();
+					try{
+						(*it)->onDeath().get()->run(); //strongly exception safe
+					}catch(GameException &e){
+						printAlert(e.getErr());
+					}
 				}
 				Minion * bm = (*it)->getBase();
 				it->release();
@@ -171,8 +175,13 @@ int Game::getTurns() const{
 
 void Game::endTurn(){
 	for(auto && minion : activePlayer->board){
-		if(minion->onEndTurn().get() != nullptr) {
-			minion->onEndTurn().get()->run();
+		std::unique_ptr<Effect> eff = minion->onEndTurn();
+		if(eff.get() != nullptr) {
+			try{
+				eff->run(); // strongly exception safe
+			}catch(GameException &e){
+				printAlert(e.getErr());
+			}
 		}
 		minion->setActions(0);
 	}
@@ -369,37 +378,27 @@ void Game::use(const int &pos) {
 }
 
 
-void Game::use(const int &pos, const int &pnum, const char &t){
-	int bt = t-48;
-	Card * target = nullptr;
+void Game::use(const int &pos, const int &pnum, const int &t){
 	std::vector<Player *> players{p1.get(), p2.get()};
 
 	if(pnum != 1 && pnum != 2) throw InvalidPlayer{}; //validate pnum
 	Player *pt = players[pnum-1]; 
 	verifyBoardPosition(activePlayer.get(), pos);
-
-	if(t >= '0' && t <= '4'){
-		verifyBoardPosition(pt, bt);
-		target = pt->board[bt].get();
-	}else if (t == 'r'){
-		target = pt->ritual.get();
-	}else{
-		throw InvalidTarget{};
-	}
+	verifyBoardPosition(pt, t);
 	Minion * minion = activePlayer->board[pos].get();
+	Minion * target = pt->board[t].get();
+
 	if(minion->getActivateCost() >= 0) {
 		if(activePlayer->getMagic() >= minion->getActivateCost()) {
 			int cost = verifyActionCost(minion, 1);
 			minion->setActions(cost);
 			minion->onActivate(target).get()->run();
 			update();
+		}else{
+			view->printAlert("Not enough mana");
 		}
-		else {
-		view->printAlert("Not enough mana");
-		}
-	}
-	else {
-	view->printAlert("Invalid selection");
+	}else{
+		view->printAlert("Invalid selection");
 	}
 
 }
@@ -474,20 +473,3 @@ int Game::verifyActionCost(Minion * minion, const int &n) const {
 void Game::printAlert(const std::string &s, const int &type) const {
 	view->printAlert(s, type);
 }
-
-// void Game::disenchant(Player * player, Minion * target, Enchantment * e_target) {
-// 	for(auto & minion : player->board){
-// 		if(minion.get() == target){
-// 			if(target == e_target){
-// 				minion.release();
-// 				minion.reset(target->getComponent());
-// 			}else{
-// 				//TODO
-// 				// Minion * curr_minion = target;
-// 				// while(curr_minion->getComponent() != nullptr){
-
-// 				// }
-// 			}
-// 		}
-// 	}
-// }

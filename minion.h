@@ -4,6 +4,8 @@
 #include "effect.h"
 #include <memory>
 
+
+
 class Minion : public Card {
 	public:
 		Minion(const std::string &name, const std::string &description, const int &cost, const std::string &type);
@@ -11,6 +13,11 @@ class Minion : public Card {
 		virtual Minion * getComponent(const bool &steal = false);
 		virtual std::string getMinionName() const;
 		virtual std::string getMinionDescription() const;
+
+		// - relies heavily on use of "virtual" to make sure the following don't get called 
+		// - Minion card should ALWAYS inherit either Enchantment or BaseMinion first, shouldn't need to worry about type safety (depends on CardFactory and CardList)
+		// - makes calling minion methods A LOT easier without needing to constantly cast between those two
+
 		virtual int getMinionCost() const;
 		virtual int getAttack() const;
 		virtual void setAttack(const int &att);
@@ -25,7 +32,7 @@ class Minion : public Card {
 		virtual std::unique_ptr<Effect> onDeath();
 		virtual std::unique_ptr<Effect> onPlay();
 		virtual std::unique_ptr<Effect> onActivate(Card * target = nullptr);
-		virtual std::unique_ptr<Minion>& getBoardRef() const;
+		virtual std::unique_ptr<Minion>& getBoardRef() const = 0;
 		virtual void setBoardRef(std::unique_ptr<Minion>& ref);
 		virtual void resetBoardRef();
 };

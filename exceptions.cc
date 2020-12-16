@@ -65,3 +65,7 @@ BoardIsFull::BoardIsFull()
 DeckError::DeckError()
     : GameException{"Problem loading deck.", true}
 {}
+
+IllegalAction::IllegalAction(const std::string &act)
+    : GameException{"Illegal action: "+act, true}
+{}

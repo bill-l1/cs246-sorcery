@@ -3,7 +3,7 @@
 #include <string>
 
 class GameException {
-	std::string err;
+	std::string err; // error message
     bool doExit;
 	public:
 		GameException(const std::string &err, const bool &doExit=false);
@@ -60,6 +60,10 @@ class BoardIsFull : public GameException {
 
 class DeckError : public GameException {
     public: DeckError();
+};
+
+class IllegalAction : public GameException {
+    public: IllegalAction(const std::string &act);
 };
 
 #endif

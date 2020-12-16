@@ -10,6 +10,7 @@
 #include "effect.h"
 #include "player.h"
 #include "game.h"
+#include "exceptions.h"
 
 AllBoard::AllBoard(Player * own, Card * tar, int atk, int def) :
 	Effect{own, tar},
@@ -89,8 +90,9 @@ SampleEffect::SampleEffect(Player * own, Card * tar,int atk, int def) :
 void SampleEffect::run() {
 	BaseMinion * m = dynamic_cast<BaseMinion *>(getTarget());
 	if(m != nullptr) {
-	m->setAttack(m->getAttack()+attack);
-	m->setDefense(m->getDefense()+defense);
+		this->getGame()->buff(m, attack,defense);
+		// m->setAttack(m->getAttack()+attack);
+		// m->setDefense(m->getDefense()+defense);
 	}
 }
 
@@ -100,15 +102,18 @@ SummonEffect::SummonEffect(Player * own, Card * tar, int qt) :
 {}
 
 void SummonEffect::run() {
-	this->getGame()->verifyBoardNotFull(this->getGame()->getActivePlayer());
-
-	for(int i = 0; i < quantity; i++) {
-        std::unique_ptr<Card> card = CardFactory::buildCard<MinionList::AirElemental>();
-        std::unique_ptr<BaseMinion> cast_card;
-        BaseMinion * ptr = static_cast<BaseMinion *>(card.get());
-        card.release();
-        cast_card.reset(ptr);
-        this->getGame()->getActivePlayer()->playCard(std::move(cast_card));
+	try{
+		for(int i = 0; i < quantity; i++) {
+			this->getGame()->verifyBoardNotFull(this->getGame()->getActivePlayer());
+			std::unique_ptr<Card> card = CardFactory::buildCard<MinionList::AirElemental>();
+			std::unique_ptr<BaseMinion> cast_card;
+			BaseMinion * ptr = static_cast<BaseMinion *>(card.get());
+			card.release();
+			cast_card.reset(ptr);
+			this->getGame()->getActivePlayer()->playCard(std::move(cast_card));
+		}
+	}catch(BoardIsFull &e){
+		throw;
 	}
 }
 
@@ -121,10 +126,8 @@ TeamBuff::TeamBuff(Player * own, Card * tar, int atk, int def) :
 void TeamBuff::run() {
 	BaseMinion * m = dynamic_cast<BaseMinion *>(getTarget());
 	if(m != nullptr) {
-	for(int i = 0; i < m->getOwner()->getBoardSize(); i++) {
-		m->getGame()->buff(m->getOwner()->getBoardNum(i),attack,defense);
-		
-	}
-	
+		for(int i = 0; i < m->getOwner()->getBoardSize(); i++) {
+			m->getGame()->buff(m->getOwner()->getBoardNum(i),attack,defense);
+		}
 	}
 }

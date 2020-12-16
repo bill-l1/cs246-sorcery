@@ -2,6 +2,7 @@
 #include <iostream>
 #include "base_minion.h"
 #include "minion.h"
+#include "exceptions.h"
 
 RefObj::RefObj(std::unique_ptr<Minion>& b_ref) : b_ref{b_ref} {}
 
@@ -53,7 +54,8 @@ Minion * BaseMinion::getBase() {
 }
 
 std::unique_ptr<Minion>& BaseMinion::getBoardRef() const {
-	return b_ref->b_ref; // TODO handle if b_ref isn't defined
+	if(b_ref.get() == nullptr) throw IllegalAction{"b_ref not defined"};
+	return b_ref->b_ref;
 }
 
 void BaseMinion::setBoardRef(std::unique_ptr<Minion>& ref){

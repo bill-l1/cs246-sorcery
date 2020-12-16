@@ -32,7 +32,6 @@ int Minion::getAttack() const {
 
 void Minion::setAttack(const int &att){
     std::cerr << "Illegal function call from minion" << std::endl;
-    return;
 }
 
 int Minion::getDefense() const {
@@ -42,7 +41,6 @@ int Minion::getDefense() const {
 
 void Minion::setDefense(const int &def) {
     std::cerr << "Illegal function call from minion" << std::endl;
-    return;   
 }
 
 int Minion::getActions() const {
@@ -52,7 +50,6 @@ int Minion::getActions() const {
 
 void Minion::setActions(const int &n) {
     std::cerr << "Illegal function call from minion" << std::endl;
-    return;
 }
 
 int Minion::getActivateCost() const {
@@ -62,35 +59,33 @@ int Minion::getActivateCost() const {
 
 void Minion::buff(const int &att, const int &def){
     std::cerr << "Illegal function call from minion" << std::endl;
-    return;
 }
 
 Minion * Minion::getBase() {
     std::cerr << "Illegal function call from minion" << std::endl;
-    return std::move(nullptr);
+    return nullptr;
 }
 
 std::unique_ptr<Effect> Minion::onDeath() {
-return std::move(nullptr);
+    return std::move(nullptr);
 }
 
 std::unique_ptr<Effect> Minion::onEndTurn() {
-return std::move(nullptr);
+    return std::move(nullptr);
 }
 
  std::unique_ptr<Effect> Minion::onPlay() {
-return std::move(nullptr);
+    return std::move(nullptr);
 }
 
 std::unique_ptr<Effect> Minion::onActivate(Card * target) {
-return std::move(nullptr);
+    return std::move(nullptr);
 }
 
-std::unique_ptr<Minion>& Minion::getBoardRef() const {
-    std::unique_ptr<Minion> m = std::make_unique<Minion>("invalid", "", 1, "invalid");
-    return m;
+void Minion::setBoardRef(std::unique_ptr<Minion>& ref) {
+    std::cerr << "Illegal function call from minion" << std::endl;
 }
 
-void Minion::setBoardRef(std::unique_ptr<Minion>& ref) {}
-
-void Minion::resetBoardRef() {}
+void Minion::resetBoardRef() {
+    std::cerr << "Illegal function call from minion" << std::endl;
+}

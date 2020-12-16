@@ -14,7 +14,6 @@ using std::cerr;
 using std::endl;
 
 int main(int argc, char *argv[]){
-	cin.exceptions(std::ios_base::eofbit);
 	std::istream * infile = &cin;
 	std::string p1deckname = "default.deck";
 	std::string p2deckname = "default.deck";
@@ -55,19 +54,21 @@ int main(int argc, char *argv[]){
 			p2deckname = argv[++i];
 		}
 	}
+	
+	infile->exceptions(std::ios_base::eofbit);
 
 	try{
 		cout << "Enter name of player 1: ";
-		cin >> p1name;
+		*infile >> p1name;
 		cout << "Enter name of player 2: ";
-		cin >> p2name;
+		*infile >> p2name;
+		infile->ignore(10000, '\n');
 	}catch(std::ifstream::failure &e){
 		cerr << "Invalid player names. Continuing with defaults:" << endl;
 		p1name = "Player 1";
 		p2name = "Player 2";
 	}
 
-	cin.ignore(10000, '\n');
 	try{
 		Game game{p1name, p2name, p1deckname, p2deckname, testing}; // can fail to load decks
 		std::string s;
@@ -89,9 +90,9 @@ int main(int argc, char *argv[]){
 					int pos, t;
 					if(iss >> pos){
 						if(iss >> t){
-							game.attack(pos, t); // TODO minus one to each so its 1-5
+							game.attack(pos-1, t-1);
 						}else{
-							game.attack(pos);
+							game.attack(pos-1);
 						}
 					}else{
 						throw InvalidCommand{};
@@ -102,28 +103,28 @@ int main(int argc, char *argv[]){
 					if(iss >> pos){
 						if(iss >> pnum){
 							if(iss >> target){
-								game.play(pos, pnum, target);
+								if(target >= '1' && target <= '5') target--;
+								game.play(pos-1, pnum-1, target);
 							}else{
 								throw InvalidCommand{};
 							}
 						}else{
-							game.play(pos);
+							game.play(pos-1);
 						}
 					}else{
 						throw InvalidCommand{};
 					}
 				}else if(cmd == "use"){
-					int pos, pnum;
-					char target;
+					int pos, pnum, target;
 					if(iss >> pos){
 						if(iss >> pnum){
 							if(iss >> target){
-							game.use(pos, pnum, target);
+								game.use(pos-1, pnum, target-1);
 							}else{
 								throw InvalidCommand{};
 							}
 						}else{
-							game.use(pos);
+							game.use(pos-1);
 						}
 					}else{
 						throw InvalidCommand{};
