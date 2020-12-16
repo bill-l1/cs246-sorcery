@@ -9,7 +9,7 @@
 #include "spell.h"
 #include "ritual.h"
 #include "exceptions.h"
-
+#include "cardfactory.h"
 Player::Player(const std::string &name)
 	: name{name},
 	life{20},
@@ -81,12 +81,16 @@ void Player::playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion>
 	target.reset(enchant);
 }
 
-// void Player::playCard(std::unique_ptr<Spell> card, Card * target) {	
+// void Player::playCard(std::unique_ptr<Spell> card, std::unique_ptr<Minion> &target) {	
 // 	card->onPlay(target).get()->run();
 // }
 
-// void Player::playCard(std::unique_ptr<Spell> card) {	
-// 	card->onPlay(nullptr).get()->run();
+// void Player::playCard(std::unique_ptr<Spell> card, std::unique_ptr<Ritual> &target) {	
+// 	card->onPlay(target).get()->run();
+// }
+
+// void Player::playCard(std::unique_ptr<Spell> card) {
+// 	card->onPlay().get()->run();
 // }
 
 void Player::playCard(std::unique_ptr<Ritual> card) {
@@ -99,5 +103,33 @@ if(num >= this->getBoardSize()) {
 return nullptr;
 }	
 return board[num].get();
+
+}
+
+void Player::addToHand(Minion * target) {
+std::unique_ptr<Card> c = CardFactory::getCard(target->getMinionName(),target->getOwner());
+
+if( hand.size() < MAX_HAND_SIZE) {
+hand.push_back(std::move(c));
+}
+else {
+throw HandIsFull{};
+}
+}
+
+std::unique_ptr<BaseMinion>& Player::graveyardTop() {
+	return graveyard.top();
+}
+
+void Player::graveyardPop() {
+	graveyard.pop();
+}
+
+void Player::removeFromBoard(Minion * target) {
+for(int i = 0; i < getBoardSize(); i++) {
+	if(target == getBoardNum(i)) {
+		board.erase(board.begin()+i);
+	}
+}
 
 }

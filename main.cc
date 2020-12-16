@@ -15,8 +15,8 @@ using std::endl;
 
 int main(int argc, char *argv[]){
 	std::istream * infile = &cin;
-	std::string p1deckname = "default.deck";
-	std::string p2deckname = "default.deck";
+	std::string p1deckname = "testspells.deck";
+	std::string p2deckname = "testbomb.deck";
 	std::string p1name = "Player";
 	std::string p2name = "Player";
 	bool testing = false;

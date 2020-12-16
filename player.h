@@ -19,7 +19,7 @@ class Player  {
 	std::stack<std::unique_ptr<Card> > deck;
 	std::vector<std::unique_ptr<Card> > hand;
 	std::vector<std::unique_ptr<Minion>> board;
-	std::stack<std::unique_ptr<Minion>> graveyard;
+	std::stack<std::unique_ptr<BaseMinion>> graveyard;
 	std::unique_ptr<Ritual> ritual;
 	public:
 		Player(const std::string &name);
@@ -36,12 +36,16 @@ class Player  {
 		void draw();
 		void playCard(std::unique_ptr<BaseMinion> card);
 		void playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion>& target);
-		void playCard(std::unique_ptr<Spell> card, Card * target);
+		void playCard(std::unique_ptr<Spell> card, std::unique_ptr<Minion>& target);
+		void playCard(std::unique_ptr<Spell> card, std::unique_ptr<Ritual>& target);
 		void playCard(std::unique_ptr<Ritual> card);
 		void playCard(std::unique_ptr<Spell> card);
 
-		//std::stack<std::unique_ptr<Minion>> getGraveyard();
-
+		std::unique_ptr<BaseMinion>& graveyardTop();
+		void graveyardPop();
+		void addToHand(Minion * target);
+		void addToBoard(std::unique_ptr<Minion> target);
+		void removeFromBoard(Minion * target);
 		Minion * getBoardNum(int num) const;
 		//void runOnPlay(); //iterate through all board/rituals for onPlay effects
 		//void runOnStartTurn(); 

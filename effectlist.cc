@@ -1,5 +1,4 @@
 #include <memory>
-#include <iostream>
 #include "cardfactory.h"
 #include "cardlist.h"
 #include "effectlist.h"
@@ -54,7 +53,6 @@ DisenchantEffect::~DisenchantEffect() {}
 void DisenchantEffect::run(){
     Minion * curr_minion = b_ref.get();
     if(curr_minion == e_target){
-        std::cout << "run disenchant" << std::endl;
         Minion * child = curr_minion->getComponent(true);
         b_ref.reset(child);
     }else{
@@ -102,18 +100,15 @@ SummonEffect::SummonEffect(Player * own, Card * tar, int qt) :
 {}
 
 void SummonEffect::run() {
-	try{
-		for(int i = 0; i < quantity; i++) {
-			this->getGame()->verifyBoardNotFull(this->getGame()->getActivePlayer());
-			std::unique_ptr<Card> card = CardFactory::buildCard<MinionList::AirElemental>();
-			std::unique_ptr<BaseMinion> cast_card;
-			BaseMinion * ptr = static_cast<BaseMinion *>(card.get());
-			card.release();
-			cast_card.reset(ptr);
-			this->getGame()->getActivePlayer()->playCard(std::move(cast_card));
-		}
-	}catch(BoardIsFull &e){
-		throw;
+	this->getGame()->verifyBoardNotFull(getOwner());
+
+	for(int i = 0; i < quantity; i++) {
+        std::unique_ptr<Card> card = CardFactory::buildCard<MinionList::AirElemental>();
+        std::unique_ptr<BaseMinion> cast_card;
+        BaseMinion * ptr = static_cast<BaseMinion *>(card.get());
+        card.release();
+        cast_card.reset(ptr);
+        getOwner()->playCard(std::move(cast_card));
 	}
 }
 

@@ -67,12 +67,16 @@ class EnchantmentList {
 
 class SpellList {
 	public:
-	class Banish : public Spell { public: Banish();  std::vector<std::unique_ptr<Effect>> onPlay(Card * target) override; };
-	class Blizzard : public Spell { public: Blizzard();  std::vector<std::unique_ptr<Effect>> onPlay(Card * target) override;};
-	//class Disenchant : public Spell { public: Disenchant();  std::vector<std::unique_ptr<Effect>> onPlay(Card * target) override; };
-	class Recharge : public Spell { public: Recharge();  std::vector<std::unique_ptr<Effect>> onPlay(Card * target) override;};
-	class Unsummon : public Spell { public: Unsummon();  std::vector<std::unique_ptr<Effect>> onPlay(Card * target) override;};
-	class RaiseDead : public Spell { public: RaiseDead();  std::vector<std::unique_ptr<Effect>> onPlay(Card * target) override;};
+	class Banish : public Spell { 
+		public: Banish();  
+		std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Minion>& target) override; 
+		std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Ritual>& target) override; 
+	};
+	class Blizzard : public Spell { public: Blizzard();  std::vector<std::unique_ptr<Effect>> onPlay() override;};
+	class Disenchant : public Spell { public: Disenchant();  std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Minion>& target) override; };
+	class Recharge : public Spell { public: Recharge();  std::vector<std::unique_ptr<Effect>> onPlay() override;};
+	class Unsummon : public Spell { public: Unsummon();  std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Minion>& target) override;};
+	class RaiseDead : public Spell { public: RaiseDead();  std::vector<std::unique_ptr<Effect>> onPlay() override;};
 };
 
 class RitualList {

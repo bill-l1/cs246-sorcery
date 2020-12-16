@@ -10,7 +10,8 @@ HandEffect::HandEffect(Player * own, Card * tar) :
 void HandEffect::run() {
 	BaseMinion * m = dynamic_cast<BaseMinion *>(getTarget());
 	if( m != nullptr) {
-		Minion * bm = m->getBase();
-		//m->getGame()->getActivePlayer()->hand.push_back(bm);	
+		getGame()->printAlert(m->getMinionName() + " returned to " + m->getOwner()->getName() + "'s hand!", 1);
+		m->getOwner()->addToHand(m);
+		m->getOwner()->removeFromBoard(m);	
 	}
 }
