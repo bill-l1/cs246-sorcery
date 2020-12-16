@@ -3,17 +3,20 @@
 
 #include "base_minion.h"
 #include "enchantment.h"
-
 #include "spell.h"
-#include "sampleeffect.h"
-#include "game.h"
 #include "ritual.h"
-#include "banisheffect.h"
-#include "teambuff.h"
-#include "allboard.h"
-#include "summoneffect.h"
-#include "disenchanteffect.h"
-#include "manaeffect.h"
+
+class Effect;
+
+// #include "sampleeffect.h"
+// #include "game.h"
+// #include "banisheffect.h"
+// #include "teambuff.h"
+// #include "allboard.h"
+// #include "summoneffect.h"
+// #include "disenchanteffect.h"
+// #include "manaeffect.h"
+
 //Steps to create a new card:
 // 1. add it to header
 // 	class NAME : public TYPE_CLASS { public : NAME(); };

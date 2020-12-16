@@ -1,6 +1,7 @@
 #include "cardlist.h"
 #include "base_minion.h"
 #include "spell.h"
+#include "effectlist.h"
 
 MinionList::AirElemental::AirElemental()
 	: BaseMinion{
