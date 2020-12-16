@@ -59,9 +59,10 @@ class SpellList {
 	public:
 	class Banish : public Spell { public: Banish();  std::unique_ptr<Effect> onPlay(Card * target) override; };
 	class Blizzard : public Spell { public: Blizzard();  std::unique_ptr<Effect> onPlay(Card * target) override;};
-	//class Unsummon : public Spell { public: Unsummon(Player * owner, Card * Target); };
-	class Disenchant : public Spell { public: Disenchant(); };
-
+	class Disenchant : public Spell { public: Disenchant();  std::unique_ptr<Effect> onPlay(Card * target) override; };
+	class Recharge : public Spell { public: Recharge();  std::unique_ptr<Effect> onPlay(Card * target) override;};
+	class Unsummon : public Spell { public: Unsummon();  std::unique_ptr<Effect> onPlay(Card * target) override;};
+	class RaiseDead : public Spell { public: RaiseDead();  std::unique_ptr<Effect> onPlay(Card * target) override;};
 };
 
 class RitualList {
