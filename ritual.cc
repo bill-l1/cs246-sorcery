@@ -1,15 +1,12 @@
 
 #include <memory>
-#include "game.h"
-#include "player.h"
 #include "effect.h"
-#include "card.h"
 #include "ritual.h"
 
-Ritual::Ritual(const std::string &name, const std::string &description, const int &cost, std::unique_ptr<Effect> eff, int chg) : 
+Ritual::Ritual(const std::string &name, const std::string &description, const int &cost, std::unique_ptr<Effect> effect, const int &charges) : 
 	Card{name, description, cost, "Ritual"},
-	effect{std::move(eff)},
-	charges{chg}
+	effect{std::move(effect)},
+	charges{charges}
 {}
 
 Ritual::~Ritual() {};
@@ -26,9 +23,10 @@ void Ritual::setCharges(int chg) {
 }
 
 Effect * Ritual::onTurnStart() {
-return nullptr;
+	return nullptr;
 }
+
 Effect * Ritual::onPlay() {
-return nullptr;
+	return nullptr;
 }
 

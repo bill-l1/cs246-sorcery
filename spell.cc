@@ -1,9 +1,5 @@
 
 #include <memory>
-#include "game.h"
-#include "player.h"
-#include "effect.h"
-#include "card.h"
 #include "spell.h"
 
 Spell::Spell(const std::string &name, const std::string &description, const int &cost, Card * tar) : 
@@ -20,7 +16,6 @@ void Spell::setTarget(Card * tar) {
 	this->target = tar;
 }
 
-
 std::unique_ptr<Effect> Spell::onPlay(Card * target) {
-return nullptr;
+	return nullptr;
 }
