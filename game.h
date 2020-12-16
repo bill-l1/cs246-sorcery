@@ -60,7 +60,10 @@ class Game {
 		void verifyHandPosition(Player * player, const int &pos) const; //throws if position is outside of player's hand
 		void verifyBoardPosition(Player * player, const int &pos) const; //throws if position is outside of player's board
 		void verifyBoardNotFull(Player * player) const; //throws if board is full
-		int verifyMagicCost(Player * player, const int &n) const; //throws if n is greater than player's magic (unless testing is true); additionally returns the new magic amount.
+
+	void verifyGraveyardNotEmpty(Player * player) const; //throws if players graveyard is empty
+		void verifyRitualNotEmpty(Player * player) const; //throws if player has no ritual	
+	int verifyMagicCost(Player * player, const int &n) const; //throws if n is greater than player's magic (unless testing is true); additionally returns the new magic amount.
 		int verifyActionCost(Minion * minion, const int &n) const; //throws if n is greater than minion's actions (unless testing is true); additionally returns the new actions amount.
 
 		void printAlert(const std::string &s, const int &type = 0) const; // prints an alert

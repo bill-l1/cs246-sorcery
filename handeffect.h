@@ -9,7 +9,7 @@
 #include "base_minion.h"
 class HandEffect : public Effect{
 	public:
-	HandEffect(Player * owner, Card * target);
+	HandEffect(Player * owner, Card * target, std::unique_ptr<Minion> miniontarget);
 	void run() override;
 };
 

@@ -267,6 +267,12 @@ void Game::play(const int &pos){
 		activePlayer->playCard(std::move(cast_card));
 	}
 	else if(auto cast = dynamic_cast<Spell*>(c_ref.get())) {
+		if (cast->getName()=="Recharge") {
+		verifyRitualNotEmpty(activePlayer.get());
+		}
+		if (cast->getName()=="Raise Dead") {
+			verifyGraveyardNotEmpty(activePlayer.get());
+		}
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
 		activePlayer->setMagic(newMagic);
 		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
@@ -438,6 +444,19 @@ void Game::verifyBoardPosition(Player * player, const int &pos) const {
 void Game::verifyBoardNotFull(Player * player) const {
 	if(player->getBoardSize() >= MAX_BOARD_SIZE){
 		throw BoardIsFull{};
+	}
+}
+
+
+void Game::verifyRitualNotEmpty(Player * player) const {
+	if(player->getRitual() == nullptr){
+		throw InvalidPlay{};
+	}
+}
+
+void Game::verifyGraveyardNotEmpty(Player * player) const {
+	if(player->graveyard.empty()){
+		throw InvalidPlay{};
 	}
 }
 
