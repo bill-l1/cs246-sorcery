@@ -27,15 +27,13 @@ MinionList::Bomb::Bomb()
 {}
 
 std::unique_ptr<Effect> MinionList::Bomb::onDeath() {
-if(this->getOwner() == this->getGame()->getNonActivePlayer()) {
-std::unique_ptr<Effect> eff = std::make_unique<TeamBuff>(nullptr,this->getGame()->getActivePlayer()->getBoardNum(0),0,-this->getAttack());
-return std::move(eff);
-}
+	if(this->getOwner() == this->getGame()->getNonActivePlayer()) {
+		std::unique_ptr<Effect> eff = std::make_unique<TeamBuff>(getOwner(),this->getGame()->getActivePlayer()->getBoardNum(0),0,-this->getAttack());
+		return std::move(eff);
+	}
 
-std::unique_ptr<Effect> eff2 = std::make_unique<TeamBuff>(nullptr,this->getGame()->getNonActivePlayer()->getBoardNum(0),0,-this->getAttack());
-return std::move(eff2);
-
-
+	std::unique_ptr<Effect> eff2 = std::make_unique<TeamBuff>(getOwner(),this->getGame()->getNonActivePlayer()->getBoardNum(0),0,-this->getAttack());
+	return std::move(eff2);
 }
 
 MinionList::FireElemental::FireElemental()
@@ -47,12 +45,11 @@ MinionList::FireElemental::FireElemental()
 
 
 std::unique_ptr<Effect> MinionList::FireElemental::onPlay() {
-if(this->getOwner() == this->getGame()->getNonActivePlayer()) {
-std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(nullptr,this->getGame()->getActivePlayer()->getBoardNum(this->getGame()->getActivePlayer()->getBoardSize()-1),0,-1);
-return std::move(eff);
-}
-return nullptr;
-
+	if(this->getOwner() == this->getGame()->getNonActivePlayer()) {
+		std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(getOwner(),this->getGame()->getActivePlayer()->getBoardNum(this->getGame()->getActivePlayer()->getBoardSize()-1),0,-1);
+		return std::move(eff);
+	}
+	return nullptr;
 }
 
 MinionList::PotionSeller::PotionSeller()
@@ -63,9 +60,9 @@ MinionList::PotionSeller::PotionSeller()
 {}
 
 std::unique_ptr<Effect> MinionList::PotionSeller::onEndTurn() {
-	std::unique_ptr<Effect> eff = std::make_unique<TeamBuff>(nullptr,this->getGame()->getActivePlayer()->getBoardNum(0),0,1);
+	std::unique_ptr<Effect> eff = std::make_unique<TeamBuff>(getOwner(),this->getGame()->getActivePlayer()->getBoardNum(0),0,1);
 	if (this->getOwner() != this->getGame()->getActivePlayer()) {
-	return nullptr;
+		return nullptr;
 	}
 	eff.get()->setGame(this->getGame());
 	return std::move(eff);
@@ -80,10 +77,9 @@ MinionList::NovicePyromancer::NovicePyromancer()
 
 
 std::unique_ptr<Effect> MinionList::NovicePyromancer::onActivate(Card * target) {
-	std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(nullptr,target,0,-1);
+	std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(target->getOwner(), target,0,-1);
 	eff.get()->setGame(this->getGame());
 	return std::move(eff);
-
 }
 
 MinionList::ApprenticeSummoner::ApprenticeSummoner()
@@ -95,10 +91,9 @@ MinionList::ApprenticeSummoner::ApprenticeSummoner()
 
 
 std::unique_ptr<Effect> MinionList::ApprenticeSummoner::onActivate(Card * target) {
-	std::unique_ptr<Effect> eff = std::make_unique<SummonEffect>(nullptr,nullptr,1);
+	std::unique_ptr<Effect> eff = std::make_unique<SummonEffect>(getOwner(), nullptr,1);
 	eff.get()->setGame(this->getGame());
 	return std::move(eff);
-
 }
 
 MinionList::MasterSummoner::MasterSummoner()
@@ -109,13 +104,10 @@ MinionList::MasterSummoner::MasterSummoner()
 {}
 
 std::unique_ptr<Effect> MinionList::MasterSummoner::onActivate(Card * target) {
-	std::unique_ptr<Effect> eff = std::make_unique<SummonEffect>(nullptr,nullptr,3);
+	std::unique_ptr<Effect> eff = std::make_unique<SummonEffect>(getOwner(),nullptr,3);
 	eff.get()->setGame(this->getGame());
 	return std::move(eff);
-
 }
-
-
 
 EnchantmentList::GiantStrength::GiantStrength()
 	: Enchantment{
@@ -189,8 +181,13 @@ SpellList::Banish::Banish()
 	"Destroy Target Minion or Ritual", 2, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::Banish::onPlay(Card * target) {
-	std::unique_ptr<Effect> eff = std::make_unique<BanishEffect>(nullptr,target);
+std::unique_ptr<Effect> SpellList::Banish::onPlay(std::unique_ptr<Minion>& target) {
+	std::unique_ptr<Effect> eff = std::make_unique<BanishEffect>(target->getOwner(), target.get());
+	return eff;
+}
+
+std::unique_ptr<Effect> SpellList::Banish::onPlay(std::unique_ptr<Ritual>& target) {
+	std::unique_ptr<Effect> eff = std::make_unique<BanishEffect>(target->getOwner(), target.get());
 	return eff;
 }
 
@@ -201,25 +198,27 @@ SpellList::Blizzard::Blizzard()
 {}
 
 
-std::unique_ptr<Effect> SpellList::Blizzard::onPlay(Card* target) {
+std::unique_ptr<Effect> SpellList::Blizzard::onPlay() {
 	std::unique_ptr<Effect> eff = std::make_unique<AllBoard>(nullptr,nullptr,0,-2);
 	eff.get()->setGame(this->getGame());
 	return eff;
 }
 
-
-/*
 SpellList::Disenchant::Disenchant()
 	:Spell {
 	"Disenchant",
 	"Destroy the top enchantment on target minion", 1, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::Disenchant::onPlay(Card * target) {
-	std::unique_ptr<Effect> eff = std::make_unique<DisenchantEffect>(nullptr,target,target);
-	return eff;
+std::unique_ptr<Effect> SpellList::Disenchant::onPlay(std::unique_ptr<Minion>& target) {
+	if(Enchantment * cast = dynamic_cast<Enchantment * >(target.get())){
+		std::unique_ptr<Effect> eff = std::make_unique<DisenchantEffect>(nullptr, target, cast);
+		return eff;
+	}else{
+		//TODO probably should throw here
+		return nullptr;
+	}
 }
-*/
 
 SpellList::Recharge::Recharge()
 	:Spell {
@@ -227,11 +226,10 @@ SpellList::Recharge::Recharge()
 	"Your ritual gains 3 charges", 1, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::Recharge::onPlay(Card * target) {
-	std::unique_ptr<Effect> eff = std::make_unique<RitualEffect>(nullptr,nullptr,3);
+std::unique_ptr<Effect> SpellList::Recharge::onPlay() {
+	std::unique_ptr<Effect> eff = std::make_unique<RitualEffect>(getOwner(),nullptr,3);
 	return eff;
 }
-
 
 SpellList::RaiseDead::RaiseDead()
 	:Spell {
@@ -239,14 +237,11 @@ SpellList::RaiseDead::RaiseDead()
 	"Resurrect the top minion in your graveyard and set its defense to 1", 1, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::RaiseDead::onPlay(Card * target) {
-	std::unique_ptr<Effect> eff = std::make_unique<ResEffect>(nullptr,nullptr);
+std::unique_ptr<Effect> SpellList::RaiseDead::onPlay() {
+	std::unique_ptr<Effect> eff = std::make_unique<ResEffect>(getOwner(), nullptr);
 	eff.get()->setGame(this->getGame());
-
 	return eff;
 }
-
-
 
 SpellList::Unsummon::Unsummon()
 	:Spell {
@@ -254,13 +249,11 @@ SpellList::Unsummon::Unsummon()
 	"Return target minion to its owners hand", 1, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::Unsummon::onPlay(Card * target) {
-	std::unique_ptr<Effect> eff = std::make_unique<HandEffect>(nullptr,target);
+std::unique_ptr<Effect> SpellList::Unsummon::onPlay(std::unique_ptr<Minion>& target) {
+	std::unique_ptr<Effect> eff = std::make_unique<HandEffect>(nullptr,target.get());
 	eff.get()->setGame(this->getGame());
 	return eff;
 }
-
-
 
 RitualList::auraOfPower::auraOfPower()
 	:Ritual {
@@ -269,20 +262,14 @@ RitualList::auraOfPower::auraOfPower()
 	std::make_unique<SampleEffect>(nullptr,nullptr,1,1),4}
 {}
 
-
-
-
 Effect * RitualList::auraOfPower::onPlay() {
-if(this->getOwner() != this->getGame()->getActivePlayer()) {
-return nullptr;
+	if(this->getOwner() != this->getGame()->getActivePlayer()) {
+		return nullptr;
+	}
+	this->setCharges(this->getCharges()-1);
+	this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(this->getOwner()->getBoardSize()-1));
+	return this->getEffect();
 }
-this->setCharges(this->getCharges()-1);
-this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(this->getOwner()->getBoardSize()-1));
-return this->getEffect();
-
-}
-
-
 
 RitualList::Standstill::Standstill()
 	:Ritual {
@@ -293,10 +280,9 @@ RitualList::Standstill::Standstill()
 {}
 
 Effect * RitualList::Standstill::onPlay() {
-this->setCharges(this->getCharges()-1);
-this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(this->getGame()->getActivePlayer()->getBoardSize()-1));
-return this->getEffect();
-
+	this->setCharges(this->getCharges()-1);
+	this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(this->getGame()->getActivePlayer()->getBoardSize()-1));
+	return this->getEffect();
 }
 
 
@@ -309,12 +295,11 @@ RitualList::DarkRitual::DarkRitual()
 {}
 
 Effect * RitualList::DarkRitual::onTurnStart() {
-if(this->getOwner() != this->getGame()->getActivePlayer()) {
-return nullptr;
-}
-this->setCharges(this->getCharges()-1);
-return this->getEffect();
-
+	if(this->getOwner() != this->getGame()->getActivePlayer()) {
+		return nullptr;
+	}
+	this->setCharges(this->getCharges()-1);
+	return this->getEffect();
 }
 
 

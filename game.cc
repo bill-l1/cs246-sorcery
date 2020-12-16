@@ -123,13 +123,14 @@ void Game::update() {
 			if((*it)->getDefense() <= 0){
 				printAlert((*it)->getMinionName() + " was destroyed.", 1);
 				if((*it)->onDeath() != nullptr) {
-				(*it)->onDeath().get()->run();
+					(*it)->onDeath().get()->run();
 				}
-				Minion * bm = (*it)->getBase();
-				it->release();
-				it->reset(bm);
+				BaseMinion * bm = static_cast<BaseMinion *>((*it)->getBase());
 				bm->resetBoardRef();
-				p->graveyard.push(std::move(*it));
+				std::unique_ptr<BaseMinion> new_bm;
+				new_bm.reset(bm);
+				p->graveyard.push(std::move(new_bm));
+				it->release();
 				p->board.erase(it);
 			}else{
 				++it;
@@ -265,7 +266,7 @@ void Game::play(const int &pos){
 		activePlayer->playCard(std::move(cast_card));
 	}	
 	
-	else{ //TODO add non-targeted spells
+	else{ 
 		throw InvalidPlay{};
 	}
 
@@ -274,7 +275,8 @@ void Game::play(const int &pos){
 
 void Game::play(const int &pos, const int &pnum, const char &t){
 	int bt = t-48;
-	Card * target = nullptr;
+	// Card * target = nullptr;
+	bool targetIsMinion = true;
 	std::vector<Player *> players{p1.get(), p2.get()};
 
 	if(pnum != 1 && pnum != 2) throw InvalidPlayer{}; //validate pnum
@@ -283,9 +285,12 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 
 	if(t >= '0' && t <= '4'){
 		verifyBoardPosition(pt, bt);
-		target = pt->board[bt].get();
+		//target = pt->board[bt].get();
+
 	}else if (t == 'r'){
-		target = pt->ritual.get();
+		//TODO verify if ritual exists
+		targetIsMinion = false;
+		//target = pt->ritual.get();
 	}else{
 		throw InvalidTarget{};
 	}
@@ -301,9 +306,14 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		std::unique_ptr<Spell> cast_card;
 		card.release(); 
 		cast_card.reset(cast); 
-		activePlayer->playCard(std::move(cast_card), target);
+		if(targetIsMinion){
+			activePlayer->playCard(std::move(cast_card), pt->board[bt]);
+		}else{
+			activePlayer->playCard(std::move(cast_card), pt->ritual);
+		}
 	}else if(auto cast = dynamic_cast<Enchantment *>(c_ref.get())){
-		if (!dynamic_cast<Minion *>(target)) throw InvalidTarget{}; //validate target is a minion
+		// if (!dynamic_cast<Minion *>(target)) throw InvalidTarget{}; //validate target is a minion
+		if (!targetIsMinion) throw InvalidTarget{}; //validate target is a minion
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
 		activePlayer->setMagic(newMagic);
 		std::unique_ptr<Minion>& m_target = pt->board[bt];
@@ -311,7 +321,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		std::unique_ptr<Enchantment> cast_card;
 		card.release(); 
 		cast_card.reset(cast); 
-		activePlayer->playCard(std::move(cast_card), m_target);	
+		activePlayer->playCard(std::move(cast_card), m_target);
 	}else{ 
 		throw InvalidPlay{};
 	}

@@ -40,7 +40,7 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	// Spells
 	{"Banish", &CardFactory::buildCard<SpellList::Banish>},
 	{"Blizzard", &CardFactory::buildCard<SpellList::Blizzard>},
-	//{"Disenchant", &CardFactory::buildCard<SpellList::Disenchant>},
+	{"Disenchant", &CardFactory::buildCard<SpellList::Disenchant>},
 	{"Recharge", &CardFactory::buildCard<SpellList::Recharge>},
 	{"Raise Dead", &CardFactory::buildCard<SpellList::RaiseDead>},
 	{"Unsummon", &CardFactory::buildCard<SpellList::Unsummon>},

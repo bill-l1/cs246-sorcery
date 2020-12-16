@@ -16,6 +16,14 @@ void Spell::setTarget(Card * tar) {
 	this->target = tar;
 }
 
-std::unique_ptr<Effect> Spell::onPlay(Card * target) {
-	return nullptr;
+std::unique_ptr<Effect> Spell::onPlay() {
+	return nullptr; //TODO should throw InvalidPlay
+}
+
+std::unique_ptr<Effect> Spell::onPlay(std::unique_ptr<Minion>& target) {
+	return nullptr; //TODO should throw InvalidPlay
+}
+
+std::unique_ptr<Effect> Spell::onPlay(std::unique_ptr<Ritual>& target) {
+	return nullptr; //TODO should throw InvalidPlay
 }

@@ -12,7 +12,7 @@
 class RitualEffect : public Effect{
 	int quantity;
 	public:
-	RitualEffect(Player * owner, Card * target, int quantity);
+	RitualEffect(Player * owner, Card * target, const int &quantity);
 	void run() override;
 };
 

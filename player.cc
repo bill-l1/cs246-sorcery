@@ -81,12 +81,16 @@ void Player::playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion>
 	target.reset(enchant);
 }
 
-void Player::playCard(std::unique_ptr<Spell> card, Card * target) {	
+void Player::playCard(std::unique_ptr<Spell> card, std::unique_ptr<Minion> &target) {	
 	card->onPlay(target).get()->run();
 }
 
-void Player::playCard(std::unique_ptr<Spell> card) {	
-	card->onPlay(nullptr).get()->run();
+void Player::playCard(std::unique_ptr<Spell> card, std::unique_ptr<Ritual> &target) {	
+	card->onPlay(target).get()->run();
+}
+
+void Player::playCard(std::unique_ptr<Spell> card) {
+	card->onPlay().get()->run();
 }
 
 void Player::playCard(std::unique_ptr<Ritual> card) {
@@ -102,26 +106,24 @@ return board[num].get();
 
 }
 
-
-
 void Player::addToHand(Minion * target) {
 	//std::unique_ptr<Card> c = CardFactory::getCard(target->getMinionName(),target->getOwner());
 	//hand.push_back(c);
-	
+	//TODO
 }
 
-std::unique_ptr<Minion> Player::graveyardTop() {
-return std::move(graveyard.top());
+std::unique_ptr<BaseMinion>& Player::graveyardTop() {
+	return graveyard.top();
 }
 
 void Player::graveyardPop() {
-graveyard.pop();
+	graveyard.pop();
 }
 
 void Player::removeFromBoard(Minion * target) {
 for(int i = 0; i < getBoardSize(); i++) {
 	if(target == getBoardNum(i)) {
-	board.erase(board.begin()+i);
+		board.erase(board.begin()+i);
 	}
 }
 
