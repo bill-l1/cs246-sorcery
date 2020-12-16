@@ -461,11 +461,7 @@ int Game::verifyMagicCost(Player * player, const int &n) const {
 
 int Game::verifyActionCost(Minion * minion, const int &n) const {
 	if(minion->getActions() < n){
-		if(testing){
-			return 0;
-		}else{
-			throw InsufficientActions{};
-		}
+		throw InsufficientActions{};
 	}else{
 		return minion->getActions() - n;
 	}
