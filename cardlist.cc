@@ -57,6 +57,7 @@ std::vector<std::unique_ptr<Effect>> MinionList::FireElemental::onPlay() {
 	if(this->getOwner() == this->getGame()->getNonActivePlayer()) {
 		std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(getOwner(),this->getGame()->getActivePlayer()->getBoardNum(this->getGame()->getActivePlayer()->getBoardSize()-1),0,-1);
 		// return std::move(eff);
+		eff.get()->setGame(this->getGame());
 		base.push_back(std::move(eff));
 		return base;
 	}

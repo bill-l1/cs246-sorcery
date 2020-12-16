@@ -290,7 +290,7 @@ void Game::play(const int &pos){
 		card.release(); // if this causes a leak im finna lose it
 		cast_card.reset(cast); //prob set up a helper function for this.
 		// activePlayer->playCard(std::move(cast_card));
-		runEffects(cast_card->onPlay(nullptr));
+		runEffects(cast_card->onPlay());
 	}	
 	
 	else{ 
