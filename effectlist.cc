@@ -1,5 +1,7 @@
 #include <memory>
 #include <iostream>
+#include "cardfactory.h"
+#include "cardlist.h"
 #include "effectlist.h"
 #include "ritual.h"
 #include "minion.h"
@@ -22,7 +24,6 @@ void AllBoard::run() {
 
 	for(int j = 0; j < this->getGame()->getNonActivePlayer()->getBoardSize(); j++) {
 		this->getGame()->buff(this->getGame()->getNonActivePlayer()->getBoardNum(j),attack,defense);
-		
 	}
 }
 
@@ -33,11 +34,11 @@ BanishEffect::BanishEffect(Player * own, Card * tar) :
 void BanishEffect::run() {
 	BaseMinion * m = dynamic_cast<BaseMinion *>(getTarget());
 	if( m!= nullptr) {
-	m->setDefense(0);
+	    m->setDefense(0);
 	}
 	Ritual * r = dynamic_cast<Ritual *>(getTarget());
 	if(r != nullptr) {
-	r->setCharges(0);
+	    r->setCharges(0);
 	}
 }
 
@@ -99,16 +100,15 @@ SummonEffect::SummonEffect(Player * own, Card * tar, int qt) :
 {}
 
 void SummonEffect::run() {
-	
-	//std::unique_ptr<Card> buildcard = CardFactory::getCard("Air Elemental",this->getGame()->getActivePlayer());
-	std::unique_ptr<BaseMinion> card = std::make_unique<BaseMinion>("Air Elemental", "",0,1,1);
-
 	this->getGame()->verifyBoardNotFull(this->getGame()->getActivePlayer());
 
 	for(int i = 0; i < quantity; i++) {
-	std::unique_ptr<BaseMinion> card = std::make_unique<BaseMinion>("Air Elemental", "",0,1,1);
-	this->getGame()->getActivePlayer()->playCard(std::move(card));
-
+        std::unique_ptr<Card> card = CardFactory::buildCard<MinionList::AirElemental>();
+        std::unique_ptr<BaseMinion> cast_card;
+        BaseMinion * ptr = static_cast<BaseMinion *>(card.get());
+        card.release();
+        cast_card.reset(ptr);
+        this->getGame()->getActivePlayer()->playCard(std::move(cast_card));
 	}
 }
 
