@@ -205,6 +205,58 @@ std::unique_ptr<Effect> SpellList::Blizzard::onPlay(Card* target) {
 	return eff;
 }
 
+/*
+
+SpellList::Disenchant::Disenchant()
+	:Spell {
+	"Disenchant",
+	"Destroy the top enchantment on target minion", 1, nullptr}
+{}
+
+std::unique_ptr<Effect> SpellList::Disenchant::onPlay(Card * target) {
+	std::unique_ptr<Effect> eff = std::make_unique<DisenchantEffect>(nullptr,target);
+	return eff;
+}
+
+*/
+SpellList::Recharge::Recharge()
+	:Spell {
+	"Recharge",
+	"Your ritual gains 3 charges", 1, nullptr}
+{}
+
+std::unique_ptr<Effect> SpellList::Recharge::onPlay(Card * target) {
+	std::unique_ptr<Effect> eff = std::make_unique<RitualEffect>(nullptr,nullptr,3);
+	return eff;
+}
+
+
+SpellList::RaiseDead::RaiseDead()
+	:Spell {
+	"Raise Dead",
+	"Resurrect the top minion in your graveyard and set its defense to 1", 1, nullptr}
+{}
+
+std::unique_ptr<Effect> SpellList::RaiseDead::onPlay(Card * target) {
+	std::unique_ptr<Effect> eff = std::make_unique<ResEffect>(nullptr,nullptr);
+	return eff;
+}
+
+
+
+SpellList::Unsummon::Unsummon()
+	:Spell {
+	"Unsummon",
+	"Return target minion to its owners hand", 1, nullptr}
+{}
+
+std::unique_ptr<Effect> SpellList::Unsummon::onPlay(Card * target) {
+	std::unique_ptr<Effect> eff = std::make_unique<HandEffect>(nullptr,target);
+	return eff;
+}
+
+
+
 RitualList::auraOfPower::auraOfPower()
 	:Ritual {
 	"Aura of Power",
