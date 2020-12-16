@@ -63,7 +63,7 @@ void Minion::buff(const int &att, const int &def){
     std::cerr << "Illegal function call from minion" << std::endl;
 }
 
-Minion * Minion::getBase() {
+Minion * Minion::getBase(const bool &release) {
     std::cerr << "Illegal function call from minion" << std::endl;
     return nullptr;
 }
@@ -97,5 +97,9 @@ void Minion::setBoardRef(std::unique_ptr<Minion>& ref) {
 }
 
 void Minion::resetBoardRef() {
+    std::cerr << "Illegal function call from minion" << std::endl;
+}
+
+void Minion::setParent(std::unique_ptr<Minion>& ref) {
     std::cerr << "Illegal function call from minion" << std::endl;
 }

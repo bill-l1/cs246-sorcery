@@ -106,14 +106,12 @@ return board[num].get();
 
 }
 
-void Player::addToHand(Minion * target) {
-//TODO fix
-if( hand.size() < MAX_HAND_SIZE) {
-hand.push_back(std::move(c));
-}
-else {
-throw HandIsFull{};
-}
+void Player::addToHand(std::unique_ptr<Card> card) {
+	if(hand.size() < MAX_HAND_SIZE) {
+		hand.push_back(std::move(card));
+	}else {
+		throw HandIsFull{};
+	}
 }
 
 std::unique_ptr<BaseMinion>& Player::graveyardTop() {
@@ -124,11 +122,14 @@ void Player::graveyardPop() {
 	graveyard.pop();
 }
 
-void Player::removeFromBoard(Minion * target) {
-for(int i = 0; i < getBoardSize(); i++) {
-	if(target == getBoardNum(i)) {
-		board.erase(board.begin()+i);
+void Player::removeFromBoard(std::unique_ptr<Minion>& target, const bool &release) {
+	std::unique_ptr<Minion> m;
+	for(int i = 0; i < getBoardSize(); i++) {
+		if(&target == &board[i]) {
+			if(release){
+				board[i].release();
+			}
+			board.erase(board.begin()+i);
+		}
 	}
-}
-
 }

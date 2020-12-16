@@ -32,13 +32,12 @@ BanishEffect::BanishEffect(Player * own, Card * tar) :
 {}
 
 void BanishEffect::run() {
-	BaseMinion * m = dynamic_cast<BaseMinion *>(getTarget());
-	if( m!= nullptr) {
-	    m->setDefense(0);
-	}
-	Ritual * r = dynamic_cast<Ritual *>(getTarget());
-	if(r != nullptr) {
-	    r->setCharges(0);
+	if(getTarget() != nullptr){
+		if(Minion * m = dynamic_cast<Minion *>(getTarget())){
+			m->buff(0, -m->getDefense());
+		}else if(Ritual * r = dynamic_cast<Ritual *>(getTarget())){
+			r->setCharges(0);
+		}
 	}
 }
 

@@ -43,9 +43,9 @@ class Player  {
 
 		std::unique_ptr<BaseMinion>& graveyardTop();
 		void graveyardPop();
-		void addToHand(Minion * target);
+		void addToHand(std::unique_ptr<Card> card);
 		void addToBoard(std::unique_ptr<Minion> target);
-		void removeFromBoard(Minion * target);
+		void removeFromBoard(std::unique_ptr<Minion>& target, const bool &release = false);
 		Minion * getBoardNum(int num) const;
 		//void runOnPlay(); //iterate through all board/rituals for onPlay effects
 		//void runOnStartTurn(); 

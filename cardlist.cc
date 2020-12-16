@@ -299,7 +299,7 @@ SpellList::Unsummon::Unsummon()
 {}
 
 std::vector<std::unique_ptr<Effect>> SpellList::Unsummon::onPlay(std::unique_ptr<Minion>& target) {
-	std::unique_ptr<Effect> eff = std::make_unique<HandEffect>(nullptr,target.get());
+	std::unique_ptr<Effect> eff = std::make_unique<HandEffect>(getOwner(), target);
 	// return eff;
 	eff.get()->setGame(this->getGame());
 	std::vector<std::unique_ptr<Effect>> base;

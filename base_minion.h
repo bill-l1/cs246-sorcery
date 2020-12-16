@@ -1,13 +1,13 @@
 #ifndef BASE_MINION_H
 #define BASE_MINION_H
 #include <string>
-#include "minion.h"
 #include <memory>
+#include "minion.h"
 
 class RefObj {
-	std::unique_ptr<Minion>& b_ref;
+	std::unique_ptr<Minion>& ref;
 	public:
-	RefObj(std::unique_ptr<Minion>& b_ref);
+	RefObj(std::unique_ptr<Minion>& ref);
 	friend class BaseMinion;
 };
 
@@ -18,6 +18,7 @@ class BaseMinion : public Minion {
 	int activateCost;
 	std::unique_ptr<Effect> ability;
 	std::unique_ptr<RefObj> b_ref;
+	std::unique_ptr<RefObj> p_ref;
 	public:
 		BaseMinion(const std::string &name, const std::string &description, const int &cost, const int &att, const int &def, const int &activateCost=-1);
 		virtual ~BaseMinion();
@@ -29,10 +30,11 @@ class BaseMinion : public Minion {
 		void setActions(const int &n) override;
 		int getActivateCost() const override;
 		void buff(const int &att, const int &def) override;
-		Minion * getBase() override;
+		Minion * getBase(const bool &release = false) override;
 		std::unique_ptr<Minion>& getBoardRef() const override;
 		void setBoardRef(std::unique_ptr<Minion>& ref) override;
 		void resetBoardRef() override;
+		void setParent(std::unique_ptr<Minion>& ref) override;
 };
 
 #endif

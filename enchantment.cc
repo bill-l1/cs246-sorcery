@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <iostream> //TODO Cleanup
 #include "minion.h"
 #include "enchantment.h"
 #include "player.h"
@@ -65,6 +66,7 @@ Minion * Enchantment::getComponent(const bool &steal)  {
 
 void Enchantment::setComponent(Minion * minion){
     component.reset(minion); 
+    setParent(component);
 }
 
 std::string Enchantment::getAttackStr() const {
@@ -107,8 +109,8 @@ void Enchantment::buff(const int &att, const int &def) {
     component->buff(att, def);
 }
 
-Minion * Enchantment::getBase(){
-    return component->getBase();
+Minion * Enchantment::getBase(const bool &release){
+    return component->getBase(release);
 }
 
 std::vector<std::unique_ptr<Effect>> Enchantment::onDeath() {
@@ -141,4 +143,13 @@ void Enchantment::setBoardRef(std::unique_ptr<Minion>& ref) {
 
 void Enchantment::resetBoardRef(){
     component->resetBoardRef();
+}
+
+void Enchantment::setParent(std::unique_ptr<Minion>& ref) {
+    if(!dynamic_cast<Enchantment *>(component.get())){
+        component->setParent(ref);
+        std::cout << "setting parent" << std::endl;
+    }else{
+        std::cout << "skipping" << std::endl;
+    }
 }

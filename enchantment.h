@@ -30,7 +30,7 @@ class Enchantment : public Minion {
         void setActions(const int &n) override;
 		virtual int getActivateCost() const override;
 		void buff(const int &att, const int &def) override;
-		Minion * getBase() override;
+		Minion * getBase(const bool &release = false) override;
 		std::vector<std::unique_ptr<Effect>> onEndTurn() override;
 		std::vector<std::unique_ptr<Effect>> onDeath() override;
 		std::vector<std::unique_ptr<Effect>> onPlay() override;
@@ -38,6 +38,7 @@ class Enchantment : public Minion {
         std::unique_ptr<Minion>& getBoardRef() const override;
 		void setBoardRef(std::unique_ptr<Minion>& ref) override;
         void resetBoardRef() override;
+        void setParent(std::unique_ptr<Minion>& ref) override;
 };
 
 #endif

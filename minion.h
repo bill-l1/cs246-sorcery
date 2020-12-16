@@ -27,7 +27,7 @@ class Minion : public Card {
 		virtual void setActions(const int &n);
 		virtual int getActivateCost() const;
 		virtual void buff(const int &att, const int &def);
-		virtual Minion * getBase();
+		virtual Minion * getBase(const bool &release = false);
 		virtual std::vector<std::unique_ptr<Effect>> onEndTurn();
 		virtual std::vector<std::unique_ptr<Effect>> onDeath();
 		virtual std::vector<std::unique_ptr<Effect>> onPlay();
@@ -35,6 +35,7 @@ class Minion : public Card {
 		virtual std::unique_ptr<Minion>& getBoardRef() const = 0;
 		virtual void setBoardRef(std::unique_ptr<Minion>& ref);
 		virtual void resetBoardRef();
+		virtual void setParent(std::unique_ptr<Minion>& ref);
 };
 
 #endif

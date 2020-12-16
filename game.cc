@@ -123,13 +123,12 @@ void Game::update() {
 			if((*it)->getDefense() <= 0){
 				printAlert((*it)->getMinionName() + " was destroyed.", 1);
 				runEffects((*it)->onDeath()); //strongly exception safe
-				BaseMinion * bm = static_cast<BaseMinion *>((*it)->getBase());
-				bm->resetBoardRef();
-				std::unique_ptr<BaseMinion> new_bm;
+				BaseMinion * bm = static_cast<BaseMinion *>((*it)->getBase(true)); // release BaseMinion
+				bm->resetBoardRef(); // reset its board reference
+				std::unique_ptr<BaseMinion> new_bm; // create new smart pointer container
 				new_bm.reset(bm);
-				p->graveyard.push(std::move(new_bm));
-				it->release();
-				p->board.erase(it);
+				p->graveyard.push(std::move(new_bm)); // add to graveyard
+				p->board.erase(it); // delete enchantments (BaseMinion released)
 			}else{
 				++it;
 			}
@@ -320,7 +319,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		std::unique_ptr<Spell> cast_card;
 		card.release(); 
 		cast_card.reset(cast); 
-		printAlert(activePlayer->getName()+" casts "+card->getName()+"!", 2);
+		printAlert(activePlayer->getName()+" casts "+cast_card->getName()+"!", 2);
 		if(targetIsMinion){
 			runEffects(cast_card->onPlay(pt->board[bt]));
 		}else{
@@ -335,7 +334,7 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		std::unique_ptr<Enchantment> cast_card;
 		card.release(); 
 		cast_card.reset(cast); 
-		printAlert(activePlayer->getName()+" enchants "+m_target->getMinionName()+" with "+card->getName()+"!", 2);
+		printAlert(activePlayer->getName()+" enchants "+m_target->getMinionName()+" with "+cast_card->getName()+"!", 2);
 		activePlayer->playCard(std::move(cast_card), m_target);
 	}else{ 
 		throw InvalidPlay{};
