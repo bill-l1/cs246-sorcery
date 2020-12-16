@@ -2,6 +2,8 @@
 #include "base_minion.h"
 #include "spell.h"
 #include "effectlist.h"
+#include "reseffect.h"
+#include "handeffect.h"
 
 MinionList::AirElemental::AirElemental()
 	: BaseMinion{
@@ -205,8 +207,8 @@ std::unique_ptr<Effect> SpellList::Blizzard::onPlay(Card* target) {
 	return eff;
 }
 
-/*
 
+/*
 SpellList::Disenchant::Disenchant()
 	:Spell {
 	"Disenchant",
@@ -214,11 +216,11 @@ SpellList::Disenchant::Disenchant()
 {}
 
 std::unique_ptr<Effect> SpellList::Disenchant::onPlay(Card * target) {
-	std::unique_ptr<Effect> eff = std::make_unique<DisenchantEffect>(nullptr,target);
+	std::unique_ptr<Effect> eff = std::make_unique<DisenchantEffect>(nullptr,target,target);
 	return eff;
 }
-
 */
+
 SpellList::Recharge::Recharge()
 	:Spell {
 	"Recharge",
@@ -239,6 +241,8 @@ SpellList::RaiseDead::RaiseDead()
 
 std::unique_ptr<Effect> SpellList::RaiseDead::onPlay(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<ResEffect>(nullptr,nullptr);
+	eff.get()->setGame(this->getGame());
+
 	return eff;
 }
 
@@ -252,6 +256,7 @@ SpellList::Unsummon::Unsummon()
 
 std::unique_ptr<Effect> SpellList::Unsummon::onPlay(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<HandEffect>(nullptr,target);
+	eff.get()->setGame(this->getGame());
 	return eff;
 }
 

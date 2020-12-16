@@ -101,3 +101,28 @@ return nullptr;
 return board[num].get();
 
 }
+
+
+
+void Player::addToHand(Minion * target) {
+	//std::unique_ptr<Card> c = CardFactory::getCard(target->getMinionName(),target->getOwner());
+	//hand.push_back(c);
+	
+}
+
+std::unique_ptr<Minion> Player::graveyardTop() {
+return std::move(graveyard.top());
+}
+
+void Player::graveyardPop() {
+graveyard.pop();
+}
+
+void Player::removeFromBoard(Minion * target) {
+for(int i = 0; i < getBoardSize(); i++) {
+	if(target == getBoardNum(i)) {
+	board.erase(board.begin()+i);
+	}
+}
+
+}
