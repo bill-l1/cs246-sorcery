@@ -16,6 +16,8 @@ void Spell::setTarget(Card * tar) {
 	this->target = tar;
 }
 
-std::unique_ptr<Effect> Spell::onPlay(Card * target) {
-	return nullptr;
+std::vector<std::unique_ptr<Effect>> Spell::onPlay(Card * target) {
+	// return nullptr;
+	std::vector<std::unique_ptr<Effect>> empty;
+    return empty;
 }

@@ -90,7 +90,7 @@ SampleEffect::SampleEffect(Player * own, Card * tar,int atk, int def) :
 void SampleEffect::run() {
 	BaseMinion * m = dynamic_cast<BaseMinion *>(getTarget());
 	if(m != nullptr) {
-		this->getGame()->buff(m, attack,defense);
+		this->getGame()->buff(m, attack, defense);
 		// m->setAttack(m->getAttack()+attack);
 		// m->setDefense(m->getDefense()+defense);
 	}

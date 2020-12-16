@@ -1,5 +1,6 @@
 #include <string>
-#include <iostream>
+#include <vector>
+#include <memory>
 #include "minion.h"
 #include "enchantment.h"
 #include "player.h"
@@ -110,20 +111,24 @@ Minion * Enchantment::getBase(){
     return component->getBase();
 }
 
-std::unique_ptr<Effect> Enchantment::onDeath() {
-	return std::move(component->onDeath());
+std::vector<std::unique_ptr<Effect>> Enchantment::onDeath() {
+	// return std::move(component->onDeath());
+    return component->onDeath();
 }
 
-std::unique_ptr<Effect> Enchantment::onEndTurn() {
-    return std::move(component->onEndTurn());
+std::vector<std::unique_ptr<Effect>> Enchantment::onEndTurn() {
+    // return std::move(component->onEndTurn());
+    return component->onEndTurn();
 }
 
-std::unique_ptr<Effect> Enchantment::onPlay() {
-    return std::move(component->onPlay());
+std::vector<std::unique_ptr<Effect>> Enchantment::onPlay() {
+    // return std::move(component->onPlay());
+    return component->onPlay();
 }
 
-std::unique_ptr<Effect> Enchantment::onActivate(Card * target) {
-    return std::move(component->onActivate(target));
+std::vector<std::unique_ptr<Effect>> Enchantment::onActivate(Card * target) {
+    // return std::move(component->onActivate(target));
+    return component->onActivate(target);
 }
 
 std::unique_ptr<Minion>& Enchantment::getBoardRef() const {

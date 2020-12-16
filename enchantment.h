@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 #include "minion.h"
 
 class Enchantment : public Minion {
@@ -30,10 +31,10 @@ class Enchantment : public Minion {
 		virtual int getActivateCost() const override;
 		void buff(const int &att, const int &def) override;
 		Minion * getBase() override;
-		std::unique_ptr<Effect> onEndTurn() override;
-		std::unique_ptr<Effect> onDeath() override;
-		std::unique_ptr<Effect> onPlay() override;
-		std::unique_ptr<Effect> onActivate(Card * target = nullptr) override;
+		std::vector<std::unique_ptr<Effect>> onEndTurn() override;
+		std::vector<std::unique_ptr<Effect>> onDeath() override;
+		std::vector<std::unique_ptr<Effect>> onPlay() override;
+		std::vector<std::unique_ptr<Effect>> onActivate(Card * target = nullptr) override;
         std::unique_ptr<Minion>& getBoardRef() const override;
 		void setBoardRef(std::unique_ptr<Minion>& ref) override;
         void resetBoardRef() override;

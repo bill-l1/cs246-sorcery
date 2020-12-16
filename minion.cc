@@ -1,5 +1,7 @@
 #include <string>
 #include <iostream>
+#include <memory>
+#include <vector>
 #include "minion.h"
 #include "card.h"
 
@@ -66,20 +68,28 @@ Minion * Minion::getBase() {
     return nullptr;
 }
 
-std::unique_ptr<Effect> Minion::onDeath() {
-    return std::move(nullptr);
+std::vector<std::unique_ptr<Effect>> Minion::onDeath() {
+    // return std::move(nullptr);
+    std::vector<std::unique_ptr<Effect>> empty;
+    return empty;
 }
 
-std::unique_ptr<Effect> Minion::onEndTurn() {
-    return std::move(nullptr);
+std::vector<std::unique_ptr<Effect>> Minion::onEndTurn() {
+    // return std::move(nullptr);
+    std::vector<std::unique_ptr<Effect>> empty;
+    return empty;
 }
 
- std::unique_ptr<Effect> Minion::onPlay() {
-    return std::move(nullptr);
+std::vector<std::unique_ptr<Effect>> Minion::onPlay() {
+    // return std::move(nullptr);
+    std::vector<std::unique_ptr<Effect>> empty;
+    return empty;
 }
 
-std::unique_ptr<Effect> Minion::onActivate(Card * target) {
-    return std::move(nullptr);
+std::vector<std::unique_ptr<Effect>> Minion::onActivate(Card * target) {
+    // return std::move(nullptr);
+    std::vector<std::unique_ptr<Effect>> empty;
+    return empty;
 }
 
 void Minion::setBoardRef(std::unique_ptr<Minion>& ref) {

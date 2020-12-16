@@ -11,7 +11,7 @@ class Spell : public Card {
 		virtual ~Spell();
 		Card * getTarget() const;
 		void setTarget(Card * tar);
-		virtual std::unique_ptr<Effect> onPlay(Card * target);
+		virtual std::vector<std::unique_ptr<Effect>> onPlay(Card * target);
 };
 
 #endif

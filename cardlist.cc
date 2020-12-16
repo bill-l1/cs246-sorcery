@@ -1,3 +1,4 @@
+#include <vector>
 #include "cardlist.h"
 #include "base_minion.h"
 #include "spell.h"
@@ -24,14 +25,20 @@ MinionList::Bomb::Bomb()
 	2, 1, 2}
 {}
 
-std::unique_ptr<Effect> MinionList::Bomb::onDeath() {
+std::vector<std::unique_ptr<Effect>> MinionList::Bomb::onDeath() {
 if(this->getOwner() == this->getGame()->getNonActivePlayer()) {
 std::unique_ptr<Effect> eff = std::make_unique<TeamBuff>(nullptr,this->getGame()->getActivePlayer()->getBoardNum(0),0,-this->getAttack());
-return std::move(eff);
+		std::vector<std::unique_ptr<Effect>> base;
+		base.push_back(std::move(eff));
+		return base;
+// return std::move(eff);
 }
 
 std::unique_ptr<Effect> eff2 = std::make_unique<TeamBuff>(nullptr,this->getGame()->getNonActivePlayer()->getBoardNum(0),0,-this->getAttack());
-return std::move(eff2);
+// return std::move(eff2);
+std::vector<std::unique_ptr<Effect>> base;
+		base.push_back(std::move(eff2));
+		return base;
 
 
 }
@@ -44,12 +51,17 @@ MinionList::FireElemental::FireElemental()
 {}
 
 
-std::unique_ptr<Effect> MinionList::FireElemental::onPlay() {
+std::vector<std::unique_ptr<Effect>> MinionList::FireElemental::onPlay() {
+	std::vector<std::unique_ptr<Effect>> base;
 if(this->getOwner() == this->getGame()->getNonActivePlayer()) {
 std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(nullptr,this->getGame()->getActivePlayer()->getBoardNum(this->getGame()->getActivePlayer()->getBoardSize()-1),0,-1);
-return std::move(eff);
+// return std::move(eff);
+		
+		base.push_back(std::move(eff));
+		return base;
 }
-return nullptr;
+return base;
+// return nullptr;
 
 }
 
@@ -60,13 +72,18 @@ MinionList::PotionSeller::PotionSeller()
 	2, 1, 3,-1}
 {}
 
-std::unique_ptr<Effect> MinionList::PotionSeller::onEndTurn() {
+std::vector<std::unique_ptr<Effect>> MinionList::PotionSeller::onEndTurn() {
 	std::unique_ptr<Effect> eff = std::make_unique<TeamBuff>(nullptr,this->getGame()->getActivePlayer()->getBoardNum(0),0,1);
+			std::vector<std::unique_ptr<Effect>> base;
+
 	if (this->getOwner() != this->getGame()->getActivePlayer()) {
-	return nullptr;
+	// return nullptr;
+		return base;
 	}
 	eff.get()->setGame(this->getGame());
-	return std::move(eff);
+	base.push_back(std::move(eff));
+	return base;
+	// return std::move(eff);
 }
 
 MinionList::NovicePyromancer::NovicePyromancer()
@@ -77,10 +94,13 @@ MinionList::NovicePyromancer::NovicePyromancer()
 {}
 
 
-std::unique_ptr<Effect> MinionList::NovicePyromancer::onActivate(Card * target) {
+std::vector<std::unique_ptr<Effect>> MinionList::NovicePyromancer::onActivate(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(nullptr,target,0,-1);
 	eff.get()->setGame(this->getGame());
-	return std::move(eff);
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	return base;
+	// return std::move(eff);
 
 }
 
@@ -92,10 +112,13 @@ MinionList::ApprenticeSummoner::ApprenticeSummoner()
 {}
 
 
-std::unique_ptr<Effect> MinionList::ApprenticeSummoner::onActivate(Card * target) {
+std::vector<std::unique_ptr<Effect>> MinionList::ApprenticeSummoner::onActivate(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<SummonEffect>(nullptr,nullptr,1);
 	eff.get()->setGame(this->getGame());
-	return std::move(eff);
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	return base;
+	// return std::move(eff);
 
 }
 
@@ -106,10 +129,13 @@ MinionList::MasterSummoner::MasterSummoner()
 	3, 2, 2, 2}
 {}
 
-std::unique_ptr<Effect> MinionList::MasterSummoner::onActivate(Card * target) {
+std::vector<std::unique_ptr<Effect>> MinionList::MasterSummoner::onActivate(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<SummonEffect>(nullptr,nullptr,3);
 	eff.get()->setGame(this->getGame());
-	return std::move(eff);
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	return base;
+	// return std::move(eff);
 
 }
 
@@ -137,12 +163,16 @@ EnchantmentList::Delay::Delay()
 	toDestroy{false}
 {}
 
-std::unique_ptr<Effect> EnchantmentList::Delay::onEndTurn(){
+std::vector<std::unique_ptr<Effect>> EnchantmentList::Delay::onEndTurn(){
 	if(toDestroy){
-		return std::make_unique<DisenchantEffect>(getOwner(), getBoardRef(), this);
+		std::vector<std::unique_ptr<Effect>> v = component->onEndTurn();
+		v.push_back(std::make_unique<DisenchantEffect>(getOwner(), getBoardRef(), this));
+		return v;
+		// return std::make_unique<DisenchantEffect>(getOwner(), getBoardRef(), this);
 	}else{
 		toDestroy = true;
-		return std::move(component->onEndTurn());
+		// return std::move(component->onEndTurn());
+		return component->onEndTurn();
 	}
 }
 
@@ -177,8 +207,9 @@ int EnchantmentList::Silence::getActivateCost() const {
 	return -1;
 }
 
-std::unique_ptr<Effect> EnchantmentList::Silence::onActivate(Card * target)  {
-	return nullptr;
+std::vector<std::unique_ptr<Effect>> EnchantmentList::Silence::onActivate(Card * target)  {
+	std::vector<std::unique_ptr<Effect>> empty;
+	return empty;
 }
 
 SpellList::Banish::Banish()
@@ -187,9 +218,13 @@ SpellList::Banish::Banish()
 	"Destroy Target Minion or Ritual", 2, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::Banish::onPlay(Card * target) {
+std::vector<std::unique_ptr<Effect>> SpellList::Banish::onPlay(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<BanishEffect>(nullptr,target);
-	return eff;
+	// return eff;
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	return base;
+	
 }
 
 SpellList::Blizzard::Blizzard()
@@ -199,10 +234,13 @@ SpellList::Blizzard::Blizzard()
 {}
 
 
-std::unique_ptr<Effect> SpellList::Blizzard::onPlay(Card* target) {
+std::vector<std::unique_ptr<Effect>> SpellList::Blizzard::onPlay(Card* target) {
 	std::unique_ptr<Effect> eff = std::make_unique<AllBoard>(nullptr,nullptr,0,-2);
 	eff.get()->setGame(this->getGame());
-	return eff;
+	// return eff;
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	return base;
 }
 
 /*
@@ -213,7 +251,7 @@ SpellList::Disenchant::Disenchant()
 	"Destroy the top enchantment on target minion", 1, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::Disenchant::onPlay(Card * target) {
+std::vector<std::unique_ptr<Effect>> SpellList::Disenchant::onPlay(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<DisenchantEffect>(nullptr,target);
 	return eff;
 }
@@ -225,9 +263,12 @@ SpellList::Recharge::Recharge()
 	"Your ritual gains 3 charges", 1, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::Recharge::onPlay(Card * target) {
+std::vector<std::unique_ptr<Effect>> SpellList::Recharge::onPlay(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<RitualEffect>(nullptr,nullptr,3);
-	return eff;
+	// return eff;
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	return base;
 }
 
 
@@ -237,9 +278,12 @@ SpellList::RaiseDead::RaiseDead()
 	"Resurrect the top minion in your graveyard and set its defense to 1", 1, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::RaiseDead::onPlay(Card * target) {
+std::vector<std::unique_ptr<Effect>> SpellList::RaiseDead::onPlay(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<ResEffect>(nullptr,nullptr);
-	return eff;
+	// return eff;
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	return base;
 }
 
 
@@ -250,9 +294,12 @@ SpellList::Unsummon::Unsummon()
 	"Return target minion to its owners hand", 1, nullptr}
 {}
 
-std::unique_ptr<Effect> SpellList::Unsummon::onPlay(Card * target) {
+std::vector<std::unique_ptr<Effect>> SpellList::Unsummon::onPlay(Card * target) {
 	std::unique_ptr<Effect> eff = std::make_unique<HandEffect>(nullptr,target);
-	return eff;
+	// return eff;
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	return base;
 }
 
 

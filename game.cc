@@ -122,13 +122,14 @@ void Game::update() {
 		for(auto it = p->board.begin(); it != p->board.end();){
 			if((*it)->getDefense() <= 0){
 				printAlert((*it)->getMinionName() + " was destroyed.", 1);
-				if((*it)->onDeath() != nullptr) {
-					try{
-						(*it)->onDeath().get()->run(); //strongly exception safe
-					}catch(GameException &e){
-						printAlert(e.getErr());
-					}
-				}
+				// if((*it)->onDeath() != nullptr) {
+				// 	try{
+				// 		(*it)->onDeath().get()->run(); //strongly exception safe
+				// 	}catch(GameException &e){
+				// 		printAlert(e.getErr());
+				// 	}
+				// }
+				runEffects((*it)->onDeath());
 				Minion * bm = (*it)->getBase();
 				it->release();
 				it->reset(bm);
@@ -142,6 +143,16 @@ void Game::update() {
 
 		if(p->getLife() <= 0){
 			endGame(p);
+		}
+	}
+}
+
+void Game::runEffects(std::vector<std::unique_ptr<Effect>> v){
+	for(auto && eff : v){
+		try{
+			eff->run();
+		}catch(GameException &e){
+			printAlert(e.getErr());
 		}
 	}
 }
@@ -175,14 +186,15 @@ int Game::getTurns() const{
 
 void Game::endTurn(){
 	for(auto && minion : activePlayer->board){
-		std::unique_ptr<Effect> eff = minion->onEndTurn();
-		if(eff.get() != nullptr) {
-			try{
-				eff->run(); // strongly exception safe
-			}catch(GameException &e){
-				printAlert(e.getErr());
-			}
-		}
+		// std::unique_ptr<Effect> eff = minion->onEndTurn();
+		// if(eff.get() != nullptr) {
+		// 	try{
+		// 		eff->run(); // strongly exception safe
+		// 	}catch(GameException &e){
+		// 		printAlert(e.getErr());
+		// 	}
+		// }
+		runEffects(std::move(minion->onEndTurn()));
 		minion->setActions(0);
 	}
 	update();
@@ -232,25 +244,29 @@ void Game::play(const int &pos){
 		cast_card.reset(cast); //prob set up a helper function for this.
 		activePlayer->playCard(std::move(cast_card));
 		for(auto && minion : activePlayer.get()->board){
-			if(minion->onPlay() != nullptr) {
-				minion->onPlay().get()->run();
-			}
+			// if(minion->onPlay() != nullptr) {
+			// 	minion->onPlay().get()->run();
+			// }
+			runEffects(minion->onPlay());
 		}
 		if(activePlayer.get()->ritual != nullptr) {
 			if (activePlayer.get()->ritual->onPlay() != nullptr) {
 				activePlayer.get()->ritual->onPlay()->run();
 			}
+			// runEffects(activePlayer.get()->ritual->onPlay());
 		}
 
 		for(auto && minion : nonActivePlayer.get()->board){
-			if(minion->onPlay() != nullptr) {
-				minion->onPlay().get()->run();
-			}
+			// if(minion->onPlay() != nullptr) {
+			// 	minion->onPlay().get()->run();
+			// }
+			runEffects(minion->onPlay());
 		}
 		if(nonActivePlayer.get()->ritual != nullptr) {
 			if (nonActivePlayer.get()->ritual->onPlay() != nullptr) {
 				nonActivePlayer.get()->ritual->onPlay()->run();
 			}
+			// runEffects(nonActivePlayer.get()->ritual->onPlay());
 		}	
 	}else if(auto cast = dynamic_cast<Ritual*>(c_ref.get())) {
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
@@ -272,7 +288,8 @@ void Game::play(const int &pos){
 		card.get()->setGame(this);
 		card.release(); // if this causes a leak im finna lose it
 		cast_card.reset(cast); //prob set up a helper function for this.
-		activePlayer->playCard(std::move(cast_card));
+		// activePlayer->playCard(std::move(cast_card));
+		runEffects(cast_card->onPlay(nullptr));
 	}	
 	
 	else{ //TODO add non-targeted spells
@@ -311,7 +328,8 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 		std::unique_ptr<Spell> cast_card;
 		card.release(); 
 		cast_card.reset(cast); 
-		activePlayer->playCard(std::move(cast_card), target);
+		// activePlayer->playCard(std::move(cast_card), target);
+		runEffects(cast_card->onPlay(target));
 	}else if(auto cast = dynamic_cast<Enchantment *>(c_ref.get())){
 		if (!dynamic_cast<Minion *>(target)) throw InvalidTarget{}; //validate target is a minion
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
@@ -360,7 +378,8 @@ void Game::use(const int &pos) {
 		if(activePlayer->getMagic() >= minion->getActivateCost()) {
 			int cost = verifyActionCost(minion, 1);
 			minion->setActions(cost);
-			minion->onActivate().get()->run();
+			// minion->onActivate().get()->run();
+			runEffects(minion->onActivate());
 			update();
 		}
 		else {
@@ -393,7 +412,8 @@ void Game::use(const int &pos, const int &pnum, const int &t){
 		if(activePlayer->getMagic() >= minion->getActivateCost()) {
 			int cost = verifyActionCost(minion, 1);
 			minion->setActions(cost);
-			minion->onActivate(target).get()->run();
+			// minion->onActivate(target).get()->run();
+			runEffects(minion->onActivate(target));
 			update();
 		}else{
 			view->printAlert("Not enough mana");

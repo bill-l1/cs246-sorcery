@@ -81,13 +81,13 @@ void Player::playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion>
 	target.reset(enchant);
 }
 
-void Player::playCard(std::unique_ptr<Spell> card, Card * target) {	
-	card->onPlay(target).get()->run();
-}
+// void Player::playCard(std::unique_ptr<Spell> card, Card * target) {	
+// 	card->onPlay(target).get()->run();
+// }
 
-void Player::playCard(std::unique_ptr<Spell> card) {	
-	card->onPlay(nullptr).get()->run();
-}
+// void Player::playCard(std::unique_ptr<Spell> card) {	
+// 	card->onPlay(nullptr).get()->run();
+// }
 
 void Player::playCard(std::unique_ptr<Ritual> card) {
 	this->ritual=std::move(card);

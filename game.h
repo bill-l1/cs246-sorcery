@@ -14,6 +14,7 @@ class Card;
 class Minion;
 class Player;
 class Enchantment;
+class Effect;
 
 class Game {
 	std::shared_ptr<Player> p1; //Player 1
@@ -29,7 +30,7 @@ class Game {
 	void shuffleVector(std::vector<T> & v) const; // shuffles a vector
 	void update(); //helper function for checking card/player states after actions
 	std::unique_ptr<Card> takeCardFromHand(Player * player, const int &pos);
-	
+	void runEffects(std::vector<std::unique_ptr<Effect>> v);
 	public:
 		Game(const std::string &p1name, const std::string &p2name, const std::string &p1deckname, const std::string &p2deckname, const bool &testing); //starts the game, creating players and decks from player/file names
 		Player * getP1() const;

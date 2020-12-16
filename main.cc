@@ -104,7 +104,7 @@ int main(int argc, char *argv[]){
 						if(iss >> pnum){
 							if(iss >> target){
 								if(target >= '1' && target <= '5') target--;
-								game.play(pos-1, pnum-1, target);
+								game.play(pos-1, pnum, target);
 							}else{
 								throw InvalidCommand{};
 							}
@@ -132,7 +132,7 @@ int main(int argc, char *argv[]){
 				}else if(cmd == "inspect"){
 					int pos;
 					if(iss >> pos){
-						game.displayMinion(pos);
+						game.displayMinion(pos-1);
 					}else{
 						throw InvalidCommand{};
 					}
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]){
 				}else if(cmd == "discard" && testing){
 					int pos;
 					if(iss >> pos){
-						game.discard(pos);
+						game.discard(pos-1);
 					}else{
 						throw InvalidCommand{};
 					}
