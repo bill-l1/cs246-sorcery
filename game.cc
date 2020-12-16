@@ -233,22 +233,23 @@ void Game::play(const int &pos){
 		activePlayer->playCard(std::move(cast_card));
 		for(auto && minion : activePlayer.get()->board){
 			if(minion->onPlay() != nullptr) {
-			minion->onPlay().get()->run();
-			}
-		}
-		for(auto && minion : nonActivePlayer.get()->board){
-			if(minion->onPlay() != nullptr) {
-			minion->onPlay().get()->run();
+				minion->onPlay().get()->run();
 			}
 		}
 		if(activePlayer.get()->ritual != nullptr) {
 			if (activePlayer.get()->ritual->onPlay() != nullptr) {
-			activePlayer.get()->ritual->onPlay()->run();
+				activePlayer.get()->ritual->onPlay()->run();
+			}
+		}
+
+		for(auto && minion : nonActivePlayer.get()->board){
+			if(minion->onPlay() != nullptr) {
+				minion->onPlay().get()->run();
 			}
 		}
 		if(nonActivePlayer.get()->ritual != nullptr) {
 			if (nonActivePlayer.get()->ritual->onPlay() != nullptr) {
-			nonActivePlayer.get()->ritual->onPlay()->run();
+				nonActivePlayer.get()->ritual->onPlay()->run();
 			}
 		}	
 	}else if(auto cast = dynamic_cast<Ritual*>(c_ref.get())) {
