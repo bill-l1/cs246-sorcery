@@ -9,7 +9,7 @@
 #include "spell.h"
 #include "ritual.h"
 #include "exceptions.h"
-
+#include "cardfactory.h"
 Player::Player(const std::string &name)
 	: name{name},
 	life{20},
@@ -107,9 +107,8 @@ return board[num].get();
 }
 
 void Player::addToHand(Minion * target) {
-	//std::unique_ptr<Card> c = CardFactory::getCard(target->getMinionName(),target->getOwner());
-	//hand.push_back(c);
-	//TODO
+std::unique_ptr<Card> c = CardFactory::getCard(target->getMinionName(),target->getOwner());
+hand.push_back(std::move(c));
 }
 
 std::unique_ptr<BaseMinion>& Player::graveyardTop() {
