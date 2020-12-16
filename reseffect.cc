@@ -1,5 +1,5 @@
 #include "reseffect.h"
-RitualEffect::RitualEffect(Player * own, Card * tar) :
+ResEffect::ResEffect(Player * own, Card * tar) :
 	Effect{own, tar}
 {}
 

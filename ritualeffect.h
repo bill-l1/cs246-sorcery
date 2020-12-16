@@ -8,6 +8,7 @@
 #include "minion.h"
 #include "base_minion.h"
 #include <memory>
+#include "ritual.h"
 class RitualEffect : public Effect{
 	int quantity;
 	public:

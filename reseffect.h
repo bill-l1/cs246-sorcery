@@ -10,7 +10,7 @@
 #include <memory>
 class ResEffect : public Effect{
 	public:
-	RitualEffect(Player * owner, Card * target);
+	ResEffect(Player * owner, Card * target);
 	void run() override;
 };
 

@@ -6,6 +6,6 @@ RitualEffect::RitualEffect(Player * own, Card * tar, int qt) :
 
 void RitualEffect::run() {
 	if(this->getGame()->getActivePlayer()->getRitual() != nullptr) {
-		this->getGame()->getActivePlayer()->getRitual()->setCharges(this->getGame()->getActivePlayer()->getRitual()->getCharges+quantity);
+		this->getGame()->getActivePlayer()->getRitual()->setCharges(this->getGame()->getActivePlayer()->getRitual()->getCharges()+quantity);
 	}
 }

@@ -204,7 +204,7 @@ std::unique_ptr<Effect> SpellList::Blizzard::onPlay(Card* target) {
 	return eff;
 }
 
-
+/*
 
 SpellList::Disenchant::Disenchant()
 	:Spell {
@@ -217,7 +217,7 @@ std::unique_ptr<Effect> SpellList::Disenchant::onPlay(Card * target) {
 	return eff;
 }
 
-
+*/
 SpellList::Recharge::Recharge()
 	:Spell {
 	"Recharge",

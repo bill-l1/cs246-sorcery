@@ -14,6 +14,9 @@
 #include "summoneffect.h"
 #include "disenchanteffect.h"
 #include "manaeffect.h"
+#include "handeffect.h"
+#include "reseffect.h"
+#include "ritualeffect.h"
 //Steps to create a new card:
 // 1. add it to header
 // 	class NAME : public TYPE_CLASS { public : NAME(); };
@@ -59,7 +62,7 @@ class SpellList {
 	public:
 	class Banish : public Spell { public: Banish();  std::unique_ptr<Effect> onPlay(Card * target) override; };
 	class Blizzard : public Spell { public: Blizzard();  std::unique_ptr<Effect> onPlay(Card * target) override;};
-	class Disenchant : public Spell { public: Disenchant();  std::unique_ptr<Effect> onPlay(Card * target) override; };
+	//class Disenchant : public Spell { public: Disenchant();  std::unique_ptr<Effect> onPlay(Card * target) override; };
 	class Recharge : public Spell { public: Recharge();  std::unique_ptr<Effect> onPlay(Card * target) override;};
 	class Unsummon : public Spell { public: Unsummon();  std::unique_ptr<Effect> onPlay(Card * target) override;};
 	class RaiseDead : public Spell { public: RaiseDead();  std::unique_ptr<Effect> onPlay(Card * target) override;};
