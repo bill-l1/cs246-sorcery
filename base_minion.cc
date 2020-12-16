@@ -64,5 +64,5 @@ void BaseMinion::setBoardRef(std::unique_ptr<Minion>& ref){
 }
 
 void BaseMinion::resetBoardRef() {
-	b_ref.release();
+	b_ref.reset();
 }

@@ -8,6 +8,10 @@
 
 class Effect;
 
+#include "handeffect.h"
+#include "ritualeffect.h"
+#include "reseffect.h"
+
 // #include "sampleeffect.h"
 // #include "game.h"
 // #include "banisheffect.h"
