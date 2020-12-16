@@ -27,10 +27,12 @@ class Game {
 	void startTurn(); // helper function for running start of turn actions
 	std::stack<std::unique_ptr<Card>> loadDeck(const std::string &dname, const bool &doShuffle, Player * owner) const; // creates a deck for a player from file dname, optionally shuffling it
 	template <typename T> 
-	void shuffleVector(std::vector<T> & v) const; // shuffles a vector
+		void shuffleVector(std::vector<T> & v) const; // shuffles a vector
 	void update(); //helper function for checking card/player states after actions
-	std::unique_ptr<Card> takeCardFromHand(Player * player, const int &pos);
-	void runEffects(std::vector<std::unique_ptr<Effect>> v);
+	std::unique_ptr<Card> takeCardFromHand(Player * player, const int &pos); // helper function that moves card at hand[pos] from a player
+	void runEffects(std::vector<std::unique_ptr<Effect>> v); // helper function that runs effects sequentially in a vector
+	template <class From, class To>
+		std::unique_ptr<To> castUnique(std::unique_ptr<From> u_ptr);
 	public:
 		Game(const std::string &p1name, const std::string &p2name, const std::string &p1deckname, const std::string &p2deckname, const bool &testing); //starts the game, creating players and decks from player/file names
 		Player * getP1() const;
