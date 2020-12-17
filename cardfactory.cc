@@ -38,7 +38,7 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	{"Master Summoner", &CardFactory::buildCard<MinionList::MasterSummoner>},
 	{"Drill Sergeant", &CardFactory::buildCard<MinionList::DrillSergeant>},
 	{"Clumsy Gunner", &CardFactory::buildCard<MinionList::ClumsyGunner>},
-
+	{"Storm Elemental", &CardFactory::buildCard<MinionList::StormElemental>},
 	// Spells
 	{"Banish", &CardFactory::buildCard<SpellList::Banish>},
 	{"Blizzard", &CardFactory::buildCard<SpellList::Blizzard>},
@@ -47,14 +47,16 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	{"Raise Dead", &CardFactory::buildCard<SpellList::RaiseDead>},
 	{"Unsummon", &CardFactory::buildCard<SpellList::Unsummon>},
 	{"Strength Potion", &CardFactory::buildCard<SpellList::StrengthPotion>},
-	
+	{"Wipe", &CardFactory::buildCard<SpellList::Wipe>},
 	// Enchantments
 	{"Giant Strength", &CardFactory::buildCard<EnchantmentList::GiantStrength>},
 	{"Enrage", &CardFactory::buildCard<EnchantmentList::Enrage>},
 	{"Delay", &CardFactory::buildCard<EnchantmentList::Delay>},
 	{"Magic Fatigue", &CardFactory::buildCard<EnchantmentList::MagicFatigue>},
 	{"Silence", &CardFactory::buildCard<EnchantmentList::Silence>},
-	
+	{"Steadfast", &CardFactory::buildCard<EnchantmentList::Steadfast>},
+	{"Retaliate", &CardFactory::buildCard<EnchantmentList::Retaliate>},
+	{"Bolster", &CardFactory::buildCard<EnchantmentList::Bolster>},
 	// Rituals
 	{"Aura of Power", &CardFactory::buildCard<RitualList::AuraOfPower>},
 	{"Standstill", &CardFactory::buildCard<RitualList::Standstill>},

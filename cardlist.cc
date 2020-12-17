@@ -181,6 +181,24 @@ std::vector<std::unique_ptr<Effect>> MinionList::MasterSummoner::onActivate(Card
 
 }
 
+MinionList::StormElemental::StormElemental()
+	: BaseMinion{
+	"Storm Elemental",
+	"Summon up to two 1/1 air elementals when this dies",
+	3, 2, 2, -1}
+{}
+
+std::vector<std::unique_ptr<Effect>> MinionList::StormElemental::onDeath() {
+	std::unique_ptr<Effect> eff = std::make_unique<SummonEffect>(getOwner(),nullptr,2);
+	eff.get()->setGame(this->getGame());
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	return base;
+	// return std::move(eff);
+
+}
+
+
 EnchantmentList::GiantStrength::GiantStrength()
 	: Enchantment{
 	"Giant Strength",
@@ -251,6 +269,78 @@ std::vector<std::unique_ptr<Effect>> EnchantmentList::Silence::onActivate(Card *
 	std::vector<std::unique_ptr<Effect>> empty;
 	return empty;
 }
+
+EnchantmentList::Steadfast::Steadfast()
+	: Enchantment{
+	"Steadfast",
+	"Give a minion: At the end of your turn, gain 2 attack",
+	1}
+{}
+
+std::vector<std::unique_ptr<Effect>> EnchantmentList::Steadfast::onEndTurn(){
+		std::vector<std::unique_ptr<Effect>> v = component->onEndTurn();
+		if(this->getOwner() == this->getComponent()->getGame()->getActivePlayer()) {
+		v.push_back(std::make_unique<SampleEffect>(getOwner(), getComponent(), 1,0));
+		}		
+		return v;
+}
+
+
+EnchantmentList::Retaliate::Retaliate()
+	: Enchantment{
+	"Retaliate",
+	"Give a minion \"When this minion dies, give all your minions +2/+2\"",
+	1}
+{}
+
+std::vector<std::unique_ptr<Effect>> EnchantmentList::Retaliate::onDeath(){
+		std::vector<std::unique_ptr<Effect>> v = component->onDeath();
+		v.push_back(std::make_unique<TeamBuff>(getOwner(), getComponent(), 2,2));	
+		return v;
+}
+
+
+EnchantmentList::Bolster::Bolster()
+	: Enchantment{
+	"Bolster",
+	"Give a minion \"When an opponents minion enters play, this gains 1 defense\"",
+	1}
+{}
+
+std::vector<std::unique_ptr<Effect>> EnchantmentList::Bolster::onPlay(){
+		std::vector<std::unique_ptr<Effect>> v = component->onPlay();
+		if (this->getOwner() == this->getComponent()->getGame()->getNonActivePlayer()) {
+
+		v.push_back(std::make_unique<SampleEffect>(getOwner(), getComponent(), 0,1));	
+	
+		}
+		return v;
+}
+
+
+
+SpellList::Wipe::Wipe()
+	: Spell {
+	"Wipe",
+	"Destroy all minions and resurrect the last minion destroyed for each player.", 3}
+{}
+
+
+std::vector<std::unique_ptr<Effect>> SpellList::Wipe::onPlay() {
+	std::unique_ptr<Effect> eff = std::make_unique<AllBoard>(nullptr,nullptr,0,-999);
+	eff.get()->setGame(this->getGame());
+	std::unique_ptr<Effect> eff2 = std::make_unique<ResEffect>(this->getGame()->getActivePlayer(),nullptr);
+	eff2.get()->setGame(this->getGame());
+	std::unique_ptr<Effect> eff3 = std::make_unique<ResEffect>(this->getGame()->getNonActivePlayer(),nullptr);
+	eff3.get()->setGame(this->getGame());
+	std::vector<std::unique_ptr<Effect>> base;
+	base.push_back(std::move(eff));
+	base.push_back(std::move(eff2));
+	base.push_back(std::move(eff3));
+	return base;
+}
+
+
 
 SpellList::Banish::Banish()
 	:TargettedSpell {

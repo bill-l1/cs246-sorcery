@@ -30,6 +30,7 @@ class MinionList {
 	class MasterSummoner : public BaseMinion { public: MasterSummoner(); std::vector<std::unique_ptr<Effect>> onActivate(Card * target) override; };
 	class DrillSergeant : public BaseMinion { public: DrillSergeant(); std::vector<std::unique_ptr<Effect>> onActivate(Card * target) override; };
 	class ClumsyGunner : public BaseMinion { public: ClumsyGunner(); std::vector<std::unique_ptr<Effect>> onEndTurn() override; };
+	class StormElemental : public BaseMinion { public: StormElemental(); std::vector<std::unique_ptr<Effect>> onDeath() override; };
 
 };
 
@@ -53,6 +54,22 @@ class EnchantmentList {
 		int getActivateCost() const override;
 		std::vector<std::unique_ptr<Effect>> onActivate(Card * target = nullptr) override;
 	};
+	class Steadfast : public Enchantment { 
+		public: Steadfast(); 
+		std::vector<std::unique_ptr<Effect>> onEndTurn() override;
+	};
+	class Retaliate : public Enchantment { 
+		public: Retaliate(); 
+		//int getActivateCost() const override;
+		std::vector<std::unique_ptr<Effect>> onDeath() override;
+	};
+	class Bolster : public Enchantment { 
+		public: Bolster(); 
+		//int getActivateCost() const override;
+		std::vector<std::unique_ptr<Effect>> onPlay() override;
+	};
+
+
 };
 
 class SpellList {
@@ -68,6 +85,7 @@ class SpellList {
 	class Unsummon : public TargettedSpell { public: Unsummon();  std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Minion>& target) override;};
 	class RaiseDead : public Spell { public: RaiseDead();  std::vector<std::unique_ptr<Effect>> onPlay() override;};
 	class StrengthPotion : public Spell { public: StrengthPotion();  std::vector<std::unique_ptr<Effect>> onPlay() override;};
+	class Wipe : public Spell { public: Wipe();  std::vector<std::unique_ptr<Effect>> onPlay() override;};
 };
 
 class RitualList {
