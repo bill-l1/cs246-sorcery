@@ -96,10 +96,6 @@ void Minion::setBoardRef(std::unique_ptr<Minion>& ref) {
     std::cerr << "Illegal function call from minion" << std::endl;
 }
 
-void Minion::resetBoardRef() {
-    std::cerr << "Illegal function call from minion" << std::endl;
-}
-
 void Minion::setParent(std::unique_ptr<Minion>& ref) {
     std::cerr << "Illegal function call from minion" << std::endl;
 }

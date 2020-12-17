@@ -11,19 +11,6 @@
 
 class Effect;
 
-#include "handeffect.h"
-#include "ritualeffect.h"
-#include "reseffect.h"
-
-// #include "sampleeffect.h"
-// #include "game.h"
-// #include "banisheffect.h"
-// #include "teambuff.h"
-// #include "allboard.h"
-// #include "summoneffect.h"
-// #include "disenchanteffect.h"
-// #include "manaeffect.h"
-
 //Steps to create a new card:
 // 1. add it to header
 // 	class NAME : public TYPE_CLASS { public : NAME(); };
@@ -67,21 +54,21 @@ class EnchantmentList {
 
 class SpellList {
 	public:
-	class Banish : public Spell { 
+	class Banish : public TargettedSpell { 
 		public: Banish();  
 		std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Minion>& target) override; 
 		std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Ritual>& target) override; 
 	};
 	class Blizzard : public Spell { public: Blizzard();  std::vector<std::unique_ptr<Effect>> onPlay() override;};
-	class Disenchant : public Spell { public: Disenchant();  std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Minion>& target) override; };
+	class Disenchant : public TargettedSpell { public: Disenchant();  std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Minion>& target) override; };
 	class Recharge : public Spell { public: Recharge();  std::vector<std::unique_ptr<Effect>> onPlay() override;};
-	class Unsummon : public Spell { public: Unsummon();  std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Minion>& target) override;};
+	class Unsummon : public TargettedSpell { public: Unsummon();  std::vector<std::unique_ptr<Effect>> onPlay(std::unique_ptr<Minion>& target) override;};
 	class RaiseDead : public Spell { public: RaiseDead();  std::vector<std::unique_ptr<Effect>> onPlay() override;};
 };
 
 class RitualList {
 	public:
-	class auraOfPower : public Ritual { public: auraOfPower(); Effect * onPlay() override; };
+	class AuraOfPower : public Ritual { public: AuraOfPower(); Effect * onPlay() override; };
 	class Standstill : public Ritual { public: Standstill(); Effect * onPlay() override; };
 	class DarkRitual : public Ritual { public: DarkRitual(); Effect * onTurnStart() override; };
 

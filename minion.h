@@ -34,7 +34,6 @@ class Minion : public Card {
 		virtual std::vector<std::unique_ptr<Effect>> onActivate(Card * target = nullptr);
 		virtual std::unique_ptr<Minion>& getBoardRef() const = 0;
 		virtual void setBoardRef(std::unique_ptr<Minion>& ref);
-		virtual void resetBoardRef();
 		virtual void setParent(std::unique_ptr<Minion>& ref);
 };
 

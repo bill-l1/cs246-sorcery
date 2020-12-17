@@ -4,8 +4,7 @@
 #include "base_minion.h"
 #include "spell.h"
 #include "effectlist.h"
-#include "reseffect.h"
-#include "handeffect.h"
+#include "exceptions.h"
 
 MinionList::AirElemental::AirElemental()
 	: BaseMinion{
@@ -50,7 +49,6 @@ MinionList::FireElemental::FireElemental()
 	"Whenever an opponent's minion enters play, deal 1 damage to it",
 	2, 2, 2}
 {}
-
 
 std::vector<std::unique_ptr<Effect>> MinionList::FireElemental::onPlay() {
 	std::vector<std::unique_ptr<Effect>> base;
@@ -208,9 +206,9 @@ std::vector<std::unique_ptr<Effect>> EnchantmentList::Silence::onActivate(Card *
 }
 
 SpellList::Banish::Banish()
-	:Spell {
+	:TargettedSpell {
 	"Banish",
-	"Destroy Target Minion or Ritual", 2, nullptr}
+	"Destroy target minion or ritual", 2}
 {}
 
 std::vector<std::unique_ptr<Effect>> SpellList::Banish::onPlay(std::unique_ptr<Minion>& target) {
@@ -230,9 +228,9 @@ std::vector<std::unique_ptr<Effect>> SpellList::Banish::onPlay(std::unique_ptr<R
 }
 
 SpellList::Blizzard::Blizzard()
-	:Spell {
+	: Spell {
 	"Blizzard",
-	"Deal 2 damage to all minions", 3, nullptr}
+	"Deal 2 damage to all minions", 3}
 {}
 
 
@@ -246,9 +244,9 @@ std::vector<std::unique_ptr<Effect>> SpellList::Blizzard::onPlay() {
 }
 
 SpellList::Disenchant::Disenchant()
-	:Spell {
+	:TargettedSpell {
 	"Disenchant",
-	"Destroy the top enchantment on target minion", 1, nullptr}
+	"Destroy the top enchantment on target minion", 1}
 {}
 
 std::vector<std::unique_ptr<Effect>> SpellList::Disenchant::onPlay(std::unique_ptr<Minion>& target) {
@@ -258,7 +256,7 @@ std::vector<std::unique_ptr<Effect>> SpellList::Disenchant::onPlay(std::unique_p
 		base.push_back(std::move(eff));
 		return base;
 	}else{
-		//TODO probably should throw here
+		throw InvalidTarget{};
 		return base;
 	}
 }
@@ -266,7 +264,7 @@ std::vector<std::unique_ptr<Effect>> SpellList::Disenchant::onPlay(std::unique_p
 SpellList::Recharge::Recharge()
 	:Spell {
 	"Recharge",
-	"Your ritual gains 3 charges", 1, nullptr}
+	"Your ritual gains 3 charges", 1}
 {}
 
 std::vector<std::unique_ptr<Effect>> SpellList::Recharge::onPlay() {
@@ -280,7 +278,7 @@ std::vector<std::unique_ptr<Effect>> SpellList::Recharge::onPlay() {
 SpellList::RaiseDead::RaiseDead()
 	:Spell {
 	"Raise Dead",
-	"Resurrect the top minion in your graveyard and set its defense to 1", 1, nullptr}
+	"Resurrect the top minion in your graveyard and set its defense to 1", 1}
 {}
 
 std::vector<std::unique_ptr<Effect>> SpellList::RaiseDead::onPlay() {
@@ -293,9 +291,9 @@ std::vector<std::unique_ptr<Effect>> SpellList::RaiseDead::onPlay() {
 }
 
 SpellList::Unsummon::Unsummon()
-	:Spell {
+	:TargettedSpell {
 	"Unsummon",
-	"Return target minion to its owners hand", 1, nullptr}
+	"Return target minion to its owners hand", 1}
 {}
 
 std::vector<std::unique_ptr<Effect>> SpellList::Unsummon::onPlay(std::unique_ptr<Minion>& target) {
@@ -307,14 +305,14 @@ std::vector<std::unique_ptr<Effect>> SpellList::Unsummon::onPlay(std::unique_ptr
 	return base;
 }
 
-RitualList::auraOfPower::auraOfPower()
+RitualList::AuraOfPower::AuraOfPower()
 	:Ritual {
 	"Aura of Power",
 	"Whenever a minion enters play under your control, it gains +1/+1", 1,
-	std::make_unique<SampleEffect>(nullptr,nullptr,1,1),4}
+	std::make_unique<SampleEffect>(nullptr,nullptr, 1, 1), 4, 1}
 {}
 
-Effect * RitualList::auraOfPower::onPlay() {
+Effect * RitualList::AuraOfPower::onPlay() {
 	if(this->getOwner() != this->getGame()->getActivePlayer()) {
 		return nullptr;
 	}
@@ -326,8 +324,8 @@ Effect * RitualList::auraOfPower::onPlay() {
 RitualList::Standstill::Standstill()
 	:Ritual {
 	"Standstill",
-	"Whenever a minion enters play, destroy it",3,
-	std::make_unique<BanishEffect>(nullptr,nullptr),4}
+	"Whenever a minion enters play, destroy it", 3,
+	std::make_unique<BanishEffect>(nullptr,nullptr), 4, 2}
 
 {}
 
@@ -339,10 +337,10 @@ Effect * RitualList::Standstill::onPlay() {
 
 
 RitualList::DarkRitual::DarkRitual()
-	:Ritual {
+	: Ritual {
 	"Dark ritual",
 	"At the start of your turn gain 1 mana", 0,
-	std::make_unique<ManaEffect>(nullptr,nullptr),5}
+	std::make_unique<ManaEffect>(nullptr,nullptr), 5, 1}
 
 {}
 

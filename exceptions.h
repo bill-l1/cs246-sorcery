@@ -62,6 +62,14 @@ class DeckError : public GameException {
     public: DeckError();
 };
 
+class GraveyardEmpty : public GameException {
+    public: GraveyardEmpty();
+};
+
+class RitualEmpty : public GameException {
+    public: RitualEmpty();
+};
+
 class IllegalAction : public GameException {
     public: IllegalAction(const std::string &act);
 };

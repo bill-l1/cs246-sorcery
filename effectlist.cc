@@ -125,3 +125,56 @@ void TeamBuff::run() {
 		}
 	}
 }
+
+HandEffect::HandEffect(Player * own, std::unique_ptr<Minion> &b_ref) :
+	Effect{own, b_ref.get()},
+	b_ref{b_ref}
+{}
+
+void HandEffect::run() {
+	// BaseMinion * m = dynamic_cast<BaseMinion *>(getTarget());
+	Minion * bm = b_ref->getBase(true);
+	b_ref->getOwner()->removeFromBoard(b_ref);
+	std::unique_ptr<Card> toHand;
+	try{
+		toHand.reset(bm);
+		bm->getOwner()->addToHand(std::move(toHand));
+		getGame()->printAlert(bm->getMinionName() + " returned to " + bm->getOwner()->getName() + "'s hand!", 1);
+	}catch(HandIsFull &e){
+		getGame()->printAlert(bm->getMinionName() + " was destroyed.", 1);
+		throw;
+	}
+}
+
+
+ResEffect::ResEffect(Player * own, Card * tar) :
+	Effect{own, tar}
+{}
+
+void ResEffect::run() {
+	if(getOwner() != nullptr && getOwner() != nullptr) {
+		getGame()->verifyBoardNotFull(getOwner());
+		std::unique_ptr<BaseMinion>& m = getOwner()->graveyardTop();
+		std::unique_ptr<BaseMinion> cast_m;
+		BaseMinion * ptr = static_cast<BaseMinion *>(m.get());
+		ptr->setDefense(1);
+		getGame()->printAlert(ptr->getMinionName()+" is resurrected with 1 defense.", 2);
+		m.release();
+		cast_m.reset(ptr);
+		getOwner()->graveyardPop();
+		getOwner()->playCard(std::move(cast_m));
+	}else{
+		throw InvalidTarget();
+	}
+}
+
+RitualEffect::RitualEffect(Player * own, Card * tar, const int &qt) :
+	Effect{own, tar},
+	quantity{qt}
+{}
+
+void RitualEffect::run() {
+	if(getOwner() != nullptr && getOwner()->getRitual() != nullptr) {
+		getOwner()->getRitual()->setCharges(getOwner()->getRitual()->getCharges()+quantity);
+	}
+}

@@ -19,7 +19,7 @@ std::unique_ptr<Card> CardFactory::getCard(const std::string &name, Player * own
 		card = FUNC_MAP[name]();
 	}else{
 		card = std::make_unique<BaseMinion>("???", "Invalid card", 4, 7, 7);
-		//throw InvalidCard{name}; TODO uncomment when all cards have been implemented
+		throw InvalidCard{name};
 	}
 	card->setOwner(owner);
 	return std::move(card);
@@ -53,7 +53,7 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	{"Silence", &CardFactory::buildCard<EnchantmentList::Silence>},
 	
 	// Rituals
-	{"Aura of Power", &CardFactory::buildCard<RitualList::auraOfPower>},
+	{"Aura of Power", &CardFactory::buildCard<RitualList::AuraOfPower>},
 	{"Standstill", &CardFactory::buildCard<RitualList::Standstill>},
 	{"Dark Ritual", &CardFactory::buildCard<RitualList::DarkRitual>}
 

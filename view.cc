@@ -147,7 +147,7 @@ void View::printBoard() const {
 			display_ritual(
 				p1_rptr->getName(),
 				p1_rptr->getCost(),
-				0, //TODO
+				p1_rptr->getActivateCost(),
 				p1_rptr->getDescription(),
 				p1_rptr->getCharges()
 			)
@@ -178,7 +178,7 @@ void View::printBoard() const {
 			display_ritual(
 				p2_rptr->getName(),
 				p2_rptr->getCost(),
-				0, //TODO
+				p1_rptr->getActivateCost(),
 				p2_rptr->getDescription(),
 				p2_rptr->getCharges()
 			) 
@@ -294,12 +294,10 @@ static card_template_t display_any_card(Card * card) {
 	}else if(Spell * cast = dynamic_cast<Spell *>(card)){
 		return display_spell(cast->getName(), cast->getCost(), cast->getDescription());
 	}else if(Ritual * cast = dynamic_cast<Ritual *>(card)){
-		//TODO FIX 0
-		return display_ritual(cast->getName(), cast->getCost(), 0, cast->getDescription(), cast->getCharges());
-	}else {
+		return display_ritual(cast->getName(), cast->getCost(), cast->getActivateCost(), cast->getDescription(), cast->getCharges());
+	}else{
 		return CARD_TEMPLATE_BORDER;
 	}
-	//TODO other card types
 }
 
 static card_template_t display_any_minion(Minion * minion){

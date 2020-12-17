@@ -10,6 +10,7 @@ class Enchantment : public Minion {
     std::string att_str;
     std::string def_str;
     int statConvert(const int &in, const std::string &s) const;
+    void verifyComponentNotNull() const;
     protected:
         std::unique_ptr<Minion> component;
     public:
@@ -37,7 +38,6 @@ class Enchantment : public Minion {
 		std::vector<std::unique_ptr<Effect>> onActivate(Card * target = nullptr) override;
         std::unique_ptr<Minion>& getBoardRef() const override;
 		void setBoardRef(std::unique_ptr<Minion>& ref) override;
-        void resetBoardRef() override;
         void setParent(std::unique_ptr<Minion>& ref) override;
 };
 

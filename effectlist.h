@@ -60,4 +60,25 @@ class TeamBuff: public Effect{
 	void run() override;
 };
 
+class HandEffect : public Effect{
+	std::unique_ptr<Minion>& b_ref;
+	public:
+	HandEffect(Player * owner, std::unique_ptr<Minion> &b_ref);
+	void run() override;
+};
+
+class ResEffect : public Effect{
+	public:
+	ResEffect(Player * owner, Card * target);
+	void run() override;
+};
+
+class RitualEffect : public Effect{
+	int quantity;
+	public:
+	RitualEffect(Player * owner, Card * target, const int &quantity);
+	void run() override;
+};
+
+
 #endif

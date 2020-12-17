@@ -51,12 +51,16 @@ void BaseMinion::buff(const int &att, const int &def){
 
 Minion * BaseMinion::getBase(const bool &release) {
 	if(p_ref.get() != nullptr && release){
-		p_ref->ref.release();
+		Minion * ptr = p_ref->ref.release();
 		p_ref.reset();
+		return ptr;
 	}else if(release){
-		b_ref->ref.release();
+		Minion * ptr = b_ref->ref.release();
+		b_ref.reset();
+		return ptr;
+	}else{
+		return this;
 	}
-	return this;
 }
 
 std::unique_ptr<Minion>& BaseMinion::getBoardRef() const {
@@ -69,11 +73,6 @@ void BaseMinion::setBoardRef(std::unique_ptr<Minion>& ref){
 		b_ref.reset(new RefObj(ref));
 	}
 }
-
-void BaseMinion::resetBoardRef() {
-	b_ref.reset();
-}
-
 void BaseMinion::setParent(std::unique_ptr<Minion>& ref) {
 	if(ref.get() != nullptr){
 		p_ref.reset(new RefObj(ref));

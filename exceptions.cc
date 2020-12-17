@@ -66,6 +66,14 @@ DeckError::DeckError()
     : GameException{"Problem loading deck.", true}
 {}
 
+GraveyardEmpty::GraveyardEmpty()
+    : GameException{"Graveyard is empty!"}
+{}
+
+RitualEmpty::RitualEmpty()
+    : GameException{"Ritual does not exist!"}
+{}
+
 IllegalAction::IllegalAction(const std::string &act)
     : GameException{"Illegal action: "+act, true}
 {}

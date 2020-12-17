@@ -117,14 +117,13 @@ void Game::shuffleVector(std::vector<T> & v) const {
 }
 
 void Game::update() {
-	std::vector<Player *> players{p1.get(), p2.get()};
+	std::vector<Player *> players{activePlayer.get(), nonActivePlayer.get()};
 	for(auto &p : players){
 		for(auto it = p->board.begin(); it != p->board.end();){
 			if((*it)->getDefense() <= 0){
 				printAlert((*it)->getMinionName() + " was destroyed.", 1);
 				runEffects((*it)->onDeath()); //strongly exception safe
 				BaseMinion * bm = static_cast<BaseMinion *>((*it)->getBase(true)); // release BaseMinion
-				bm->resetBoardRef(); // reset its board reference
 				std::unique_ptr<BaseMinion> new_bm; // create new smart pointer container
 				new_bm.reset(bm);
 				p->graveyard.push(std::move(new_bm)); // add to graveyard
@@ -264,10 +263,10 @@ void Game::play(const int &pos){
 		card.release(); 
 		cast_card.reset(cast); 
 		activePlayer->playCard(std::move(cast_card));
-	}
-	else if(auto cast = dynamic_cast<Spell*>(c_ref.get())) {
+	}else if(auto cast = dynamic_cast<Spell*>(c_ref.get())) {
+		if(dynamic_cast<TargettedSpell*>(c_ref.get())) throw InvalidPlay{};
 		if (cast->getName()=="Recharge") {
-		verifyRitualNotEmpty(activePlayer.get());
+			verifyRitualNotEmpty(activePlayer.get());
 		}
 		if (cast->getName()=="Raise Dead") {
 			verifyGraveyardNotEmpty(activePlayer.get());
@@ -280,9 +279,7 @@ void Game::play(const int &pos){
 		card.release(); 
 		cast_card.reset(cast); 
 		runEffects(cast_card->onPlay());
-	}	
-	
-	else{ 
+	}else{ 
 		throw InvalidPlay{};
 	}
 
@@ -312,11 +309,11 @@ void Game::play(const int &pos, const int &pnum, const char &t){
 	int newMagic = verifyMagicCost(activePlayer.get(), activePlayer->hand[pos]->getCost());
 	std::unique_ptr<Card> &c_ref = activePlayer->hand[pos];
 
-	if(auto cast = dynamic_cast<Spell *>(c_ref.get())){
+	if(auto cast = dynamic_cast<TargettedSpell *>(c_ref.get())){
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
 		card.get()->setGame(this);
 		activePlayer->setMagic(newMagic);
-		std::unique_ptr<Spell> cast_card;
+		std::unique_ptr<TargettedSpell> cast_card;
 		card.release(); 
 		cast_card.reset(cast); 
 		printAlert(activePlayer->getName()+" casts "+cast_card->getName()+"!", 2);
@@ -449,13 +446,13 @@ void Game::verifyBoardNotFull(Player * player) const {
 
 void Game::verifyRitualNotEmpty(Player * player) const {
 	if(player->getRitual() == nullptr){
-		throw InvalidPlay{};
+		throw RitualEmpty{};
 	}
 }
 
 void Game::verifyGraveyardNotEmpty(Player * player) const {
 	if(player->graveyard.empty()){
-		throw InvalidPlay{};
+		throw GraveyardEmpty{};
 	}
 }
 
