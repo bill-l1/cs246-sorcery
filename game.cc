@@ -20,6 +20,7 @@ extern const unsigned MAX_HAND_SIZE = 5;
 extern const unsigned MAX_BOARD_SIZE = 5;
 extern const unsigned INTIAL_HAND_SIZE = 4;
 extern const unsigned MAX_ACTIONS = 1;
+extern const unsigned MAX_DECK_SIZE = 30;
 
 Game::Game(const std::string &p1name, const std::string &p2name, const std::string &p1deckname, const std::string &p2deckname, const bool &testing)
 {
@@ -32,13 +33,13 @@ Game::Game(const std::string &p1name, const std::string &p2name, const std::stri
 		for(unsigned i = 0; i < INTIAL_HAND_SIZE; i++){
 			p1->draw();
 		}
-	}catch(HandIsFull){}
+	}catch(HandIsFull){}catch(DeckEmpty){}
 
 	try{
 		for(unsigned i = 0; i < INTIAL_HAND_SIZE; i++){
 			p2->draw();
 		}
-	}catch(HandIsFull){}
+	}catch(HandIsFull){}catch(DeckEmpty){}
 
 	view = std::make_unique<View>(this);
 	activePlayer = p1;
@@ -56,6 +57,8 @@ void Game::startTurn(){
 		draw();
 	}catch(HandIsFull){
 		printAlert("Can't draw card: hand is too full!");
+	}catch(DeckEmpty){
+		printAlert("Can't draw card: deck is empty!");
 	}
 	activePlayer->setMagic(activePlayer->getMagic() + 1);
 
@@ -70,11 +73,13 @@ std::stack<std::unique_ptr<Card>> Game::loadDeck(const std::string &dname, const
 	std::stack<std::unique_ptr<Card>> deck;
 	std::vector<std::string> cardNames;
 	try{
+		int cardCount = 0;
 		std::ifstream f(dname);
 		std::string s;
 
-		while(std::getline(f, s)) {
+		while(std::getline(f, s) && cardCount <= MAX_DECK_SIZE) {
 			cardNames.push_back(s);	
+			cardCount++;
 		}
 		
 		if(doShuffle){
