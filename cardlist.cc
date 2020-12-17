@@ -99,6 +99,25 @@ std::vector<std::unique_ptr<Effect>> MinionList::NovicePyromancer::onActivate(Ca
 	// return std::move(eff);
 }
 
+MinionList::DrillSergeant::DrillSergeant()
+        : BaseMinion{
+        "Drill Sergeant",
+        "Give target minion +2 attack and -1 defense",
+        2, 2, 1, 2}
+{}
+
+
+std::vector<std::unique_ptr<Effect>> MinionList::DrillSergeant::onActivate(Card * target) {
+        std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(target->getOwner(), target,2,-1);
+        eff.get()->setGame(this->getGame());
+        std::vector<std::unique_ptr<Effect>> base;
+        base.push_back(std::move(eff));
+        return base;
+}
+
+
+
+
 MinionList::ApprenticeSummoner::ApprenticeSummoner()
 	: BaseMinion{
 	"Apprentice Summoner",
@@ -304,6 +323,31 @@ std::vector<std::unique_ptr<Effect>> SpellList::Unsummon::onPlay(std::unique_ptr
 	base.push_back(std::move(eff));
 	return base;
 }
+
+SpellList::StrengthPotion::StrengthPotion()
+        :Spell {
+        "Strength Potion",
+        "Give a random friendly minion +4/+4", 2}
+{}
+
+
+std::vector<std::unique_ptr<Effect>> SpellList::StrengthPotion::onPlay() {
+	int target = this->getGame()->getActivePlayer()->getBoardSize();
+	int target2 = 0;
+	if(target != 0) {
+	target2 = rand() % target;
+	}
+	std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(this->getGame()->getActivePlayer(),this->getGame()->getActivePlayer()->getBoardNum(target2),4,4);
+        eff.get()->setGame(this->getGame());
+
+        // return eff;
+        std::vector<std::unique_ptr<Effect>> base;
+        base.push_back(std::move(eff));
+        return base;
+}
+
+
+
 
 RitualList::AuraOfPower::AuraOfPower()
 	:Ritual {
