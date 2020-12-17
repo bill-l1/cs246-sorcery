@@ -37,6 +37,7 @@ std::map<std::string, build_ptr> CardFactory::FUNC_MAP{
 	{"Apprentice Summoner", &CardFactory::buildCard<MinionList::ApprenticeSummoner>},
 	{"Master Summoner", &CardFactory::buildCard<MinionList::MasterSummoner>},
 	{"Drill Sergeant", &CardFactory::buildCard<MinionList::DrillSergeant>},
+	{"Clumsy Gunner", &CardFactory::buildCard<MinionList::ClumsyGunner>},
 
 	// Spells
 	{"Banish", &CardFactory::buildCard<SpellList::Banish>},

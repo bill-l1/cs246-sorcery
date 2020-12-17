@@ -29,6 +29,7 @@ class MinionList {
 	class ApprenticeSummoner : public BaseMinion { public: ApprenticeSummoner(); std::vector<std::unique_ptr<Effect>> onActivate(Card * target) override;};
 	class MasterSummoner : public BaseMinion { public: MasterSummoner(); std::vector<std::unique_ptr<Effect>> onActivate(Card * target) override; };
 	class DrillSergeant : public BaseMinion { public: DrillSergeant(); std::vector<std::unique_ptr<Effect>> onActivate(Card * target) override; };
+	class ClumsyGunner : public BaseMinion { public: ClumsyGunner(); std::vector<std::unique_ptr<Effect>> onEndTurn() override; };
 
 };
 

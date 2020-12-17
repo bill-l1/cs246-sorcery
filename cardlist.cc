@@ -116,6 +116,34 @@ std::vector<std::unique_ptr<Effect>> MinionList::DrillSergeant::onActivate(Card 
 }
 
 
+MinionList::ClumsyGunner::ClumsyGunner()
+        : BaseMinion{
+        "Clumsy Gunner",
+        "At the end of your turn, deal 2 damage to a random enemy",
+        2, 1, 3, -1}
+{}
+
+std::vector<std::unique_ptr<Effect>> MinionList::ClumsyGunner::onEndTurn() {
+	std::vector<std::unique_ptr<Effect>> base;
+	int target = this->getGame()->getNonActivePlayer()->getBoardSize();
+	int target2 = 0;
+	if(target != 0) {
+	target2 = rand() % target;
+	}
+
+std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(this->getGame()->getActivePlayer(),this->getGame()->getNonActivePlayer()->getBoardNum(target2),0,-2);
+eff.get()->setGame(this->getGame());
+
+
+if (this->getOwner() != this->getGame()->getActivePlayer()) {
+		return base;
+}
+
+base.push_back(std::move(eff));
+return base;
+
+
+}
 
 
 MinionList::ApprenticeSummoner::ApprenticeSummoner()
