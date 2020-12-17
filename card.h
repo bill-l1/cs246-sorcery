@@ -1,9 +1,8 @@
 #ifndef CARD_H
 #define CARD_H
 #include <string>
-#include "game.h"
-// may need helper funciton to move from deck to hand to board to etc.
 
+class Game;
 class Player;
 
 class Card  {

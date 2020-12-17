@@ -18,7 +18,7 @@ std::unique_ptr<Card> CardFactory::getCard(const std::string &name, Player * own
 	if(FUNC_MAP.count(name)){
 		card = FUNC_MAP[name]();
 	}else{
-		card = std::make_unique<BaseMinion>("???", "Invalid card", 4, 7, 7);
+		// card = std::make_unique<BaseMinion>("???", "Invalid card", 4, 7, 7);
 		throw InvalidCard{name};
 	}
 	card->setOwner(owner);
