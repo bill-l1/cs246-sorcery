@@ -137,6 +137,7 @@ void Game::update() {
 				++it;
 			}
 		}
+		
 
 		if(p->getLife() <= 0){
 			endGame(p);
@@ -255,8 +256,10 @@ void Game::play(const int &pos){
 			if(rit != nullptr) {
 				if (rit->onPlay() != nullptr) {
 					try{
+						if(rit->getCharges() > 0) {
 						rit->onPlay()->run();
 						rit->setCharges(rit->getCharges()-rit->getActivateCost());
+						}
 					}catch(GameException &e){
 						printAlert(e.getErr());
 					}

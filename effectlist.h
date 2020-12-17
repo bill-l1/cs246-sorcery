@@ -81,4 +81,5 @@ class RitualEffect : public Effect{
 };
 
 
+
 #endif

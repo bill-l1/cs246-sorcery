@@ -278,9 +278,11 @@ EnchantmentList::Steadfast::Steadfast()
 {}
 
 std::vector<std::unique_ptr<Effect>> EnchantmentList::Steadfast::onEndTurn(){
-		std::vector<std::unique_ptr<Effect>> v = component->onEndTurn();
+		std::vector<std::unique_ptr<Effect>> v = component.get()->onEndTurn();
 		if(this->getOwner() == this->getComponent()->getGame()->getActivePlayer()) {
-		v.push_back(std::make_unique<SampleEffect>(getOwner(), getComponent(), 1,0));
+		std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(this->getOwner(), this->getComponent(), 1,0);
+		eff.get()->setGame(this->getComponent()->getGame());
+		v.push_back(std::move(eff));
 		}		
 		return v;
 }
@@ -295,7 +297,9 @@ EnchantmentList::Retaliate::Retaliate()
 
 std::vector<std::unique_ptr<Effect>> EnchantmentList::Retaliate::onDeath(){
 		std::vector<std::unique_ptr<Effect>> v = component->onDeath();
-		v.push_back(std::make_unique<TeamBuff>(getOwner(), getComponent(), 2,2));	
+		std::unique_ptr<Effect> eff = std::make_unique<TeamBuff>(getOwner(), getComponent(), 2,2);
+		eff.get()->setGame(this->getComponent()->getGame());
+		v.push_back(std::move(eff));
 		return v;
 }
 
@@ -310,8 +314,9 @@ EnchantmentList::Bolster::Bolster()
 std::vector<std::unique_ptr<Effect>> EnchantmentList::Bolster::onPlay(){
 		std::vector<std::unique_ptr<Effect>> v = component->onPlay();
 		if (this->getOwner() == this->getComponent()->getGame()->getNonActivePlayer()) {
-
-		v.push_back(std::make_unique<SampleEffect>(getOwner(), getComponent(), 0,1));	
+		std::unique_ptr<Effect> eff = std::make_unique<SampleEffect>(getOwner(), getComponent(), 0,1);	
+		eff.get()->setGame(this->getComponent()->getGame());
+		v.push_back(std::move(eff));
 	
 		}
 		return v;

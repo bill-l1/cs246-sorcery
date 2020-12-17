@@ -178,3 +178,4 @@ void RitualEffect::run() {
 		getOwner()->getRitual()->setCharges(getOwner()->getRitual()->getCharges()+quantity);
 	}
 }
+
