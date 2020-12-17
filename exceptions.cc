@@ -74,6 +74,10 @@ RitualEmpty::RitualEmpty()
     : GameException{"Ritual does not exist!"}
 {}
 
+DeckEmpty::DeckEmpty()
+    : GameException{"No more cards in deck!"}
+{}
+
 IllegalAction::IllegalAction(const std::string &act)
     : GameException{"Illegal action: "+act, true}
 {}

@@ -74,9 +74,13 @@ int main(int argc, char *argv[]){
 		std::string s;
 		while (true){
 			try {
-				cout << "\033[1;32m > ";
+				if(infile == &cin){
+					cout << "\033[1;32m > ";
+				}
 				std::getline(*infile, s);	
-				cout << "\033[0m";
+				if(infile == &cin){
+					cout << "\033[0m";
+				}
 				std::istringstream iss{s};
 				std::string cmd;
 				iss >> cmd;

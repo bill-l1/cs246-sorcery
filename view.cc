@@ -178,7 +178,7 @@ void View::printBoard() const {
 			display_ritual(
 				p2_rptr->getName(),
 				p2_rptr->getCost(),
-				p1_rptr->getActivateCost(),
+				p2_rptr->getActivateCost(),
 				p2_rptr->getDescription(),
 				p2_rptr->getCharges()
 			) 

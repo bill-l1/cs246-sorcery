@@ -57,12 +57,17 @@ Ritual * Player::getRitual() const {
 }
 
 void Player::draw() {
-	if(!deck.empty() && hand.size() < MAX_HAND_SIZE){
-		hand.push_back(std::move(deck.top()));
-		deck.pop();
+	if(!deck.empty()){
+		if(hand.size() < MAX_HAND_SIZE){
+			hand.push_back(std::move(deck.top()));
+			deck.pop();
+		}else{
+			throw HandIsFull{};
+		}
 	}else{
-		throw HandIsFull{};
+		throw DeckEmpty{};
 	}
+	
 }
 
 void Player::playCard(std::unique_ptr<BaseMinion> card){

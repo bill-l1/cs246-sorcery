@@ -70,6 +70,10 @@ class RitualEmpty : public GameException {
     public: RitualEmpty();
 };
 
+class DeckEmpty : public GameException {
+    public: DeckEmpty();
+};
+
 class IllegalAction : public GameException {
     public: IllegalAction(const std::string &act);
 };
