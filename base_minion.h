@@ -16,7 +16,6 @@ class BaseMinion : public Minion {
 	int defense;
 	int actions;
 	int activateCost;
-	std::unique_ptr<Effect> ability;
 	std::unique_ptr<RefObj> b_ref;
 	std::unique_ptr<RefObj> p_ref;
 	public:

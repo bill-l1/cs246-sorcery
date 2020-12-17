@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <stdexcept>
 #include "minion.h"
 #include "enchantment.h"
 #include "player.h"
@@ -15,14 +16,19 @@ Enchantment::Enchantment(const std::string &name, const std::string &description
 Enchantment::~Enchantment(){}
 
 int Enchantment::statConvert(const int &in, const std::string &s) const{
-    if (s.length() < 2) throw IllegalAction{"bad Enchantment string: "+s};
-    int val = stoi(s.substr(1));
-    if(s[0] == '+'){
-        return in + val;
-    }else if(s[0] == '-'){
-        return in - val;
-    }else if(s[0] == '*'){
-        return in * val;
+    try{
+        if (s.length() < 2) return in;
+        int val = stoi(s.substr(1));
+        if(s[0] == '+'){
+            return in + val;
+        }else if(s[0] == '-'){
+            return in - val;
+        }else if(s[0] == '*'){
+            return in * val;
+        }
+    }catch(const std::invalid_argument& ia){
+        throw IllegalAction{"bad Enchantment string: "+s};
+        return in;
     }
     return val;
 }
