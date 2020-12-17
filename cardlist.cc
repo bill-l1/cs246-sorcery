@@ -316,7 +316,6 @@ Effect * RitualList::AuraOfPower::onPlay() {
 	if(this->getOwner() != this->getGame()->getActivePlayer()) {
 		return nullptr;
 	}
-	this->setCharges(this->getCharges()-1);
 	this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(this->getOwner()->getBoardSize()-1));
 	return this->getEffect();
 }
@@ -330,7 +329,6 @@ RitualList::Standstill::Standstill()
 {}
 
 Effect * RitualList::Standstill::onPlay() {
-	this->setCharges(this->getCharges()-1);
 	this->getEffect()->setTarget(this->getGame()->getActivePlayer()->getBoardNum(this->getGame()->getActivePlayer()->getBoardSize()-1));
 	return this->getEffect();
 }
@@ -348,7 +346,6 @@ Effect * RitualList::DarkRitual::onTurnStart() {
 	if(this->getOwner() != this->getGame()->getActivePlayer()) {
 		return nullptr;
 	}
-	this->setCharges(this->getCharges()-1);
 	return this->getEffect();
 }
 
