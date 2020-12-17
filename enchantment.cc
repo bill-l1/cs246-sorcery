@@ -26,11 +26,11 @@ int Enchantment::statConvert(const int &in, const std::string &s) const{
         }else if(s[0] == '*'){
             return in * val;
         }
+        return in;
     }catch(const std::invalid_argument& ia){
         throw IllegalAction{"bad Enchantment string: "+s};
         return in;
     }
-    return val;
 }
 
 void Enchantment::verifyComponentNotNull() const{
