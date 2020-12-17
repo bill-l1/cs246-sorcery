@@ -73,7 +73,7 @@ std::stack<std::unique_ptr<Card>> Game::loadDeck(const std::string &dname, const
 	std::stack<std::unique_ptr<Card>> deck;
 	std::vector<std::string> cardNames;
 	try{
-		int cardCount = 0;
+		unsigned cardCount = 0;
 		std::ifstream f(dname);
 		std::string s;
 
@@ -240,23 +240,29 @@ void Game::play(const int &pos){
 		card.release(); 
 		cast_card.reset(cast); 
 		activePlayer->playCard(std::move(cast_card));
-		for(auto && minion : activePlayer.get()->board){
-			runEffects(minion->onPlay());
-		}
-		if(activePlayer.get()->ritual != nullptr) {
-			if (activePlayer.get()->ritual->onPlay() != nullptr) {
-				activePlayer.get()->ritual->onPlay()->run();
+		
+		std::vector<Player *> players{activePlayer.get(), nonActivePlayer.get()};
+		for(auto &p : players){
+			for(auto && minion : p->board){
+				try{
+					runEffects(minion->onPlay());
+				}catch(GameException &e){
+					printAlert(e.getErr());
+				}
 			}
-		}
 
-		for(auto && minion : nonActivePlayer.get()->board){
-			runEffects(minion->onPlay());
-		}
-		if(nonActivePlayer.get()->ritual != nullptr) {
-			if (nonActivePlayer.get()->ritual->onPlay() != nullptr) {
-				nonActivePlayer.get()->ritual->onPlay()->run();
+			Ritual * rit = p->ritual.get();
+			if(rit != nullptr) {
+				if (rit->onPlay() != nullptr) {
+					try{
+						rit->onPlay()->run();
+						rit->setCharges(rit->getCharges()-rit->getActivateCost());
+					}catch(GameException &e){
+						printAlert(e.getErr());
+					}
+				}
 			}
-		}	
+		}
 	}else if(auto cast = dynamic_cast<Ritual*>(c_ref.get())) {
 		std::unique_ptr<Card> card = takeCardFromHand(activePlayer.get(), pos);
 		activePlayer->setMagic(newMagic);
@@ -443,7 +449,7 @@ void Game::verifyBoardPosition(Player * player, const int &pos) const {
 }
 
 void Game::verifyBoardNotFull(Player * player) const {
-	if(player->getBoardSize() >= MAX_BOARD_SIZE){
+	if((unsigned)player->getBoardSize() >= MAX_BOARD_SIZE){
 		throw BoardIsFull{};
 	}
 }

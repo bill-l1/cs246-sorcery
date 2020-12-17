@@ -36,11 +36,8 @@ class Player  {
 		void draw();
 		void playCard(std::unique_ptr<BaseMinion> card);
 		void playCard(std::unique_ptr<Enchantment> card, std::unique_ptr<Minion>& target);
-		void playCard(std::unique_ptr<Spell> card, std::unique_ptr<Minion>& target);
-		void playCard(std::unique_ptr<Spell> card, std::unique_ptr<Ritual>& target);
 		void playCard(std::unique_ptr<Ritual> card);
-		void playCard(std::unique_ptr<Spell> card);
-
+		
 		std::unique_ptr<BaseMinion>& graveyardTop();
 		void graveyardPop();
 		void addToHand(std::unique_ptr<Card> card);

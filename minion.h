@@ -10,14 +10,14 @@ class Minion : public Card {
 	public:
 		Minion(const std::string &name, const std::string &description, const int &cost, const std::string &type);
 		virtual ~Minion();
-		virtual Minion * getComponent(const bool &steal = false);
-		virtual std::string getMinionName() const;
-		virtual std::string getMinionDescription() const;
-
-		// - relies heavily on use of "virtual" to make sure the following don't get called 
+		
+		// - NOTE: relies heavily on use of "virtual" to make sure the following don't get called 
 		// - Minion card should ALWAYS inherit either Enchantment or BaseMinion first, shouldn't need to worry about type safety (depends on CardFactory and CardList)
 		// - makes calling minion methods A LOT easier without needing to constantly cast between those two
 
+		virtual Minion * getComponent(const bool &steal = false);
+		virtual std::string getMinionName() const;
+		virtual std::string getMinionDescription() const;
 		virtual int getMinionCost() const;
 		virtual int getAttack() const;
 		virtual void setAttack(const int &att);
